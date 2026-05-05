@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		03B047450B5008540AB8CC25 /* NotchTabContribution.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46ABFA89DCE93616908F6EFB /* NotchTabContribution.swift */; };
 		0BD0E9BD79DFC002DADD1A26 /* NotchMenuItemContribution.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E7BD3C287AB152EA809636E /* NotchMenuItemContribution.swift */; };
+		10C793F6AFC9F67512ED0530 /* HostSettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A545EA48BE266E1AFEFBBB28 /* HostSettingsStore.swift */; };
 		10DE34ADF6C05BFF80313106 /* NotchObservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E0E51B4BCCCEED00BC292E /* NotchObservation.swift */; };
 		1100290C2E847E2800035A57 /* NSItemProvider+LoadHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1100290B2E847E2800035A57 /* NSItemProvider+LoadHelpers.swift */; };
 		110029272E84FD4C00035A57 /* TemporaryFileStorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110029262E84FD4C00035A57 /* TemporaryFileStorageService.swift */; };
@@ -120,6 +121,7 @@
 		5917FD112E57891600E87F1C /* MediaKeyInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5917FD102E57891600E87F1C /* MediaKeyInterceptor.swift */; };
 		5955950D2E900ED800C66711 /* ApplicationRelauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5955950C2E900ED800C66711 /* ApplicationRelauncher.swift */; };
 		59D8C23C2E589FAA00147B33 /* VolumeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D8C23B2E589FAA00147B33 /* VolumeManager.swift */; };
+		7267D1626265F3F2C65E878C /* HostLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E4D2C698C2B7EF68445B714 /* HostLogger.swift */; };
 		7414DBA0621B6E976DC60EBB /* NotchPermissionRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 418469FF9F89CB3222308B27 /* NotchPermissionRequest.swift */; };
 		7A4CC9F9FFB6D5BD0F4AB74B /* NotchNotchStateHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B4C55DEA3708C662A6E6024 /* NotchNotchStateHost.swift */; };
 		7FEF8FBDF11B9205B2BC1192 /* NotchPermissionsAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = E664244E7BD4E461D568F32C /* NotchPermissionsAPI.swift */; };
@@ -162,13 +164,17 @@
 		B1F0A0022E60000100000001 /* BrightnessManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1F0A0012E60000100000001 /* BrightnessManager.swift */; };
 		B1F747F92EC7E94000F841DB /* LottieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1F747F82EC7E94000F841DB /* LottieView.swift */; };
 		B1FEB4992C7686630066EBBC /* PanGesture.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1FEB4982C7686630066EBBC /* PanGesture.swift */; };
+		B530941C0036F756B587E48E /* ExtensionLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0FDF482E31E1EF32067883D /* ExtensionLoader.swift */; };
 		B70B0EBE62AE9DB2BBD3D8AA /* NotchScreenHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D0D52F81C2656E6C4CF764 /* NotchScreenHost.swift */; };
 		B75C22D4270CDE3DB81F7228 /* NotchPermissionKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475783AF5C06D9A2B5A65BA7 /* NotchPermissionKind.swift */; };
 		BF25B2995BD169F1FFD2BC10 /* NotchOnboardingContribution.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D0789023076C55E81E2CA0 /* NotchOnboardingContribution.swift */; };
 		C44D200A10AF4B49D3AE7249 /* NotchSettingsPaneContribution.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA59B43D3A84184C8DA4F32 /* NotchSettingsPaneContribution.swift */; };
+		C82517102F57AAB2ACA8B2F4 /* ObjCExceptionCatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 3551BBE443A79F19A856CE24 /* ObjCExceptionCatcher.m */; };
 		D339BDA841A6D8CD76A84557 /* NotchHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEFA8A3B566942347FB43191 /* NotchHost.swift */; };
+		D48C2BAF3F8EBA55C14DBFF1 /* ExtensionHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7B4A14FEBBDDEBE1E7CA18 /* ExtensionHost.swift */; };
 		F38DE6482D8243E7008B5C6D /* BatteryActivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F38DE6472D8243E2008B5C6D /* BatteryActivityManager.swift */; };
 		F8BF30F20D1A8178832EF9FD /* NotchHomeFragmentContribution.swift in Sources */ = {isa = PBXBuildFile; fileRef = B60CA8D6E821426716B1CF83 /* NotchHomeFragmentContribution.swift */; };
+		FBA2DBE4454EC311AC2DB2A0 /* HostPermissionsAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91812C3399BEC10335B7C2C4 /* HostPermissionsAPI.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -222,6 +228,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0AF2732BA37E372CD61BD80D /* ObjCExceptionCatcher.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ObjCExceptionCatcher.h; sourceTree = "<group>"; };
 		0E7BD3C287AB152EA809636E /* NotchMenuItemContribution.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotchKit/Sources/Contributions/NotchMenuItemContribution.swift; sourceTree = SOURCE_ROOT; };
 		10E0E51B4BCCCEED00BC292E /* NotchObservation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotchKit/Sources/Observation/NotchObservation.swift; sourceTree = SOURCE_ROOT; };
 		1100290B2E847E2800035A57 /* NSItemProvider+LoadHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSItemProvider+LoadHelpers.swift"; sourceTree = "<group>"; };
@@ -323,19 +330,23 @@
 		1D9563F9499A47D106008E73 /* NotchExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotchKit/Sources/NotchExtension.swift; sourceTree = SOURCE_ROOT; };
 		24171E71B8C396404EE2EDAA /* NotchKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NotchKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		26E57DBA30618ED62222A128 /* NotchExpandedItemContribution.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotchKit/Sources/Contributions/NotchExpandedItemContribution.swift; sourceTree = SOURCE_ROOT; };
+		2E4D2C698C2B7EF68445B714 /* HostLogger.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HostLogger.swift; sourceTree = "<group>"; };
 		31A06B3296E7DBC541C5085D /* NotchClosedChinContribution.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotchKit/Sources/Contributions/NotchClosedChinContribution.swift; sourceTree = SOURCE_ROOT; };
+		3551BBE443A79F19A856CE24 /* ObjCExceptionCatcher.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ObjCExceptionCatcher.m; sourceTree = "<group>"; };
 		418469FF9F89CB3222308B27 /* NotchPermissionRequest.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotchKit/Sources/Contributions/NotchPermissionRequest.swift; sourceTree = SOURCE_ROOT; };
 		4215957D03737509A99A32A5 /* NotchLogger.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotchKit/Sources/Logger/NotchLogger.swift; sourceTree = SOURCE_ROOT; };
 		46ABFA89DCE93616908F6EFB /* NotchTabContribution.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotchKit/Sources/Contributions/NotchTabContribution.swift; sourceTree = SOURCE_ROOT; };
 		475783AF5C06D9A2B5A65BA7 /* NotchPermissionKind.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotchKit/Sources/Permissions/NotchPermissionKind.swift; sourceTree = SOURCE_ROOT; };
 		485FAB98153D542448AD665D /* NotchCoordinatorHost.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotchKit/Sources/Services/NotchCoordinatorHost.swift; sourceTree = SOURCE_ROOT; };
 		507266DA2C908E2E00A2D00D /* HoverButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoverButton.swift; sourceTree = "<group>"; };
+		520FB1B48A977624391FBEE2 /* Notch-Bridging-Header.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Notch-Bridging-Header.h"; sourceTree = "<group>"; };
 		5298F87A3960B14010C4D517 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = NotchKit/Resources/Info.plist; sourceTree = SOURCE_ROOT; };
 		5917FD102E57891600E87F1C /* MediaKeyInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaKeyInterceptor.swift; sourceTree = "<group>"; };
 		5955950C2E900ED800C66711 /* ApplicationRelauncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationRelauncher.swift; sourceTree = "<group>"; };
 		59D8C23B2E589FAA00147B33 /* VolumeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeManager.swift; sourceTree = "<group>"; };
 		654B12E048FDE9441033C254 /* NotchKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NotchKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D36122D77955CC7FF52F57B /* NotchSlotLifecycle.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotchKit/Sources/NotchSlotLifecycle.swift; sourceTree = SOURCE_ROOT; };
+		91812C3399BEC10335B7C2C4 /* HostPermissionsAPI.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HostPermissionsAPI.swift; sourceTree = "<group>"; };
 		9A0887312C7A693000C160EA /* TabButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabButton.swift; sourceTree = "<group>"; };
 		9A0887342C7AFF8E00C160EA /* TabSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabSelectionView.swift; sourceTree = "<group>"; };
 		9A45994A5E5BF181E22FA8F4 /* NotchSneakPeekContribution.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotchKit/Sources/Contributions/NotchSneakPeekContribution.swift; sourceTree = SOURCE_ROOT; };
@@ -343,6 +354,8 @@
 		9AB0C6BB2C73C9CB00F7CD30 /* NotchHomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotchHomeView.swift; sourceTree = "<group>"; };
 		9B7F59E420EE1F6787E73593 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
 		9EC9CC9F1CC52B114795B8E6 /* NotchKitVersion.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotchKit/Sources/Version/NotchKitVersion.swift; sourceTree = SOURCE_ROOT; };
+		9F7B4A14FEBBDDEBE1E7CA18 /* ExtensionHost.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ExtensionHost.swift; sourceTree = "<group>"; };
+		A545EA48BE266E1AFEFBBB28 /* HostSettingsStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HostSettingsStore.swift; sourceTree = "<group>"; };
 		B10348D82C74E56000475897 /* ConditionalModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionalModifier.swift; sourceTree = "<group>"; };
 		B10F84A22C6C9596009F3026 /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 		B141C2402CA5F53E00AC8CC8 /* SparkleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparkleView.swift; sourceTree = "<group>"; };
@@ -373,6 +386,7 @@
 		C766CF56A5D31AA73223D303 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = NotchKit/Resources/Info.plist; sourceTree = SOURCE_ROOT; };
 		D07CE6C93526D1E5F4FFF54D /* NotchHUDContribution.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotchKit/Sources/Contributions/NotchHUDContribution.swift; sourceTree = SOURCE_ROOT; };
 		DEFA8A3B566942347FB43191 /* NotchHost.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotchKit/Sources/NotchHost.swift; sourceTree = SOURCE_ROOT; };
+		E0FDF482E31E1EF32067883D /* ExtensionLoader.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ExtensionLoader.swift; sourceTree = "<group>"; };
 		E4D0789023076C55E81E2CA0 /* NotchOnboardingContribution.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotchKit/Sources/Contributions/NotchOnboardingContribution.swift; sourceTree = SOURCE_ROOT; };
 		E4D0D52F81C2656E6C4CF764 /* NotchScreenHost.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotchKit/Sources/Services/NotchScreenHost.swift; sourceTree = SOURCE_ROOT; };
 		E664244E7BD4E461D568F32C /* NotchPermissionsAPI.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotchKit/Sources/Permissions/NotchPermissionsAPI.swift; sourceTree = SOURCE_ROOT; };
@@ -463,6 +477,14 @@
 				9B7F59E420EE1F6787E73593 /* Cocoa.framework */,
 			);
 			name = "OS X";
+			sourceTree = "<group>";
+		};
+		0F95A84CB42B8342C0A56D1E /* Logger */ = {
+			isa = PBXGroup;
+			children = (
+				2E4D2C698C2B7EF68445B714 /* HostLogger.swift */,
+			);
+			path = Logger;
 			sourceTree = "<group>";
 		};
 		1113ABB82E80E27000EC13B2 /* Models */ = {
@@ -695,6 +717,14 @@
 				14CEF41B2C5CAED400855D72 /* Preview Content */,
 				112FB72F2CCF12CC0015238C /* private */,
 				11CC44A12CEE614100C7244B /* BoringViewCoordinator.swift */,
+				0F95A84CB42B8342C0A56D1E /* Logger */,
+				407B8DC9A19434AF17B52163 /* Settings */,
+				755357F72D0CE39F4747CBB0 /* Permissions */,
+				0AF2732BA37E372CD61BD80D /* ObjCExceptionCatcher.h */,
+				3551BBE443A79F19A856CE24 /* ObjCExceptionCatcher.m */,
+				520FB1B48A977624391FBEE2 /* Notch-Bridging-Header.h */,
+				9F7B4A14FEBBDDEBE1E7CA18 /* ExtensionHost.swift */,
+				E0FDF482E31E1EF32067883D /* ExtensionLoader.swift */,
 			);
 			path = Host;
 			sourceTree = "<group>";
@@ -760,6 +790,14 @@
 			path = Permissions;
 			sourceTree = "<group>";
 		};
+		407B8DC9A19434AF17B52163 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				A545EA48BE266E1AFEFBBB28 /* HostSettingsStore.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
 		5CC222B764F2D8B15F7CB382 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -776,6 +814,14 @@
 			);
 			name = Core;
 			path = Core;
+			sourceTree = "<group>";
+		};
+		755357F72D0CE39F4747CBB0 /* Permissions */ = {
+			isa = PBXGroup;
+			children = (
+				91812C3399BEC10335B7C2C4 /* HostPermissionsAPI.swift */,
+			);
+			path = Permissions;
 			sourceTree = "<group>";
 		};
 		95CE6347F21CBC3AB2D8B3E6 /* Version */ = {
@@ -1292,6 +1338,12 @@
 				1100290C2E847E2800035A57 /* NSItemProvider+LoadHelpers.swift in Sources */,
 				11CFC6632E09918400748C80 /* MusicControllerSelectionView.swift in Sources */,
 				B1F0A0022E60000100000001 /* BrightnessManager.swift in Sources */,
+				C82517102F57AAB2ACA8B2F4 /* ObjCExceptionCatcher.m in Sources */,
+				7267D1626265F3F2C65E878C /* HostLogger.swift in Sources */,
+				10C793F6AFC9F67512ED0530 /* HostSettingsStore.swift in Sources */,
+				FBA2DBE4454EC311AC2DB2A0 /* HostPermissionsAPI.swift in Sources */,
+				D48C2BAF3F8EBA55C14DBFF1 /* ExtensionHost.swift in Sources */,
+				B530941C0036F756B587E48E /* ExtensionLoader.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1564,6 +1616,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Host/Notch-Bridging-Header.h";
 				SWIFT_STRICT_CONCURRENCY = targeted;
 				SWIFT_VERSION = 5.0;
 				SYSTEM_FRAMEWORK_SEARCH_PATHS = (
@@ -1617,6 +1670,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Host/Notch-Bridging-Header.h";
 				SWIFT_STRICT_CONCURRENCY = targeted;
 				SWIFT_VERSION = 5.0;
 				SYSTEM_FRAMEWORK_SEARCH_PATHS = (
