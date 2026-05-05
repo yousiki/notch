@@ -8,9 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		60B2E852BB13EB6BC56BD589 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCFF3E1F47290BD93EE79D02 /* Cocoa.framework */; };
+		C3E87FF33046E21FCAF1357F /* TipsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDBEFFB2AB57547406D5538 /* TipsExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		299198D2D44ED4827915BC3D /* TipStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Sources/TipStore.swift; sourceTree = SOURCE_ROOT; };
+		5DDBEFFB2AB57547406D5538 /* TipsExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Sources/TipsExtension.swift; sourceTree = SOURCE_ROOT; };
 		7A4E8284933D001FDA7A6C09 /* TipsExtension.bundle */ = {isa = PBXFileReference; explicitFileType = "wrapper.plug-in"; includeInIndex = 0; path = TipsExtension.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		DCFF3E1F47290BD93EE79D02 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
@@ -27,6 +30,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6BD970F0C438A9CEFB40F250 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				299198D2D44ED4827915BC3D /* TipStore.swift */,
+				5DDBEFFB2AB57547406D5538 /* TipsExtension.swift */,
+			);
+			name = Sources;
+			path = Sources;
+			sourceTree = "<group>";
+		};
 		6EAAE4C3BB48BA38DAF49DD9 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -56,6 +69,7 @@
 			children = (
 				6EAAE4C3BB48BA38DAF49DD9 /* Products */,
 				B50FF89A64CEB04BA9DA88AE /* Frameworks */,
+				6BD970F0C438A9CEFB40F250 /* Sources */,
 			);
 			sourceTree = "<group>";
 		};
@@ -123,6 +137,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C3E87FF33046E21FCAF1357F /* TipsExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

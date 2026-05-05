@@ -156,7 +156,6 @@
 		B1B112932C6A577E00093D8F /* MouseTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B112922C6A577E00093D8F /* MouseTracker.swift */; };
 		B1C448962C9712C4001F0858 /* ActionBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C448952C9712C4001F0858 /* ActionBar.swift */; };
 		B1C448982C972CC4001F0858 /* ListItemPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C448972C972CC4001F0858 /* ListItemPopover.swift */; };
-		B1C4489B2C97376A001F0858 /* TipStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C4489A2C97376A001F0858 /* TipStore.swift */; };
 		B1C974342C642B6D0000E707 /* MarqueeTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C974332C642B6D0000E707 /* MarqueeTextView.swift */; };
 		B1CE8CFE2C6F659400DD9871 /* KeyboardShortcutsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CE8CFD2C6F659400DD9871 /* KeyboardShortcutsHelper.swift */; };
 		B1D365CE2C6A979C0047BDBC /* LiveActivityModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1D365CD2C6A979C0047BDBC /* LiveActivityModifier.swift */; };
@@ -185,6 +184,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 11F7484E2EC9AABA00F841DB;
 			remoteInfo = BoringNotchXPCHelper;
+		};
+		14D316BF01F440E8C1719D3F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = ED66C1672A4CEC085C6BC93C /* TipsExtension.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = A3407980F3FE1D757951D9AB;
+			remoteInfo = TipsExtension;
 		};
 		45143B38F20B30AC9C4ECFE4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -384,7 +390,6 @@
 		B1B112922C6A577E00093D8F /* MouseTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MouseTracker.swift; sourceTree = "<group>"; };
 		B1C448952C9712C4001F0858 /* ActionBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionBar.swift; sourceTree = "<group>"; };
 		B1C448972C972CC4001F0858 /* ListItemPopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListItemPopover.swift; sourceTree = "<group>"; };
-		B1C4489A2C97376A001F0858 /* TipStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipStore.swift; sourceTree = "<group>"; };
 		B1C974332C642B6D0000E707 /* MarqueeTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarqueeTextView.swift; sourceTree = "<group>"; };
 		B1CE8CFD2C6F659400DD9871 /* KeyboardShortcutsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardShortcutsHelper.swift; sourceTree = "<group>"; };
 		B1D365CD2C6A979C0047BDBC /* LiveActivityModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveActivityModifier.swift; sourceTree = "<group>"; };
@@ -403,6 +408,7 @@
 		E4D0789023076C55E81E2CA0 /* NotchOnboardingContribution.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotchKit/Sources/Contributions/NotchOnboardingContribution.swift; sourceTree = SOURCE_ROOT; };
 		E4D0D52F81C2656E6C4CF764 /* NotchScreenHost.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotchKit/Sources/Services/NotchScreenHost.swift; sourceTree = SOURCE_ROOT; };
 		E664244E7BD4E461D568F32C /* NotchPermissionsAPI.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotchKit/Sources/Permissions/NotchPermissionsAPI.swift; sourceTree = SOURCE_ROOT; };
+		ED66C1672A4CEC085C6BC93C /* TipsExtension.xcodeproj */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.pb-project"; name = TipsExtension.xcodeproj; path = ../Extensions/Tips/TipsExtension.xcodeproj; sourceTree = SOURCE_ROOT; };
 		F38DE6472D8243E2008B5C6D /* BatteryActivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryActivityManager.swift; sourceTree = "<group>"; };
 		FDA82FFC5F03BDA86D39E5F7 /* NotchKeyboardShortcutContribution.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotchKit/Sources/Contributions/NotchKeyboardShortcutContribution.swift; sourceTree = SOURCE_ROOT; };
 		FFA59B43D3A84184C8DA4F32 /* NotchSettingsPaneContribution.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotchKit/Sources/Contributions/NotchSettingsPaneContribution.swift; sourceTree = SOURCE_ROOT; };
@@ -690,6 +696,7 @@
 				14CEF4132C5CAED300855D72 /* Products */,
 				14D031EC2C689DB70096E6A1 /* Frameworks */,
 				6F94994510695E0663E7B0CC /* Core */,
+				ED66C1672A4CEC085C6BC93C /* TipsExtension.xcodeproj */,
 			);
 			sourceTree = "<group>";
 		};
@@ -962,7 +969,6 @@
 		B1C448992C97375A001F0858 /* Tips */ = {
 			isa = PBXGroup;
 			children = (
-				B1C4489A2C97376A001F0858 /* TipStore.swift */,
 			);
 			path = Tips;
 			sourceTree = "<group>";
@@ -1122,6 +1128,7 @@
 				11F7485A2EC9AABA00F841DB /* PBXTargetDependency */,
 				D9A66422040D37DBF7814015 /* PBXTargetDependency */,
 				00F4F45554451D9FEEA85D95 /* PBXTargetDependency */,
+				19262A58E2F5980B4BB57750 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				112FB72F2CCF12CC0015238C /* private */,
@@ -1244,7 +1251,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e\nEXT_PROJECT=\"${SRCROOT}/../Extensions/Tips/TipsExtension.xcodeproj\"\nif [ -d \"$EXT_PROJECT\" ]; then\n  xcodebuild -project \"$EXT_PROJECT\" \\\n             -target TipsExtension \\\n             -configuration \"${CONFIGURATION}\" \\\n             BUILT_PRODUCTS_DIR=\"${BUILT_PRODUCTS_DIR}\" \\\n             CONFIGURATION_BUILD_DIR=\"${BUILT_PRODUCTS_DIR}\" \\\n             CODE_SIGN_IDENTITY=\"\" \\\n             CODE_SIGNING_REQUIRED=NO \\\n             CODE_SIGNING_ALLOWED=NO \\\n             build\nfi\n";
+			shellScript = "set -e\nEXT_PRODUCT=\"${BUILT_PRODUCTS_DIR}/TipsExtension.notchext\"\nif [ -d \"${EXT_PRODUCT}\" ]; then\n  echo \"TipsExtension.notchext is present at ${EXT_PRODUCT}\"\n  echo \"Binary: $(file \"${EXT_PRODUCT}/Contents/MacOS/TipsExtension\" 2>/dev/null || echo 'not found')\"\nelse\n  echo \"Error: TipsExtension.notchext not found at ${EXT_PRODUCT}\"\n  echo \"Make sure TipsExtension target built successfully.\"\n  exit 1\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1319,7 +1326,6 @@
 				B172AAC02C95DA0B001623F1 /* InlineHUD.swift in Sources */,
 				14E9FEAA2C70BF610062E83F /* DownloadView.swift in Sources */,
 				B1B112912C6A572100093D8F /* EditPanelView.swift in Sources */,
-				B1C4489B2C97376A001F0858 /* TipStore.swift in Sources */,
 				1153BD912D986DB300979FB0 /* PlaybackState.swift in Sources */,
 				B1A78C822C8BA08100BD51B0 /* FullscreenMediaDetection.swift in Sources */,
 				14E9FEAE2C7325770062E83F /* Button+Bouncing.swift in Sources */,
@@ -1426,6 +1432,11 @@
 			isa = PBXTargetDependency;
 			target = 11F7484E2EC9AABA00F841DB /* BoringNotchXPCHelper */;
 			targetProxy = 11F748592EC9AABA00F841DB /* PBXContainerItemProxy */;
+		};
+		19262A58E2F5980B4BB57750 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = TipsExtension;
+			targetProxy = 14D316BF01F440E8C1719D3F /* PBXContainerItemProxy */;
 		};
 		D9A66422040D37DBF7814015 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1627,7 +1638,7 @@
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/../mediaremote-adapter",
@@ -1682,6 +1693,7 @@
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/../mediaremote-adapter",
