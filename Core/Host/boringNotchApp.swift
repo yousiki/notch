@@ -9,6 +9,7 @@ import AVFoundation
 import Combine
 import Defaults
 import KeyboardShortcuts
+import NotchKit
 import Sparkle
 import SwiftUI
 
@@ -419,6 +420,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         } else {
             adjustWindowPosition(changeAlpha: true)
         }
+
+        ExtensionHost.shared.start()
 
         setupDragDetectors()
 
