@@ -136,6 +136,7 @@
 		9CB26F5685F7F0AC4CF6031B /* NotchHUDContribution.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07CE6C93526D1E5F4FFF54D /* NotchHUDContribution.swift */; };
 		A0C2460FD9ED628C37E90E20 /* NotchLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4215957D03737509A99A32A5 /* NotchLogger.swift */; };
 		A27116D43ABFC37C182B09D6 /* NotchKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 654B12E048FDE9441033C254 /* NotchKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		AAD58F01A7E993B11065A12A /* TipsExtension.notchext in Embed Plug-ins */ = {isa = PBXBuildFile; fileRef = 74CA84B2EF07A0A1A88C43BD /* TipsExtension.notchext */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		B064A3B81A1E86286B8D4704 /* NotchSneakPeekContribution.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A45994A5E5BF181E22FA8F4 /* NotchSneakPeekContribution.swift */; };
 		B10348D92C74E56000475897 /* ConditionalModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10348D82C74E56000475897 /* ConditionalModifier.swift */; };
 		B10F84A32C6C9596009F3026 /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10F84A22C6C9596009F3026 /* TestView.swift */; };
@@ -219,6 +220,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				AAD58F01A7E993B11065A12A /* TipsExtension.notchext in Embed Plug-ins */,
 			);
 			name = "Embed Plug-ins";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -356,6 +358,7 @@
 		59D8C23B2E589FAA00147B33 /* VolumeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeManager.swift; sourceTree = "<group>"; };
 		654B12E048FDE9441033C254 /* NotchKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NotchKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D36122D77955CC7FF52F57B /* NotchSlotLifecycle.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotchKit/Sources/NotchSlotLifecycle.swift; sourceTree = SOURCE_ROOT; };
+		74CA84B2EF07A0A1A88C43BD /* TipsExtension.notchext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TipsExtension.notchext; sourceTree = BUILT_PRODUCTS_DIR; };
 		91812C3399BEC10335B7C2C4 /* HostPermissionsAPI.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HostPermissionsAPI.swift; sourceTree = "<group>"; };
 		9A0887312C7A693000C160EA /* TabButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabButton.swift; sourceTree = "<group>"; };
 		9A0887342C7AFF8E00C160EA /* TabSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabSelectionView.swift; sourceTree = "<group>"; };
@@ -697,6 +700,7 @@
 				11F7484F2EC9AABA00F841DB /* BoringNotchXPCHelper.xpc */,
 				654B12E048FDE9441033C254 /* NotchKit.framework */,
 				24171E71B8C396404EE2EDAA /* NotchKit.framework */,
+				74CA84B2EF07A0A1A88C43BD /* TipsExtension.notchext */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1109,6 +1113,7 @@
 				14CEF4102C5CAED300855D72 /* Resources */,
 				B1ECFA062C6FE58A002ACD87 /* Embed Frameworks */,
 				11F748412EC8051E00F841DB /* Embed XPC Services */,
+				C6897F5BEA1DBCE37CD0B964 /* Build Built-in Extensions */,
 				ABD965D24C5A68DF4266BB34 /* Embed Plug-ins */,
 			);
 			buildRules = (
@@ -1221,6 +1226,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		C6897F5BEA1DBCE37CD0B964 /* Build Built-in Extensions */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Build Built-in Extensions";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\nEXT_PROJECT=\"${SRCROOT}/../Extensions/Tips/TipsExtension.xcodeproj\"\nif [ -d \"$EXT_PROJECT\" ]; then\n  xcodebuild -project \"$EXT_PROJECT\" \\\n             -target TipsExtension \\\n             -configuration \"${CONFIGURATION}\" \\\n             BUILT_PRODUCTS_DIR=\"${BUILT_PRODUCTS_DIR}\" \\\n             CONFIGURATION_BUILD_DIR=\"${BUILT_PRODUCTS_DIR}\" \\\n             CODE_SIGN_IDENTITY=\"\" \\\n             CODE_SIGNING_REQUIRED=NO \\\n             CODE_SIGNING_ALLOWED=NO \\\n             build\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		11F7484B2EC9AABA00F841DB /* Sources */ = {
