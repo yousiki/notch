@@ -186,13 +186,13 @@ The accessibility case proxies to the existing `BoringNotchXPCHelper` (preserved
 | `boringNotch/components/Notch/*.swift` (all 6 files) | `Core/Host/Notch/` | Imports only. |
 | `boringNotch/components/Tabs/*.swift` | `Core/Host/Tabs/` | `TabSelectionView` reads tab list from extension host instead of fixed enum. |
 | `boringNotch/components/Onboarding/*.swift` | `Core/Host/Onboarding/` | `OnboardingView` driver iterates extension-contributed steps in addition to core welcome. Per-feature step files (e.g. `MusicControllerSelectionView.swift`) move to their owning extensions. |
-| `boringNotch/components/Settings/*.swift` | `Core/Host/Settings/` | Shell stays as-is and iterates extension-contributed panes; per-feature section bodies move to their extensions when they are top-level structs (see §5.3). |
+| `boringNotch/components/Settings/{SettingsView,SettingsWindowController,EditPanelView,ListItemPopover,SoftwareUpdater}.swift` | `Core/Host/Settings/` | Shell stays as-is and iterates extension-contributed panes; per-feature section bodies move to their extensions when they are top-level structs (see §5.3). `MusicSlotConfigurationView.swift` is *not* in this row — it moves to MusicExtension (see §6). |
 | `boringNotch/menu/StatusBarMenu.swift` | `Core/Host/Menu/StatusBarMenu.swift` | Append extension-contributed menu items after built-in entries. |
 | `boringNotch/observers/DragDetector.swift`, `FullscreenMediaDetection.swift` | `Core/Host/Observers/` | Imports only. (`MediaKeyInterceptor` moves to HUD extension.) |
 | `boringNotch/managers/NotchSpaceManager.swift`, `ImageService.swift` | `Core/Host/Managers/` | Imports only. |
 | `boringNotch/models/{Constants,BoringViewModel,SharingStateManager}.swift` | `Core/Host/Models/` | `Constants.swift`: keep notch-sizing keys + core-feature `Defaults` keys; music/battery-specific keys move with their extensions. `MusicControlButton` and `PlaybackState` move to MusicExtension. |
 | `boringNotch/extensions/*.swift` | `Core/Host/Extensions/` | Imports only. |
-| `boringNotch/helpers/*.swift` | `Core/Host/Helpers/` (those not moved to extensions) | `AppleScriptHelper`, `MediaChecker` move to MusicExtension; `Clipboard+Content` moves to ShelfExtension; rest stay. |
+| `boringNotch/helpers/*.swift` | `Core/Host/Helpers/` (those not moved to extensions) | `AppleScriptHelper`, `MediaChecker` move to MusicExtension. `Clipboard+Content.swift` is currently dead code (no callers in the project) — it stays in `Core/Host/Helpers/` unchanged rather than being relocated. The remaining helpers (`AudioPlayer`, `AppIcons`, `AssociatedObject`, `ApplicationRelauncher`) stay in core. |
 | `boringNotch/sizing/matters.swift` | `Core/Host/Sizing/matters.swift` | None. |
 | `boringNotch/private/CGSSpace.swift` | `Core/Host/Private/CGSSpace.swift` | None. |
 | `boringNotch/utils/Logger.swift` | shared with `NotchKit` | Becomes the backing of `NotchLogger`. |
@@ -251,10 +251,9 @@ The `toggleSneakPeek` keyboard-shortcut key is deleted from the host's `Shortcut
 
 | Source | Destination |
 |---|---|
-| `boringNotch/components/Shelf/**/*.swift` (entire subtree, ~24 files: Models, ViewModels, Services, Views) | `Extensions/Shelf/Sources/` (preserve internal subdirs verbatim) |
-| `boringNotch/helpers/Clipboard+Content.swift` | `Extensions/Shelf/Sources/Helpers/Clipboard+Content.swift` |
-| `boringNotch/extensions/URL+SecurityScoped.swift` | `Extensions/Shelf/Sources/Extensions/URL+SecurityScoped.swift` |
-| `boringNotch/extensions/NSItemProvider+LoadHelpers.swift` | `Extensions/Shelf/Sources/Extensions/NSItemProvider+LoadHelpers.swift` |
+| `boringNotch/components/Shelf/**/*.swift` (entire subtree, 18 files: Models, ViewModels, Services, Views) | `Extensions/Shelf/Sources/` (preserve internal subdirs verbatim) |
+| `boringNotch/extensions/URL+SecurityScoped.swift` | `Extensions/Shelf/Sources/Extensions/URL+SecurityScoped.swift` (verified: only used by Shelf code) |
+| `boringNotch/extensions/NSItemProvider+LoadHelpers.swift` | `Extensions/Shelf/Sources/Extensions/NSItemProvider+LoadHelpers.swift` (verified: only used by `Shelf/Services/QuickShareService.swift` and `Shelf/Services/ShelfDropService.swift`) |
 | **New:** principal class | `Extensions/Shelf/Sources/ShelfExtension.swift` |
 
 ### CalendarExtension
