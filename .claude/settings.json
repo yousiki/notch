@@ -1,8 +1,0 @@
-{
-  "enabledPlugins": {
-    "swift-lsp@claude-plugins-official": true,
-    "superpowers@claude-plugins-official": true,
-    "code-simplifier@claude-plugins-official": true,
-    "biome-formatter@yousiki-claude-plugins": true
-  }
-}
