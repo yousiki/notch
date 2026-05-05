@@ -585,7 +585,7 @@
 				112FB72F2CCF12CC0015238C /* private */,
 				11CC44A12CEE614100C7244B /* BoringViewCoordinator.swift */,
 			);
-			path = boringNotch;
+			path = Host;
 			sourceTree = "<group>";
 		};
 		14CEF41B2C5CAED400855D72 /* Preview Content */ = {
@@ -620,7 +620,7 @@
 			children = (
 				14D570BB2C5E98EB0011E668 /* generic.swift */,
 			);
-			path = enums;
+			path = Models;
 			sourceTree = "<group>";
 		};
 		14D570C72C5F38760011E668 /* models */ = {
@@ -644,7 +644,7 @@
 				9A0887312C7A693000C160EA /* TabButton.swift */,
 				9A0887342C7AFF8E00C160EA /* TabSelectionView.swift */,
 			);
-			path = Tabs;
+			path = ../Tabs;
 			sourceTree = "<group>";
 		};
 		9A987A042C73CA66005CA465 /* Shelf */ = {
@@ -668,7 +668,7 @@
 				11CFC65A2E097E9D00748C80 /* WelcomeView.swift */,
 				B141C2402CA5F53E00AC8CC8 /* SparkleView.swift */,
 			);
-			path = Onboarding;
+			path = ../Onboarding;
 			sourceTree = "<group>";
 		};
 		B15063502C63D3F600EBB0E3 /* extensions */ = {
@@ -711,7 +711,7 @@
 				14D570D12C5F6C6A0011E668 /* BoringExtrasMenu.swift */,
 				1471A8582C6281BD0058408D /* BoringNotchWindow.swift */,
 			);
-			path = Notch;
+			path = ../Notch;
 			sourceTree = "<group>";
 		};
 		B18654302C6F4590000B926A /* Settings */ = {
@@ -724,7 +724,7 @@
 				B1B112902C6A572100093D8F /* EditPanelView.swift */,
 				B1C448972C972CC4001F0858 /* ListItemPopover.swift */,
 			);
-			path = Settings;
+			path = ../Settings;
 			sourceTree = "<group>";
 		};
 		B18654312C6F45AE000B926A /* Live activities */ = {
