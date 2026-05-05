@@ -38,9 +38,10 @@ These constraints override stylistic preferences and apply to every step of impl
 v1 ships in-process. v2 may move to per-extension XPC for crash isolation. To keep that upgrade tractable:
 
 - All non-view types crossing the `NotchKit` API are `Codable` *and* either Foundation-`@objc` types or `NSSecureCoding`-conforming.
-- No shared mutable globals between core and extensions; all communication goes through the explicit `NotchHost` API.
+- No shared mutable globals between core and extensions; all *cross-bundle* communication goes through the explicit `NotchHost` API and the host-services protocols defined in §4.6. Within an extension's own bundle, the existing singleton patterns (`MusicManager.shared`, `WebcamManager.shared`, etc.) are preserved unchanged — they're just no longer reachable from the host or other extensions.
 - View contributions return `NSViewController` instances (not raw `NSView` references) so a v2 swap to `NSRemoteView`-hosted controllers is a smaller surgery.
 - Results that need to round-trip from the host back to the extension are delivered via completion handlers, not synchronous returns of complex Swift values.
+- Factory closures crossing the `@objc` boundary are stored as `@convention(block)` blocks (Obj-C-compatible block ABI), not arbitrary Swift function values. See §4.3.
 
 ### 2.3 Big-bang scope, single landing
 
@@ -68,7 +69,7 @@ Notch.xcworkspace
 └── mediaremote-adapter/                     (preserved, unchanged)
 ```
 
-`NotchKit.framework` is embedded in the host and linked weakly by every extension bundle. Each extension project depends on the workspace's `NotchKit` product. Each `.xcodeproj` is independent enough that an extension could later be lifted to its own repo.
+`NotchKit.framework` is embedded in the host bundle (`boringNotch.app/Contents/Frameworks/NotchKit.framework`). Every extension links it as a regular dynamic dependency but **does not embed it**. The shared install name + `@rpath` rules in §3.4 ensure the dyld loader resolves the extension's NotchKit dependency to the host's single embedded image, so all `@objc` protocol identities are shared. Each `.xcodeproj` is independent enough that an extension could later be lifted to its own repo.
 
 ### 3.2 Process & loading model
 
@@ -77,8 +78,25 @@ Notch.xcworkspace
 - Loader scans, in order:
   1. `Notch.app/Contents/PlugIns/*.notchext` (built-ins)
   2. `~/Library/Application Support/Notch/Extensions/*.notchext` (user-installed)
-- No signature gating in v1. Risk documented in §8.
-- Built-in extensions ship via the host's "Copy Files (PlugIns)" build phase, fed from each extension project's product.
+- No in-app signature gating in v1; loading is allowed for any code-signed bundle the OS lets through (see §3.4 for the entitlement story). Risk documented in §8.
+- Built-in extensions ship via the host's "Copy Files (PlugIns)" build phase with **Code Sign on Copy** enabled, fed from each extension project's product. Build dependency: host target depends on every extension target so they build first.
+
+### 3.4 Code-signing & loading policy
+
+The host today has accessibility, camera, mic, and calendar entitlements. Apple's Hardened Runtime enables library validation by default, which forbids loading code unless it is Apple-signed or shares the host's Team ID. To allow third-party `.notchext` bundles dropped into `~/Library/Application Support/Notch/Extensions/`, the host must opt out of library validation:
+
+- Host adds the `com.apple.security.cs.disable-library-validation` entitlement.
+- Host keeps Hardened Runtime enabled (a hard requirement for the entitlement to be respected).
+- Built-in extensions are signed with the host's Team ID at build time (Code Sign on Copy in the embed phase).
+- User-installed extensions may be signed with any Team ID (or ad-hoc) and will load. v1 explicitly accepts the security tradeoff.
+- v2 plans: in-app per-extension trust prompts on first load, persisted; optional "developer mode" flag that gates the disable-library-validation behavior.
+
+**dyld / framework deduplication rule (must be enforced by every extension's build settings):**
+
+- `NotchKit.framework`'s install name is `@rpath/NotchKit.framework/Versions/A/NotchKit`.
+- Host's `LD_RUNPATH_SEARCH_PATHS` includes `@executable_path/../Frameworks`.
+- Each extension's `LD_RUNPATH_SEARCH_PATHS` includes `@loader_path/../../../../Frameworks` so an extension at `boringNotch.app/Contents/PlugIns/Foo.notchext/Contents/MacOS/Foo` resolves NotchKit out of the host's `Frameworks` directory. User-installed extensions inherit the same value; the loader rebases relative to the host before linking.
+- Extension targets must explicitly *not* embed NotchKit. CI lints reject any plugin product that contains `NotchKit.framework` in its bundle.
 
 ### 3.3 Boot sequence
 
@@ -134,19 +152,71 @@ The only object an extension uses to talk to the core. All registration goes thr
 
 ### 4.3 Slot contribution shape
 
+The factory closure is stored as a `@convention(block)` block so it crosses the `@objc` boundary cleanly (an arbitrary Swift `() -> NSViewController` cannot be exposed to Obj-C):
+
 ```swift
 @objc public final class NotchTabContribution: NSObject {
     @objc public let identifier: String
     @objc public let title: String
     @objc public let systemImage: String
     @objc public let lifecyclePolicy: NotchSlotLifecycle    // .onDemand | .preInstantiated
-    @objc public let makeViewController: () -> NSViewController
+    @objc public let makeViewController: @convention(block) () -> NSViewController
+
+    @objc public init(
+        identifier: String,
+        title: String,
+        systemImage: String,
+        lifecyclePolicy: NotchSlotLifecycle,
+        makeViewController: @escaping @convention(block) () -> NSViewController
+    ) { ... }
 }
 ```
 
-The same shape is used for `NotchClosedChinContribution`, `NotchSneakPeekContribution`, `NotchExpandedItemContribution`, `NotchHUDContribution`, with slot-specific metadata (priority, side, allowed notch states, content-type tag, etc.).
+The same shape is used for `NotchClosedChinContribution`, `NotchSneakPeekContribution`, `NotchExpandedItemContribution`, `NotchHUDContribution`, with slot-specific metadata.
+
+**Sneak-peek and expanded-item kinds are open (string-identified), not closed enums.** Today's `SneakContentType` enum in `BoringViewCoordinator.swift` is *deleted* in v1. Each `NotchSneakPeekContribution` and `NotchExpandedItemContribution` declares the kind it owns via `@objc public let kind: String` (e.g. `"music"`, `"battery"`, `"volume"`). `BoringViewCoordinator.toggleSneakPeek` / `toggleExpandingView` take a kind string instead of an enum case. Each kind must be claimed by exactly one extension; double-registration is logged and the second registration is dropped. This is the single non-trivial host edit caused by the migration — it's localized to `BoringViewCoordinator.swift` plus its callers (currently only inside core after the HUD/Music/Battery code moves to extensions).
 
 UI contribution rule: extensions return `NSViewController`. SwiftUI views are wrapped via `NSHostingController` on the extension side. The host wraps the controller in `NSViewControllerRepresentable` for SwiftUI composition.
+
+### 4.6 Host services (replaces shared-singleton access)
+
+Today the SwiftUI views in `boringNotch/components/` consume host state via `@EnvironmentObject` (`BoringViewModel`) and direct singletons (`WebcamManager.shared`, `BatteryStatusViewModel.shared`, `BoringViewCoordinator.shared`). Once those views move to extensions, the bundle boundary forbids that pattern: an extension cannot see the host's `@EnvironmentObject` graph.
+
+The host therefore exposes a small set of `@objc` *service protocols* on `NotchHost`:
+
+```swift
+@objc public protocol NotchHost {
+    // ... (registration + settings + permissions APIs from §4.2) ...
+
+    @objc func service(of kind: String) -> NSObject?     // returns one of the protocols below
+}
+
+@objc public protocol NotchNotchStateHost {
+    @objc var notchState: NotchState { get }              // .closed | .open
+    @objc var hovering: Bool { get }
+    @objc func observeNotchState(_ handler: @escaping (NotchState) -> Void) -> NotchObservation
+    @objc func observeHover(_ handler: @escaping (Bool) -> Void) -> NotchObservation
+    @objc func open()
+    @objc func close()
+}
+
+@objc public protocol NotchScreenHost {
+    @objc var selectedScreenUUID: String { get }
+    @objc func observeSelectedScreen(_ handler: @escaping (String) -> Void) -> NotchObservation
+}
+
+@objc public protocol NotchCoordinatorHost {
+    @objc var currentTabIdentifier: String { get }
+    @objc func observeCurrentTab(_ handler: @escaping (String) -> Void) -> NotchObservation
+    @objc func showTab(_ identifier: String)
+    @objc func toggleSneakPeek(kind: String, value: Double, icon: String, durationSeconds: Double)
+    @objc func toggleExpandedItem(kind: String, value: Double, durationSeconds: Double)
+}
+```
+
+Extensions get these via `host.service(of: "notch-state")` etc. **Extensions wrap the service into their own SwiftUI `ObservableObject` inside the controller they return** — one of the small new pieces of code each extension's principal-class file contains. Concretely, each extension's view-controller factory creates a SwiftUI `View` with its own per-extension state object that mirrors the relevant service primitives via the observation tokens. This is how a `Music` extension's `NotchHomeView` gets `notchState` after the move: it observes `NotchNotchStateHost.notchState` rather than reading `BoringViewModel.notchState` from an `@EnvironmentObject`.
+
+**The host does not pass `BoringViewModel` across the bundle boundary.** `BoringViewModel` becomes a host-internal type; its public surface that extensions need (notch state, hover, screen) is re-exposed via the service protocols above. Per-screen view-model behavior (the multi-display case) is exposed by giving each service instance a screen UUID it represents — `host.service(of: "notch-state", screenUUID: ...)` is the multi-display variant.
 
 ### 4.4 Settings store
 
@@ -181,7 +251,7 @@ The accessibility case proxies to the existing `BoringNotchXPCHelper` (preserved
 | Source (current path) | Destination | Required edits |
 |---|---|---|
 | `boringNotch/boringNotchApp.swift` | `Core/Host/boringNotchApp.swift` | Remove direct refs to `MusicManager`, `WebcamManager`, `BatteryStatusViewModel`, `BrightnessManager`, `VolumeManager`, `MediaKeyInterceptor`, `QuickShareService`. Add one `ExtensionHost.shared.start()` call after first window creation. Keep all window / screen / lock / drag-detector / onboarding-window logic verbatim. |
-| `boringNotch/BoringViewCoordinator.swift` | `Core/Host/BoringViewCoordinator.swift` | Remove `hudReplacement` observer + `MediaKeyInterceptor` calls (move to HUD extension). Keep notch-state, screen-UUID, sneak-peek/expanded-item dispatch — content for those slots now resolved via the contribution registry. |
+| `boringNotch/BoringViewCoordinator.swift` | `Core/Host/BoringViewCoordinator.swift` | Edits: (1) remove `hudReplacement` observer + `MediaKeyInterceptor.shared.start/stop` calls at lines 133, 153, 159 — relocates to HUD extension's principal class via `host.permissions` and direct interceptor ownership; (2) remove the `ShelfStateViewModel.shared.isEmpty` check in `alwaysShowTabs.didSet` at line 68 — replaced with `host.service(of: "coordinator")?.currentTabIdentifier` lookup or simply dropped (the special-case is "if shelf is empty when tabs hidden, show home"; with extensions, the host doesn't know about Shelf, so the special-case is moved to ShelfExtension's own `didSet` on its tab visibility); (3) replace the `SneakContentType` enum with `String` kind dispatch (see §4.3); (4) `toggleSneakPeek` / `toggleExpandingView` keep their existing public API shape but switch to string-keyed dispatch and lookup the contributed view from the registry. Notch-state, screen-UUID, hover-tracking logic stays verbatim and is the backing for the host services in §4.6. |
 | `boringNotch/ContentView.swift` | `Core/Host/ContentView.swift` | Replace hard-coded `NotchHomeView` / `ShelfView` / `WebcamView` / `MusicVisualizer` / `BoringBattery` / `DownloadView` / `OpenNotchHUD` / `InlineHUD` / `LiveActivityModifier` references with iteration over `ExtensionHost.shared.contributions(for: <slot>)`. Keep all layout, animation, shape, gesture, and chin-width logic. |
 | `boringNotch/components/Notch/*.swift` (all 6 files) | `Core/Host/Notch/` | Imports only. |
 | `boringNotch/components/Tabs/*.swift` | `Core/Host/Tabs/` | `TabSelectionView` reads tab list from extension host instead of fixed enum. |
@@ -218,9 +288,24 @@ The accessibility case proxies to the existing `BoringNotchXPCHelper` (preserved
 - Sections inlined inside `SettingsView`'s body stay there in v1; the corresponding extension contributes only its non-inline-able controls (e.g., the music-controller selection toggles, the shelf clear-storage button) via `host.register(settingsPane:)`.
 - Cosmetic re-extraction of inline sections is deliberately avoided to keep edits small.
 
-### 5.4 `NotchHomeView` note
+### 5.4 `NotchHomeView` decomposition
 
-`boringNotch/components/Notch/NotchHomeView.swift` (578 lines) currently mixes Music presentation (visualizer, controls) and Calendar presentation (event list). Per the no-rewrite rule, the entire file moves verbatim to MusicExtension as the Home tab body. CalendarExtension contributes its tab via the already-separate `BoringCalendar.swift`. If review reveals Calendar UI tightly entangled inside `NotchHomeView`, the smallest possible `git mv` of the offending struct into CalendarExtension is performed — the rest is left alone.
+`boringNotch/components/Notch/NotchHomeView.swift` (578 lines) is **not** verbatim-movable to a single extension — verified by inspection at lines 421-467 (`struct NotchHomeView`):
+
+- Line 444: renders `MusicPlayerView` (Music)
+- Line 447: renders `CalendarView` (Calendar)
+- Line 457: renders `CameraPreviewView` with `WebcamManager.shared` (Webcam)
+
+This is *the* most entangled host file. The plan is:
+
+- `NotchHomeView` itself (the composing parent struct, ~lines 421-467) stays in core as a struct that arranges contributions side-by-side — but its body changes from hard-coded child view references to iteration over all extensions that registered as a `home-tab-fragment` contribution kind. *This is a real edit, not a verbatim move.*
+- `MusicPlayerView` and supporting Music structs in the same file move to MusicExtension via per-struct `git mv` (extracting blocks of the file). Each extracted struct contributes a `NotchHomeFragmentContribution` for the home tab.
+- `CalendarView` is already a separate symbol but its definition lives in `BoringCalendar.swift` — CalendarExtension contributes a fragment that wraps it.
+- `CameraPreviewView` moves to WebcamExtension and contributes a fragment.
+
+`NotchHomeFragmentContribution` is a slot type added to NotchKit (see §4.3). It declares ordering/priority so the three fragments lay out in their current visual order (Music → Calendar → Camera).
+
+This is the largest deviation from the "verbatim move" rule in the spec, called out explicitly. The edit to `NotchHomeView` body is a contained ~30-line rewrite of the `mainContent` property; the rest of the file's contents are still moved by `git mv` of the per-feature structs.
 
 ## 6. Per-extension file disposition
 
@@ -337,10 +422,14 @@ Existing `Defaults` keys are preserved verbatim — extensions read the same key
 
 ## 8. Risks (accepted for v1)
 
-- **No code-signing on extensions.** Loading arbitrary code into a process holding accessibility / camera / mic / calendar entitlements is an attack surface. Mitigated only by the user directory being inside the user's home (not world-writable). v2 adds signature gating.
+- **No in-app code-signing gate on extensions.** The host opts out of library validation (§3.4) so user-installed `.notchext`s with any signing identity load. Combined with the host's accessibility / camera / mic / calendar entitlements, this is a real attack surface — a malicious extension inherits all of those grants without a separate user dialog. Mitigated only by the user directory being inside the user's home (not world-writable). v2 adds in-app per-extension trust prompts.
+- **TCC consent inheritance.** macOS scopes calendar / camera / mic / accessibility consent at the host bundle level. A loaded extension reads through the host's already-granted permissions without ever surfacing a per-extension consent UI. Documented; v2 designs an explicit consent layer.
 - **No process isolation.** A pure-Swift `fatalError`, deadlock, or memory corruption in any extension takes down the host. Mitigation: best-effort `@objc` exception catching at API entry points; no Swift-level safety net.
-- **`@objc` API ceiling.** New API surfaces requiring Swift-only types (generics, value types, async sequences) cannot be added without redesign.
-- **Big-bang regression risk.** Mitigated by the §2.1 `git mv`-only constraint: post-move diffs are small and reviewable, behavior is byte-identical except for the explicit edits.
+- **`@objc` API ceiling.** New API surfaces requiring Swift-only types (generics, value types, async sequences) cannot be added without redesign. Workaround pattern: data crossing the boundary uses `Codable` JSON via `Data` parameters when expressing it as Foundation types is awkward.
+- **NotchKit binary/API versioning.** v1 has no formal ABI / API versioning for `NotchKit`. A host upgrade may break user-installed third-party extensions silently. Mitigation: extensions read `NotchKit.version` at activation and refuse to run on unknown versions; the host logs and skips. v2 designs proper semver gating.
+- **Defaults schema duplication.** `Constants.swift` currently centralizes `Defaults` keys for many features. After migration, each extension owns its keys and reads via `host.settings`. v1 keeps the existing key strings unchanged for backwards compatibility, which means there are two notations for the same data: literal strings inside extension code, and the host's old (now-unreferenced) constants. The spec mandates *deleting* the migrated `Defaults` keys from `Constants.swift` as part of each feature's migration to avoid drift.
+- **Inter-extension UI coupling already in source.** `NotchHomeView.swift` directly composes Music + Calendar + Camera UI (§5.4). The decomposition is non-trivial and is the single largest source of regression risk; called out explicitly so reviewers focus on it.
+- **Big-bang regression risk.** Mitigated by the §2.1 `git mv`-only constraint and the §11 internal phasing. Post-move diffs should be small and reviewable, behavior should be byte-identical except for the explicit edits.
 - **Localization regression.** Per-feature `Localizable.xcstrings` entries stay in the host file in v1.
 
 ## 9. Testing & verification
@@ -375,3 +464,47 @@ Existing `Defaults` keys are preserved verbatim — extensions read the same key
 
 - WASM plugins
 - Inter-extension version constraints / dependencies
+
+## 11. Internal phasing of the big-bang landing
+
+The refactor lands as one PR. Internally, the work is sequenced so that risk surfaces early and cheaply. Reviewers can evaluate each phase independently in commit history; the PR ships only when all three are green.
+
+### Phase A — Plug-in plumbing proves end-to-end
+
+Smallest viable end-state: workspace, `NotchKit.framework`, host app stub, **TipsExtension** (chosen because it has the smallest surface — single `TipStore.swift`).
+
+- Create `Notch.xcworkspace`, `Core/Notch.xcodeproj` with host app + `NotchKit` targets.
+- Implement `NotchExtension` protocol, `NotchHost`, `ExtensionLoader`, `ExtensionHost`, contribution registry. New code only.
+- Implement `@convention(block)` factory shape; verify it compiles and crosses bundle boundary.
+- Configure host entitlements (Hardened Runtime + library-validation disable), `LD_RUNPATH_SEARCH_PATHS`, install names, Code Sign on Copy.
+- Create `Extensions/Tips/TipsExtension.xcodeproj`, link NotchKit, ship a `TipsExtension.swift` principal class registering one minimal contribution.
+- Verify: host launches, loader finds the bundle, principal class instantiates, contribution registers, registry lookup works, `NotchKit.framework` is *not* duplicated in the loaded image graph (verify with `lldb` or `dyldinfo`).
+- Verify: a manually-signed third-party `.notchext` placed in `~/Library/Application Support/Notch/Extensions/` also loads.
+
+Phase A is the *technical* gate. If any of the dyld / signing / `@objc` mechanics don't work, this phase fails fast before any feature migration begins.
+
+### Phase B — Host services and registry stabilize
+
+- Implement `NotchNotchStateHost`, `NotchScreenHost`, `NotchCoordinatorHost` service protocols (§4.6) backed by the existing `BoringViewModel` / `BoringViewCoordinator` instances.
+- Edit `BoringViewCoordinator.swift` to switch sneak-peek / expanded-item dispatch from `SneakContentType` enum to string-keyed registry lookup.
+- Edit `ContentView.swift` to look up slot contributions from the registry instead of referencing concrete views (initially, the registry is empty for everything except Tips, so the notch surface degrades gracefully — the *core* still renders).
+- Add `NotchHomeFragmentContribution` (§5.4) and rewrite `NotchHomeView.mainContent` to iterate fragments.
+- Verify: app still launches and shows the empty notch + the Tips extension's tab. Settings window aggregates Tips' (empty) pane. Menu bar still works.
+
+Phase B is the *architecture* gate. If host-service protocols or string-keyed dispatch turn out to be wrong shape, this phase exposes it before seven more migrations pile on.
+
+### Phase C — Feature migrations
+
+In this order (smallest / least entangled first; most coupled last):
+
+1. **Webcam** (single manager, single view, fragment contribution to home)
+2. **Battery** (live activity + sneak-peek + expanded-item kinds; exercises Codec for sneak-peek values)
+3. **Calendar** (tab + permission flow; exercises `NotchPermissionsAPI` end-to-end)
+4. **LiveActivities** (download view + marquee + modifier; mostly view-only)
+5. **HUD** (volume + brightness + media-key interceptor + accessibility; exercises XPC integration through the permission API)
+6. **Shelf** (largest single feature; sustained state, multiple services, AirDrop)
+7. **Music** (last; multiple controllers, NotchHomeView fragment, onboarding step, keyboard shortcut)
+
+Each migration is one-feature-per-commit. Each commit is independently reviewable as: `git mv` of files into the extension's project + the documented minimal edits + the principal-class file. After every migration, the manual verification gate (§9) is rerun against the affected feature.
+
+The single PR's diff therefore decomposes into ~10 self-contained commits whose order matches risk: phase-A commits at the top fail loudly if the plumbing is wrong, phase-B commits expose architectural mistakes, and phase-C commits land features one at a time. Codex's "this is three projects stacked" critique is honored by sequencing them, while still landing as a coherent unit per the user's big-bang preference.
