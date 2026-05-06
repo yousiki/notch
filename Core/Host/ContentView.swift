@@ -10,6 +10,7 @@ import AVFoundation
 import Combine
 import Defaults
 import KeyboardShortcuts
+import NotchKit
 import SwiftUI
 import SwiftUIIntrospect
 
@@ -291,8 +292,15 @@ struct ContentView: View {
                           InlineHUD(type: $coordinator.sneakPeek.kind, value: $coordinator.sneakPeek.value, icon: $coordinator.sneakPeek.icon, hoverAnimation: $isHovering, gestureProgress: $gestureProgress)
                               .transition(.opacity)
                       } else if (!coordinator.expandingView.show || coordinator.expandingView.kind == "music") && vm.notchState == .closed && (musicManager.isPlaying || !musicManager.isPlayerIdle) && coordinator.musicLiveActivityEnabled && !vm.hideOnClosed {
-                          MusicLiveActivity()
-                              .frame(alignment: .center)
+                          Group {
+                              if let item = ExtensionHost.shared.closedChinItems.first(where: { $0.identifier == "com.theboredteam.notch.music.live-activity" }) {
+                                  ContributionViewControllerHost(make: item.makeViewController)
+                              } else {
+                                  // built-in fallback until C7 migrates Music
+                                  MusicLiveActivity()
+                              }
+                          }
+                          .frame(alignment: .center)
                       } else if !coordinator.expandingView.show && vm.notchState == .closed && (!musicManager.isPlaying && musicManager.isPlayerIdle) && Defaults[.showNotHumanFace] && !vm.hideOnClosed  {
                           BoringFaceAnimation()
                        } else if vm.notchState == .open {
@@ -303,7 +311,11 @@ struct ContentView: View {
                            Rectangle().fill(.clear).frame(width: vm.closedNotchSize.width - 20, height: vm.effectiveClosedNotchHeight)
                        }
 
-                      if coordinator.sneakPeek.show {
+                      if let s = ExtensionHost.shared.sneakPeeks[coordinator.sneakPeek.kind], coordinator.sneakPeek.show {
+                          // Registry-claimed sneak peek (Phase B+).
+                          ContributionViewControllerHost(make: s.makeViewController)
+                      } else if coordinator.sneakPeek.show {
+                          // built-in fallback until C5/C7 migrate HUD + Music sneak peeks
                           if (coordinator.sneakPeek.kind != "music") && (coordinator.sneakPeek.kind != "battery") && !Defaults[.inlineHUD] && vm.notchState == .closed {
                               SystemEventIndicatorModifier(
                                   eventType: $coordinator.sneakPeek.kind,
@@ -347,11 +359,18 @@ struct ContentView: View {
               .zIndex(2)
             if vm.notchState == .open {
                 VStack {
-                    switch coordinator.currentView {
-                    case .home:
-                        NotchHomeView(albumArtNamespace: albumArtNamespace)
-                    case .shelf:
-                        ShelfView()
+                    Group {
+                        if coordinator.currentTabIdentifier == "home" {
+                            NotchHomeView(albumArtNamespace: albumArtNamespace)
+                        } else if let tab = ExtensionHost.shared.tabs.first(
+                            where: { $0.identifier == coordinator.currentTabIdentifier }) {
+                            ContributionViewControllerHost(make: tab.makeViewController)
+                        } else if coordinator.currentTabIdentifier == "com.theboredteam.notch.shelf.tab" {
+                            // built-in fallback until C6 migrates Shelf
+                            ShelfView()
+                        } else {
+                            EmptyView()
+                        }
                     }
                 }
                 .transition(
@@ -660,4 +679,11 @@ struct GeneralDropTargetDelegate: DropDelegate {
     return ContentView()
         .environmentObject(vm)
         .frame(width: vm.notchSize.width, height: vm.notchSize.height)
+}
+
+struct ContributionViewControllerHost: NSViewControllerRepresentable {
+    let make: @convention(block) () -> NSViewController
+
+    func makeNSViewController(context: Context) -> NSViewController { make() }
+    func updateNSViewController(_ nsViewController: NSViewController, context: Context) {}
 }
