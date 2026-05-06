@@ -1,6 +1,6 @@
 //
-//  boringNotchApp.swift
-//  boringNotchApp
+//  CapsuleApp.swift
+//  Capsule
 //
 //  Created by Harsh Vardhan  Goswami  on 02/08/24.
 //
