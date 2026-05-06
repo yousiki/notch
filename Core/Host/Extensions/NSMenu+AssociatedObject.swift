@@ -1,6 +1,6 @@
 //
 //  NSMenu+AssociatedObject.swift
-//  boringNotch
+//  Capsule
 //
 //  Created by Alexander on 2025-10-05.
 //

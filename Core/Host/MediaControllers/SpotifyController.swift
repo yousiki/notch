@@ -1,6 +1,6 @@
 //
 //  SpotifyController.swift
-//  boringNotch
+//  Capsule
 //
 //  Created by Alexander on 2025-03-29.
 //

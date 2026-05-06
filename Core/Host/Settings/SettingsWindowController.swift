@@ -1,6 +1,6 @@
 //
 //  SettingsWindowController.swift
-//  boringNotch
+//  Capsule
 //
 //  Created by Alexander on 2025-06-14.
 //

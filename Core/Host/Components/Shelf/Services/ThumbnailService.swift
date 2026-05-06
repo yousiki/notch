@@ -1,6 +1,6 @@
 //
 //  ThumbnailService.swift
-//  boringNotch
+//  Capsule
 //
 //  Created by Alexander on 2025-10-07.
 //

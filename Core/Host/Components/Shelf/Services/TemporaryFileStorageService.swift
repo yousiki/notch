@@ -1,6 +1,6 @@
 //
 //  TemporaryFileStorageService.swift
-//  boringNotch
+//  Capsule
 //
 //  Created by Alexander on 2025-09-24.
 //

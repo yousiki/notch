@@ -1,6 +1,6 @@
 //
 //  OpenNotchHUD.swift
-//  boringNotch
+//  Capsule
 //
 //  Created by Alexander on 2024-11-23.
 //

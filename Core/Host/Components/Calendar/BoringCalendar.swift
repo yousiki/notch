@@ -1,6 +1,6 @@
 //
 //  BoringCalendar.swift
-//  boringNotch
+//  Capsule
 //
 //  Created by Harsh Vardhan  Goswami  on 08/09/24.
 //

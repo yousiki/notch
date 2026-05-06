@@ -1,6 +1,6 @@
 //
 //  DownloadView.swift
-//  boringNotch
+//  Capsule
 //
 //  Created by Harsh Vardhan  Goswami  on 17/08/24.
 //

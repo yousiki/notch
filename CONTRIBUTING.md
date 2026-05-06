@@ -4,7 +4,7 @@ Thank you for taking the time to contribute! ❤️
 
 These guidelines help streamline the contribution process for everyone involved. By following them, you'll make it easier for maintainers to review your work and collaborate with you effectively.
 
-You can contribute in many ways: writing code, improving documentation, reporting bugs, requesting features, or creating tutorials and blog posts. Every contribution, large or small, helps make Boring Notch better.
+You can contribute in many ways: writing code, improving documentation, reporting bugs, requesting features, or creating tutorials and blog posts. Every contribution, large or small, helps make Capsule better.
 
 ## Table of Contents
 
@@ -40,8 +40,8 @@ Please submit all translations to [Crowdin](https://crowdin.com/project/boring-n
 
 2. **Clone your fork**:
    ```bash
-   git clone https://github.com/{your-username}/boring.notch.git
-   cd boring.notch
+   git clone https://github.com/{your-username}/Capsule.git
+   cd Capsule
    ```
    Replace `{your-username}` with your GitHub username.
 
@@ -130,4 +130,4 @@ If you need help or have questions:
 
 ---
 
-Thank you for contributing to Boring Notch! Your efforts help make this project better for everyone. 🎉
+Thank you for contributing to Capsule! Your efforts help make this project better for everyone. 🎉
