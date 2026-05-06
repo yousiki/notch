@@ -10,7 +10,7 @@ import Defaults
 
 struct InlineHUD: View {
     @EnvironmentObject var vm: BoringViewModel
-    @Binding var type: SneakContentType
+    @Binding var type: String
     @Binding var value: CGFloat
     @Binding var icon: String
     @Binding var hoverAnimation: Bool
@@ -20,7 +20,7 @@ struct InlineHUD: View {
             HStack(spacing: 5) {
                 Group {
                     switch (type) {
-                        case .volume:
+                        case "volume":
                             if icon.isEmpty {
                                 Image(systemName: SpeakerSymbol(value))
                                     .contentTransition(.interpolate)
@@ -33,15 +33,15 @@ struct InlineHUD: View {
                                     .scaleEffect(value.isZero ? 0.85 : 1)
                                     .frame(width: 20, height: 15, alignment: .leading)
                             }
-                        case .brightness:
+                        case "brightness":
                             Image(systemName: BrightnessSymbol(value))
                                 .contentTransition(.interpolate)
                                 .frame(width: 20, height: 15, alignment: .center)
-                        case .backlight:
+                        case "backlight":
                             Image(systemName: value > 0.5 ? "light.max" : "light.min")
                                 .contentTransition(.interpolate)
                                 .frame(width: 20, height: 15, alignment: .center)
-                        case .mic:
+                        case "mic":
                             Image(systemName: "mic")
                                 .symbolRenderingMode(.hierarchical)
                                 .symbolVariant(value > 0 ? .none : .slash)
@@ -68,7 +68,7 @@ struct InlineHUD: View {
                 .frame(width: vm.closedNotchSize.width - 20)
             
             HStack {
-                if (type == .mic) {
+                if (type == "mic") {
                     Text(value.isZero ? "muted" : "unmuted")
                         .foregroundStyle(.gray)
                         .lineLimit(1)
@@ -79,13 +79,13 @@ struct InlineHUD: View {
                 } else {
                         HStack {
                         DraggableProgressBar(value: $value, onChange: { v in
-                            if type == .volume {
+                            if type == "volume" {
                                 VolumeManager.shared.setAbsolute(Float32(v))
-                            } else if type == .brightness {
+                            } else if type == "brightness" {
                                 BrightnessManager.shared.setAbsolute(value: Float32(v))
                             }
                         })
-                        if (type == .volume && value.isZero) {
+                        if (type == "volume" && value.isZero) {
                             Text("muted")
                                 .font(.caption)
                                 .fontWeight(.medium)
@@ -137,15 +137,15 @@ struct InlineHUD: View {
         }
     }
     
-    func Type2Name(_ type: SneakContentType) -> String {
+    func Type2Name(_ type: String) -> String {
         switch(type) {
-            case .volume:
+            case "volume":
                 return "Volume"
-            case .brightness:
+            case "brightness":
                 return "Brightness"
-            case .backlight:
+            case "backlight":
                 return "Backlight"
-            case .mic:
+            case "mic":
                 return "Mic"
             default:
                 return ""
@@ -154,7 +154,7 @@ struct InlineHUD: View {
 }
 
 #Preview {
-    InlineHUD(type: .constant(.brightness), value: .constant(0.4), icon: .constant(""), hoverAnimation: .constant(false), gestureProgress: .constant(0))
+    InlineHUD(type: .constant("brightness"), value: .constant(0.4), icon: .constant(""), hoverAnimation: .constant(false), gestureProgress: .constant(0))
         .padding(.horizontal, 8)
         .background(Color.black)
         .padding()

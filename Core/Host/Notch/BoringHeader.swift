@@ -38,8 +38,8 @@ struct BoringHeader: View {
 
             HStack(spacing: 4) {
                 if vm.notchState == .open {
-                    if isHUDType(coordinator.sneakPeek.type) && coordinator.sneakPeek.show && Defaults[.showOpenNotchHUD] {
-                        OpenNotchHUD(type: $coordinator.sneakPeek.type, value: $coordinator.sneakPeek.value, icon: $coordinator.sneakPeek.icon)
+                    if isHUDType(coordinator.sneakPeek.kind) && coordinator.sneakPeek.show && Defaults[.showOpenNotchHUD] {
+                        OpenNotchHUD(type: $coordinator.sneakPeek.kind, value: $coordinator.sneakPeek.value, icon: $coordinator.sneakPeek.icon)
                             .transition(.scale(scale: 0.8).combined(with: .opacity))
                     } else {
                         if Defaults[.showMirror] {
@@ -102,9 +102,9 @@ struct BoringHeader: View {
         .environmentObject(vm)
     }
 
-    func isHUDType(_ type: SneakContentType) -> Bool {
+    func isHUDType(_ type: String) -> Bool {
         switch type {
-        case .volume, .brightness, .backlight, .mic:
+        case "volume", "brightness", "backlight", "mic":
             return true
         default:
             return false

@@ -10,7 +10,7 @@ import Defaults
 
 struct SystemEventIndicatorModifier: View {
     @EnvironmentObject var vm: BoringViewModel
-    @Binding var eventType: SneakContentType
+    @Binding var eventType: String
     @Binding var value: CGFloat {
         didSet {
             DispatchQueue.main.async {
@@ -22,11 +22,11 @@ struct SystemEventIndicatorModifier: View {
     @Binding var icon: String
     let showSlider: Bool = false
     var sendEventBack: (CGFloat) -> Void
-    
+
     var body: some View {
         HStack(spacing: 14) {
             switch (eventType) {
-                case .volume:
+                case "volume":
                     if icon.isEmpty {
                         Image(systemName: SpeakerSymbol(value))
                             .contentTransition(.interpolate)
@@ -39,17 +39,17 @@ struct SystemEventIndicatorModifier: View {
                             .scaleEffect(value.isZero ? 0.85 : 1)
                             .frame(width: 20, height: 15, alignment: .leading)
                     }
-                case .brightness:
+                case "brightness":
                     Image(systemName: "sun.max.fill")
                         .contentTransition(.symbolEffect)
                         .frame(width: 20, height: 15)
                         .foregroundStyle(.white)
-                case .backlight:
+                case "backlight":
                     Image(systemName: value > 0.5 ? "light.max" : "light.min")
                         .contentTransition(.interpolate)
                         .frame(width: 20, height: 15)
                         .foregroundStyle(.white)
-                case .mic:
+                case "mic":
                     Image(systemName: "mic")
                         .symbolVariant(value > 0 ? .none : .slash)
                         .contentTransition(.interpolate)
@@ -58,7 +58,7 @@ struct SystemEventIndicatorModifier: View {
                 default:
                     EmptyView()
             }
-            if (eventType != .mic) {
+            if (eventType != "mic") {
                 DraggableProgressBar(value: $value)
                 if Defaults[.showClosedNotchHUDPercentage] {
                     Text("\(Int(value * 100))%")

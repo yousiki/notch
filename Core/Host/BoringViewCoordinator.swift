@@ -10,19 +10,20 @@ import Combine
 import Defaults
 import SwiftUI
 
-enum SneakContentType {
-    case brightness
-    case volume
-    case backlight
-    case music
-    case mic
-    case battery
-    case download
-}
+// Sneak-peek and expanded-item kinds are open string identifiers in v1.
+// The well-known kinds used by built-in extensions are documented here for
+// reference. Each kind must be claimed by exactly one extension via
+// host.register(sneakPeek:) / host.register(expandedItem:).
+//
+//   "brightness", "volume", "backlight"  → HUDExtension
+//   "music"                              → MusicExtension
+//   "mic"                                → HUDExtension
+//   "battery"                            → BatteryExtension
+//   "download"                           → LiveActivitiesExtension
 
 struct sneakPeek {
     var show: Bool = false
-    var type: SneakContentType = .music
+    var kind: String = "music"
     var value: CGFloat = 0
     var icon: String = ""
 }
@@ -41,7 +42,7 @@ enum BrowserType {
 
 struct ExpandedItem {
     var show: Bool = false
-    var type: SneakContentType = .battery
+    var kind: String = "battery"
     var value: CGFloat = 0
     var browser: BrowserType = .chromium
 }
@@ -50,7 +51,20 @@ struct ExpandedItem {
 class BoringViewCoordinator: ObservableObject {
     static let shared = BoringViewCoordinator()
 
-    @Published var currentView: NotchViews = .home
+    @Published var currentView: NotchViews = .home {
+        didSet {
+            switch currentView {
+            case .home:  currentTabIdentifier = "home"
+            case .shelf: currentTabIdentifier = "com.theboredteam.notch.shelf.tab"
+            }
+        }
+    }
+    @Published var currentTabIdentifier: String = "home" {
+        didSet {
+            NotificationCenter.default.post(
+                name: .currentTabIdentifierChanged, object: nil)
+        }
+    }
     @Published var helloAnimationRunning: Bool = false
     private var sneakPeekDispatch: DispatchWorkItem?
     private var expandingViewDispatch: DispatchWorkItem?
@@ -180,15 +194,13 @@ class BoringViewCoordinator: ObservableObject {
         if let decodedData = try? decoder.decode(
             SharedSneakPeek.self, from: notification.userInfo?.first?.value as! Data)
         {
-            let contentType =
-                decodedData.type == "brightness"
-                ? SneakContentType.brightness
-                : decodedData.type == "volume"
-                    ? SneakContentType.volume
-                    : decodedData.type == "backlight"
-                        ? SneakContentType.backlight
-                        : decodedData.type == "mic"
-                            ? SneakContentType.mic : SneakContentType.brightness
+            let contentKind: String
+            switch decodedData.type {
+            case "brightness", "volume", "backlight", "mic":
+                contentKind = decodedData.type
+            default:
+                contentKind = "brightness"
+            }
 
             let formatter = NumberFormatter()
             formatter.locale = Locale(identifier: "en_US_POSIX")
@@ -198,7 +210,7 @@ class BoringViewCoordinator: ObservableObject {
 
             print("Decoded: \(decodedData), Parsed value: \(value)")
 
-            toggleSneakPeek(status: decodedData.show, type: contentType, value: value, icon: icon)
+            toggleSneakPeek(status: decodedData.show, kind: contentKind, value: value, icon: icon)
 
         } else {
             print("Failed to decode JSON data")
@@ -206,11 +218,11 @@ class BoringViewCoordinator: ObservableObject {
     }
 
     func toggleSneakPeek(
-        status: Bool, type: SneakContentType, duration: TimeInterval = 1.5, value: CGFloat = 0,
+        status: Bool, kind: String, duration: TimeInterval = 1.5, value: CGFloat = 0,
         icon: String = ""
     ) {
         sneakPeekDuration = duration
-        if type != .music {
+        if kind != "music" {
             // close()
             if !Defaults[.hudReplacement] {
                 return
@@ -219,13 +231,13 @@ class BoringViewCoordinator: ObservableObject {
         Task { @MainActor in
             withAnimation(.smooth) {
                 self.sneakPeek.show = status
-                self.sneakPeek.type = type
+                self.sneakPeek.kind = kind
                 self.sneakPeek.value = value
                 self.sneakPeek.icon = icon
             }
         }
 
-        if type == .mic {
+        if kind == "mic" {
             currentMicStatus = value == 1
         }
     }
@@ -242,7 +254,7 @@ class BoringViewCoordinator: ObservableObject {
             guard let self = self, !Task.isCancelled else { return }
             await MainActor.run {
                 withAnimation {
-                    self.toggleSneakPeek(status: false, type: .music)
+                    self.toggleSneakPeek(status: false, kind: "music")
                     self.sneakPeekDuration = 1.5
                 }
             }
@@ -261,14 +273,14 @@ class BoringViewCoordinator: ObservableObject {
 
     func toggleExpandingView(
         status: Bool,
-        type: SneakContentType,
+        kind: String,
         value: CGFloat = 0,
         browser: BrowserType = .chromium
     ) {
         Task { @MainActor in
             withAnimation(.smooth) {
                 self.expandingView.show = status
-                self.expandingView.type = type
+                self.expandingView.kind = kind
                 self.expandingView.value = value
                 self.expandingView.browser = browser
             }
@@ -281,12 +293,12 @@ class BoringViewCoordinator: ObservableObject {
         didSet {
             if expandingView.show {
                 expandingViewTask?.cancel()
-                let duration: TimeInterval = (expandingView.type == .download ? 2 : 3)
-                let currentType = expandingView.type
+                let duration: TimeInterval = (expandingView.kind == "download" ? 2 : 3)
+                let currentKind = expandingView.kind
                 expandingViewTask = Task { [weak self] in
                     try? await Task.sleep(for: .seconds(duration))
                     guard let self = self, !Task.isCancelled else { return }
-                    self.toggleExpandingView(status: false, type: currentType)
+                    self.toggleExpandingView(status: false, kind: currentKind)
                 }
             } else {
                 expandingViewTask?.cancel()

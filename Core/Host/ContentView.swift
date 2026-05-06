@@ -61,11 +61,11 @@ struct ContentView: View {
     private var computedChinWidth: CGFloat {
         var chinWidth: CGFloat = vm.closedNotchSize.width
 
-        if coordinator.expandingView.type == .battery && coordinator.expandingView.show
+        if coordinator.expandingView.kind == "battery" && coordinator.expandingView.show
             && vm.notchState == .closed && Defaults[.showPowerStatusNotifications]
         {
             chinWidth = 640
-        } else if (!coordinator.expandingView.show || coordinator.expandingView.type == .music)
+        } else if (!coordinator.expandingView.show || coordinator.expandingView.kind == "music")
             && vm.notchState == .closed && (musicManager.isPlaying || !musicManager.isPlayerIdle)
             && coordinator.musicLiveActivityEnabled && !vm.hideOnClosed
         {
@@ -257,7 +257,7 @@ struct ContentView: View {
                     .padding(.top, 40)
                     Spacer()
                 } else {
-                    if coordinator.expandingView.type == .battery && coordinator.expandingView.show
+                    if coordinator.expandingView.kind == "battery" && coordinator.expandingView.show
                         && vm.notchState == .closed && Defaults[.showPowerStatusNotifications]
                     {
                         HStack(spacing: 0) {
@@ -284,10 +284,10 @@ struct ContentView: View {
                             .frame(width: 76, alignment: .trailing)
                         }
                         .frame(height: vm.effectiveClosedNotchHeight, alignment: .center)
-                      } else if coordinator.sneakPeek.show && Defaults[.inlineHUD] && (coordinator.sneakPeek.type != .music) && (coordinator.sneakPeek.type != .battery) && vm.notchState == .closed {
-                          InlineHUD(type: $coordinator.sneakPeek.type, value: $coordinator.sneakPeek.value, icon: $coordinator.sneakPeek.icon, hoverAnimation: $isHovering, gestureProgress: $gestureProgress)
+                      } else if coordinator.sneakPeek.show && Defaults[.inlineHUD] && (coordinator.sneakPeek.kind != "music") && (coordinator.sneakPeek.kind != "battery") && vm.notchState == .closed {
+                          InlineHUD(type: $coordinator.sneakPeek.kind, value: $coordinator.sneakPeek.value, icon: $coordinator.sneakPeek.icon, hoverAnimation: $isHovering, gestureProgress: $gestureProgress)
                               .transition(.opacity)
-                      } else if (!coordinator.expandingView.show || coordinator.expandingView.type == .music) && vm.notchState == .closed && (musicManager.isPlaying || !musicManager.isPlayerIdle) && coordinator.musicLiveActivityEnabled && !vm.hideOnClosed {
+                      } else if (!coordinator.expandingView.show || coordinator.expandingView.kind == "music") && vm.notchState == .closed && (musicManager.isPlaying || !musicManager.isPlayerIdle) && coordinator.musicLiveActivityEnabled && !vm.hideOnClosed {
                           MusicLiveActivity()
                               .frame(alignment: .center)
                       } else if !coordinator.expandingView.show && vm.notchState == .closed && (!musicManager.isPlaying && musicManager.isPlayerIdle) && Defaults[.showNotHumanFace] && !vm.hideOnClosed  {
@@ -301,16 +301,16 @@ struct ContentView: View {
                        }
 
                       if coordinator.sneakPeek.show {
-                          if (coordinator.sneakPeek.type != .music) && (coordinator.sneakPeek.type != .battery) && !Defaults[.inlineHUD] && vm.notchState == .closed {
+                          if (coordinator.sneakPeek.kind != "music") && (coordinator.sneakPeek.kind != "battery") && !Defaults[.inlineHUD] && vm.notchState == .closed {
                               SystemEventIndicatorModifier(
-                                  eventType: $coordinator.sneakPeek.type,
+                                  eventType: $coordinator.sneakPeek.kind,
                                   value: $coordinator.sneakPeek.value,
                                   icon: $coordinator.sneakPeek.icon,
                                   sendEventBack: { newVal in
-                                      switch coordinator.sneakPeek.type {
-                                      case .volume:
+                                      switch coordinator.sneakPeek.kind {
+                                      case "volume":
                                           VolumeManager.shared.setAbsolute(Float32(newVal))
-                                      case .brightness:
+                                      case "brightness":
                                           BrightnessManager.shared.setAbsolute(value: Float32(newVal))
                                       default:
                                           break
@@ -322,7 +322,7 @@ struct ContentView: View {
                               .padding(.trailing, 8)
                           }
                           // Old sneak peek music
-                          else if coordinator.sneakPeek.type == .music {
+                          else if coordinator.sneakPeek.kind == "music" {
                               if vm.notchState == .closed && !vm.hideOnClosed && Defaults[.sneakPeekStyles] == .standard {
                                   HStack(alignment: .center) {
                                       Image(systemName: "music.note")
@@ -337,7 +337,7 @@ struct ContentView: View {
                       }
                   }
               }
-              .conditionalModifier((coordinator.sneakPeek.show && (coordinator.sneakPeek.type == .music) && vm.notchState == .closed && !vm.hideOnClosed && Defaults[.sneakPeekStyles] == .standard) || (coordinator.sneakPeek.show && (coordinator.sneakPeek.type != .music) && (vm.notchState == .closed))) { view in
+              .conditionalModifier((coordinator.sneakPeek.show && (coordinator.sneakPeek.kind == "music") && vm.notchState == .closed && !vm.hideOnClosed && Defaults[.sneakPeekStyles] == .standard) || (coordinator.sneakPeek.show && (coordinator.sneakPeek.kind != "music") && (vm.notchState == .closed))) { view in
                   view
                       .fixedSize()
               }
@@ -406,7 +406,7 @@ struct ContentView: View {
                 .overlay(
                     HStack(alignment: .top) {
                         if coordinator.expandingView.show
-                            && coordinator.expandingView.type == .music
+                            && coordinator.expandingView.kind == "music"
                         {
                             MarqueeText(
                                 .constant(musicManager.songTitle),
@@ -432,7 +432,7 @@ struct ContentView: View {
                                 )
                                 .opacity(
                                     (coordinator.expandingView.show
-                                        && coordinator.expandingView.type == .music
+                                        && coordinator.expandingView.kind == "music"
                                         && Defaults[.sneakPeekStyles] == .inline)
                                         ? 1 : 0
                                 )
@@ -441,7 +441,7 @@ struct ContentView: View {
                 )
                 .frame(
                     width: (coordinator.expandingView.show
-                        && coordinator.expandingView.type == .music
+                        && coordinator.expandingView.kind == "music"
                         && Defaults[.sneakPeekStyles] == .inline)
                         ? 380
                         : vm.closedNotchSize.width

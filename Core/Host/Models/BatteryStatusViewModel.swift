@@ -123,7 +123,7 @@ class BatteryStatusViewModel: ObservableObject {
     private func notifyImportanChangeStatus(delay: Double = 0.0) {
         Task {
             try? await Task.sleep(for: .seconds(delay))
-            self.coordinator.toggleExpandingView(status: true, type: .battery)
+            self.coordinator.toggleExpandingView(status: true, kind: "battery")
         }
     }
 

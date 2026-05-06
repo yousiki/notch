@@ -356,11 +356,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             guard let self = self else { return }
             if Defaults[.sneakPeekStyles] == .inline {
                 let newStatus = !self.coordinator.expandingView.show
-                self.coordinator.toggleExpandingView(status: newStatus, type: .music)
+                self.coordinator.toggleExpandingView(status: newStatus, kind: "music")
             } else {
                 self.coordinator.toggleSneakPeek(
                     status: !self.coordinator.sneakPeek.show,
-                    type: .music,
+                    kind: "music",
                     duration: 3.0
                 )
             }
