@@ -10,6 +10,7 @@ import Defaults
 import EventKit
 import KeyboardShortcuts
 import LaunchAtLogin
+import NotchKit
 import Sparkle
 import SwiftUI
 import SwiftUIIntrospect
@@ -54,9 +55,9 @@ struct SettingsView: View {
                 NavigationLink(value: "Shortcuts") {
                     Label("Shortcuts", systemImage: "keyboard")
                 }
-                // NavigationLink(value: "Extensions") {
-                //     Label("Extensions", systemImage: "puzzlepiece.extension")
-                // }
+                NavigationLink(value: "Extensions") {
+                    Label("Extensions", systemImage: "puzzlepiece.extension")
+                }
                 NavigationLink(value: "Advanced") {
                     Label("Advanced", systemImage: "gearshape.2")
                 }
@@ -88,7 +89,7 @@ struct SettingsView: View {
                 case "Shortcuts":
                     Shortcuts()
                 case "Extensions":
-                    GeneralSettings()
+                    ExtensionsSettingsPane()
                 case "Advanced":
                     Advanced()
                 case "About":
@@ -1791,6 +1792,28 @@ func warningBadge(_ text: String, _ description: String) -> some View {
             }
             Spacer()
         }
+    }
+}
+
+private struct ExtensionsSettingsPane: View {
+    var body: some View {
+        Form {
+            if ExtensionHost.shared.settingsPanes.isEmpty {
+                Text("No extensions have contributed settings panes.")
+                    .foregroundStyle(.secondary)
+            } else {
+                ForEach(ExtensionHost.shared.settingsPanes, id: \.identifier) { pane in
+                    Section {
+                        ContributionViewControllerHost(make: pane.makeViewController)
+                            .frame(minHeight: 120)
+                    } header: {
+                        Text(pane.title)
+                    }
+                }
+            }
+        }
+        .formStyle(.grouped)
+        .navigationTitle("Extensions")
     }
 }
 

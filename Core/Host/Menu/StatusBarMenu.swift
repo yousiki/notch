@@ -1,4 +1,5 @@
 import Cocoa
+import NotchKit
 
 class BoringStatusMenu: NSMenu {
     
@@ -17,8 +18,33 @@ class BoringStatusMenu: NSMenu {
         
         // Set up the menu
         let menu = NSMenu()
+        let extensionItems = ExtensionHost.shared.menuBarItems
+        if !extensionItems.isEmpty {
+            for item in extensionItems {
+                let mi = NSMenuItem(title: item.title, action: nil, keyEquivalent: item.keyEquivalent)
+                mi.keyEquivalentModifierMask = NSEvent.ModifierFlags(rawValue: item.keyEquivalentModifiers)
+                mi.target = MenuItemBox.shared
+                mi.action = #selector(MenuItemBox.invoke(_:))
+                mi.representedObject = MenuItemAction(block: item.action)
+                menu.addItem(mi)
+            }
+            menu.addItem(NSMenuItem.separator())
+        }
         menu.addItem(NSMenuItem(title: "Quit", action: #selector(quitAction), keyEquivalent: "q"))
         statusItem.menu = menu
     }
 
+}
+
+private final class MenuItemAction: NSObject {
+    let block: @convention(block) () -> Void
+    init(block: @escaping @convention(block) () -> Void) { self.block = block }
+}
+
+private final class MenuItemBox: NSObject {
+    static let shared = MenuItemBox()
+    @objc func invoke(_ sender: NSMenuItem) {
+        guard let action = sender.representedObject as? MenuItemAction else { return }
+        action.block()
+    }
 }
