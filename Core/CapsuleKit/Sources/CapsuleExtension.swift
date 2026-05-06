@@ -9,7 +9,7 @@ import Foundation
     /// Factory called by the loader after the bundle is loaded.
     @objc static func make() -> CapsuleExtension
 
-    /// Reverse-DNS identifier, e.g. `"com.theboredteam.music"`.
+    /// Reverse-DNS identifier, e.g. `"moe.siki.Capsule.music"`.
     @objc var identifier: String { get }
 
     /// Human-readable display name shown in Settings → Extensions.

@@ -8,12 +8,6 @@
   <em>A programmable, extensible notch-space framework for macOS.</em>
 </p>
 
-<p align="center">
-  <a href="https://github.com/yousiki/Capsule/actions/workflows/cicd.yml">
-    <img src="https://github.com/yousiki/Capsule/actions/workflows/cicd.yml/badge.svg" alt="Build & Test" />
-  </a>
-</p>
-
 > **Capsule is a fork of [TheBoredTeam/boring.notch](https://github.com/TheBoredTeam/boring.notch)**, originally created by Alexander5015 and the Boring Team.
 > This fork was started on 2026-05-06 and has diverged substantially: an extension-based architecture, new APIs, different scope. Capsule is **not** a drop-in replacement for boring.notch and is maintained independently.
 > Both projects are licensed under GPL-3.0; modifications are tracked in the git history of this repository.
