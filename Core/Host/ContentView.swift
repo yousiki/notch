@@ -167,6 +167,9 @@ struct ContentView: View {
                             }
                         }
                     }
+                    .onChange(of: isHovering) { _, newValue in
+                        vm.hovering = newValue
+                    }
                     .onChange(of: vm.isBatteryPopoverActive) {
                         if !vm.isBatteryPopoverActive && !isHovering && vm.notchState == .open && !SharingStateManager.shared.preventNotchClose {
                             hoverTask?.cancel()

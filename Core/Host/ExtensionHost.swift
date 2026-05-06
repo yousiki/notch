@@ -38,6 +38,24 @@ final class ExtensionHost: NSObject, NotchHost {
     // MARK: - Boot
 
     func start() {
+        // Single-display path: services bind to the AppDelegate's primary `vm`.
+        // Multi-display path: callers pass a screenUUID; we look up per-screen
+        // adapters from the AppDelegate's viewModels dictionary.
+        registerService(kind: "notch-state") {
+            guard let vm = (NSApp.delegate as? AppDelegate)?.vm else { return nil }
+            return NotchStateServiceAdapter(viewModel: vm)
+        }
+        registerScreenScopedService(kind: "notch-state") { uuid in
+            guard let vm = (NSApp.delegate as? AppDelegate)?.viewModels[uuid] else { return nil }
+            return NotchStateServiceAdapter(viewModel: vm)
+        }
+        registerService(kind: "screen") {
+            ScreenServiceAdapter(coordinator: BoringViewCoordinator.shared)
+        }
+        registerService(kind: "coordinator") {
+            CoordinatorServiceAdapter(coordinator: BoringViewCoordinator.shared)
+        }
+
         ExtensionLoader().load(into: self)
         DispatchQueue.main.async {
             NotificationCenter.default.post(
