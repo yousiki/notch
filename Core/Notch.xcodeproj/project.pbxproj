@@ -73,7 +73,7 @@
 		11D58EA22E760AE100FA8377 /* ImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D58EA12E760AE100FA8377 /* ImageService.swift */; };
 		11EFCD702E8E92D600D0B974 /* ShelfItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11EFCD6F2E8E92D600D0B974 /* ShelfItemViewModel.swift */; };
 		11F747CE2EC75CEA00F841DB /* DragPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11F747CD2EC75CEA00F841DB /* DragPreviewView.swift */; };
-		11F7485B2EC9AABA00F841DB /* BoringNotchXPCHelper.xpc in Embed XPC Services */ = {isa = PBXBuildFile; fileRef = 11F7484F2EC9AABA00F841DB /* BoringNotchXPCHelper.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		11F7485B2EC9AABA00F841DB /* CapsuleXPCHelper.xpc in Embed XPC Services */ = {isa = PBXBuildFile; fileRef = 11F7484F2EC9AABA00F841DB /* CapsuleXPCHelper.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		11F748682EC9AC9600F841DB /* CapsuleXPCHelperProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11F748652EC9AC9600F841DB /* CapsuleXPCHelperProtocol.swift */; };
 		11F748692EC9AC9600F841DB /* XPCHelperClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11F748662EC9AC9600F841DB /* XPCHelperClient.swift */; };
 		11F748732EC9DA9300F841DB /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 11F748722EC9DA9300F841DB /* Lottie */; };
@@ -186,7 +186,7 @@
 			containerPortal = 14CEF40A2C5CAED200855D72 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 11F7484E2EC9AABA00F841DB;
-			remoteInfo = BoringNotchXPCHelper;
+			remoteInfo = CapsuleXPCHelper;
 		};
 		14D316BF01F440E8C1719D3F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -225,7 +225,7 @@
 			dstPath = "$(CONTENTS_FOLDER_PATH)/XPCServices";
 			dstSubfolderSpec = 16;
 			files = (
-				11F7485B2EC9AABA00F841DB /* BoringNotchXPCHelper.xpc in Embed XPC Services */,
+				11F7485B2EC9AABA00F841DB /* CapsuleXPCHelper.xpc in Embed XPC Services */,
 			);
 			name = "Embed XPC Services";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -314,7 +314,7 @@
 		11D58EA12E760AE100FA8377 /* ImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageService.swift; sourceTree = "<group>"; };
 		11EFCD6F2E8E92D600D0B974 /* ShelfItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShelfItemViewModel.swift; sourceTree = "<group>"; };
 		11F747CD2EC75CEA00F841DB /* DragPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragPreviewView.swift; sourceTree = "<group>"; };
-		11F7484F2EC9AABA00F841DB /* BoringNotchXPCHelper.xpc */ = {isa = PBXFileReference; explicitFileType = "wrapper.xpc-service"; includeInIndex = 0; path = BoringNotchXPCHelper.xpc; sourceTree = BUILT_PRODUCTS_DIR; };
+		11F7484F2EC9AABA00F841DB /* CapsuleXPCHelper.xpc */ = {isa = PBXFileReference; explicitFileType = "wrapper.xpc-service"; includeInIndex = 0; path = CapsuleXPCHelper.xpc; sourceTree = BUILT_PRODUCTS_DIR; };
 		11F748652EC9AC9600F841DB /* CapsuleXPCHelperProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsuleXPCHelperProtocol.swift; sourceTree = "<group>"; };
 		11F748662EC9AC9600F841DB /* XPCHelperClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XPCHelperClient.swift; sourceTree = "<group>"; };
 		11F748812ECB07A400F841DB /* MusicControlButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicControlButton.swift; sourceTree = "<group>"; };
@@ -428,12 +428,12 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		11F7485C2EC9AABA00F841DB /* Exceptions for "../BoringNotchXPCHelper" folder in "BoringNotchXPCHelper" target */ = {
+		11F7485C2EC9AABA00F841DB /* Exceptions for "../CapsuleXPCHelper" folder in "CapsuleXPCHelper" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = 11F7484E2EC9AABA00F841DB /* BoringNotchXPCHelper */;
+			target = 11F7484E2EC9AABA00F841DB /* CapsuleXPCHelper */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -449,16 +449,16 @@
 			path = private;
 			sourceTree = "<group>";
 		};
-		11F748502EC9AABA00F841DB /* ../BoringNotchXPCHelper */ = {
+		11F748502EC9AABA00F841DB /* ../CapsuleXPCHelper */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				11F7485C2EC9AABA00F841DB /* Exceptions for "../BoringNotchXPCHelper" folder in "BoringNotchXPCHelper" target */,
+				11F7485C2EC9AABA00F841DB /* Exceptions for "../CapsuleXPCHelper" folder in "CapsuleXPCHelper" target */,
 			);
 			explicitFileTypes = {
 			};
 			explicitFolders = (
 			);
-			path = ../BoringNotchXPCHelper;
+			path = ../CapsuleXPCHelper;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -705,7 +705,7 @@
 			children = (
 				112B0EB62E30DD0F00562D6C /* mediaremote-adapter */,
 				14CEF4142C5CAED300855D72 /* Host */,
-				11F748502EC9AABA00F841DB /* ../BoringNotchXPCHelper */,
+				11F748502EC9AABA00F841DB /* ../CapsuleXPCHelper */,
 				14CEF4132C5CAED300855D72 /* Products */,
 				14D031EC2C689DB70096E6A1 /* Frameworks */,
 				6F94994510695E0663E7B0CC /* Core */,
@@ -717,7 +717,7 @@
 			isa = PBXGroup;
 			children = (
 				14CEF4122C5CAED300855D72 /* boringNotch.app */,
-				11F7484F2EC9AABA00F841DB /* BoringNotchXPCHelper.xpc */,
+				11F7484F2EC9AABA00F841DB /* CapsuleXPCHelper.xpc */,
 				654B12E048FDE9441033C254 /* NotchKit.framework */,
 				24171E71B8C396404EE2EDAA /* NotchKit.framework */,
 				74CA84B2EF07A0A1A88C43BD /* TipsExtension.notchext */,
@@ -1112,9 +1112,9 @@
 			productReference = 24171E71B8C396404EE2EDAA /* NotchKit.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		11F7484E2EC9AABA00F841DB /* BoringNotchXPCHelper */ = {
+		11F7484E2EC9AABA00F841DB /* CapsuleXPCHelper */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 11F7485D2EC9AABA00F841DB /* Build configuration list for PBXNativeTarget "BoringNotchXPCHelper" */;
+			buildConfigurationList = 11F7485D2EC9AABA00F841DB /* Build configuration list for PBXNativeTarget "CapsuleXPCHelper" */;
 			buildPhases = (
 				11F7484B2EC9AABA00F841DB /* Sources */,
 				11F7484C2EC9AABA00F841DB /* Frameworks */,
@@ -1125,11 +1125,11 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				11F748502EC9AABA00F841DB /* ../BoringNotchXPCHelper */,
+				11F748502EC9AABA00F841DB /* ../CapsuleXPCHelper */,
 			);
-			name = BoringNotchXPCHelper;
-			productName = BoringNotchXPCHelper;
-			productReference = 11F7484F2EC9AABA00F841DB /* BoringNotchXPCHelper.xpc */;
+			name = CapsuleXPCHelper;
+			productName = CapsuleXPCHelper;
+			productReference = 11F7484F2EC9AABA00F841DB /* CapsuleXPCHelper.xpc */;
 			productType = "com.apple.product-type.xpc-service";
 		};
 		14CEF4112C5CAED300855D72 /* boringNotch */ = {
@@ -1226,7 +1226,7 @@
 			projectRoot = "";
 			targets = (
 				14CEF4112C5CAED300855D72 /* boringNotch */,
-				11F7484E2EC9AABA00F841DB /* BoringNotchXPCHelper */,
+				11F7484E2EC9AABA00F841DB /* CapsuleXPCHelper */,
 				0FC796EDF06B266BC2265428 /* NotchKit */,
 			);
 		};
@@ -1472,7 +1472,7 @@
 		};
 		11F7485A2EC9AABA00F841DB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 11F7484E2EC9AABA00F841DB /* BoringNotchXPCHelper */;
+			target = 11F7484E2EC9AABA00F841DB /* CapsuleXPCHelper */;
 			targetProxy = 11F748592EC9AABA00F841DB /* PBXContainerItemProxy */;
 		};
 		19262A58E2F5980B4BB57750 /* PBXTargetDependency */ = {
@@ -1491,7 +1491,7 @@
 		11F7485E2EC9AABA00F841DB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = ../BoringNotchXPCHelper/BoringNotchXPCHelper.entitlements;
+				CODE_SIGN_ENTITLEMENTS = ../CapsuleXPCHelper/CapsuleXPCHelper.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
@@ -1499,7 +1499,7 @@
 				CURRENT_PROJECT_VERSION = 271;
 				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ../BoringNotchXPCHelper/Info.plist;
+				INFOPLIST_FILE = ../CapsuleXPCHelper/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = CapsuleXPCHelper;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
@@ -1516,7 +1516,7 @@
 		11F7485F2EC9AABA00F841DB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = ../BoringNotchXPCHelper/BoringNotchXPCHelper.entitlements;
+				CODE_SIGN_ENTITLEMENTS = ../CapsuleXPCHelper/CapsuleXPCHelper.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
@@ -1524,7 +1524,7 @@
 				CURRENT_PROJECT_VERSION = 271;
 				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ../BoringNotchXPCHelper/Info.plist;
+				INFOPLIST_FILE = ../CapsuleXPCHelper/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = CapsuleXPCHelper;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
@@ -1847,7 +1847,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		11F7485D2EC9AABA00F841DB /* Build configuration list for PBXNativeTarget "BoringNotchXPCHelper" */ = {
+		11F7485D2EC9AABA00F841DB /* Build configuration list for PBXNativeTarget "CapsuleXPCHelper" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				11F7485E2EC9AABA00F841DB /* Debug */,
