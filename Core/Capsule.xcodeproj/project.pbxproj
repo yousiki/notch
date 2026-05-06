@@ -106,13 +106,12 @@
 		14D570C22C5EAFBF0011E668 /* EmptyState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D570C12C5EAFBF0011E668 /* EmptyState.swift */; };
 		14D570C62C5F38210011E668 /* CapsuleHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D570C52C5F38210011E668 /* CapsuleHeader.swift */; };
 		14D570C92C5F38890011E668 /* CapsuleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D570C82C5F38890011E668 /* CapsuleViewModel.swift */; };
-		14D570CB2C5F4B2C0011E668 /* BatteryStatusViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D570CA2C5F4B2C0011E668 /* BatteryStatusViewModel.swift */; };
-		14D570CD2C5F4BB70011E668 /* CapsuleBattery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D570CC2C5F4BB70011E668 /* CapsuleBattery.swift */; };
 		14D570D22C5F6C6A0011E668 /* CapsuleExtrasMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D570D12C5F6C6A0011E668 /* CapsuleExtrasMenu.swift */; };
 		14E9FEAA2C70BF610062E83F /* DownloadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14E9FEA92C70BF610062E83F /* DownloadView.swift */; };
 		14E9FEAE2C7325770062E83F /* Button+Bouncing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14E9FEAD2C7325770062E83F /* Button+Bouncing.swift */; };
 		14FC6E502C7DED5600C7BEA5 /* DataTypes+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FC6E4F2C7DED5600C7BEA5 /* DataTypes+Extensions.swift */; };
 		1F40A9EA9829AEF7840643FE /* CapsuleKeyboardShortcutContribution.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA82FFC5F03BDA86D39E5F7 /* CapsuleKeyboardShortcutContribution.swift */; };
+		229D585E0AC09ADFC0C169DB /* BatteryExtension.notchext in Embed Plug-ins */ = {isa = PBXBuildFile; fileRef = 8D4C979EFC367577B90E0968 /* BatteryExtension.notchext */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		26BF02AB721BE7C050ED34FE /* NotchStateServiceAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F97315D05E16C74D28DC9E7D /* NotchStateServiceAdapter.swift */; };
 		2AD1C4C5FC7B90DE4778080E /* CapsuleClosedChinContribution.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31A06B3296E7DBC541C5085D /* CapsuleClosedChinContribution.swift */; };
 		3BC35A5C7C591DFC2F4D262F /* CapsuleKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 654B12E048FDE9441033C254 /* CapsuleKit.framework */; };
@@ -133,9 +132,9 @@
 		9A987A0D2C73CA66005CA465 /* ShelfView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A987A032C73CA66005CA465 /* ShelfView.swift */; };
 		9AB0C6BD2C73C9CB00F7CD30 /* NotchHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AB0C6BB2C73C9CB00F7CD30 /* NotchHomeView.swift */; };
 		9CB26F5685F7F0AC4CF6031B /* CapsuleHUDContribution.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07CE6C93526D1E5F4FFF54D /* CapsuleHUDContribution.swift */; };
+		A00000000000000000000011 /* WebcamExtension.notchext in Embed Plug-ins */ = {isa = PBXBuildFile; fileRef = A00000000000000000000015 /* WebcamExtension.notchext */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		A0C2460FD9ED628C37E90E20 /* CapsuleLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4215957D03737509A99A32A5 /* CapsuleLogger.swift */; };
 		A27116D43ABFC37C182B09D6 /* CapsuleKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 654B12E048FDE9441033C254 /* CapsuleKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A00000000000000000000011 /* WebcamExtension.notchext in Embed Plug-ins */ = {isa = PBXBuildFile; fileRef = A00000000000000000000015 /* WebcamExtension.notchext */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		AAD58F01A7E993B11065A12A /* TipsExtension.notchext in Embed Plug-ins */ = {isa = PBXBuildFile; fileRef = 74CA84B2EF07A0A1A88C43BD /* TipsExtension.notchext */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		B064A3B81A1E86286B8D4704 /* CapsuleSneakPeekContribution.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A45994A5E5BF181E22FA8F4 /* CapsuleSneakPeekContribution.swift */; };
 		B10348D92C74E56000475897 /* ConditionalModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10348D82C74E56000475897 /* ConditionalModifier.swift */; };
@@ -172,7 +171,6 @@
 		D339BDA841A6D8CD76A84557 /* CapsuleHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEFA8A3B566942347FB43191 /* CapsuleHost.swift */; };
 		D48C2BAF3F8EBA55C14DBFF1 /* ExtensionHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7B4A14FEBBDDEBE1E7CA18 /* ExtensionHost.swift */; };
 		D8EE184BC13AE18456B9E8F1 /* CoordinatorServiceAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75690F87ED391961B609239 /* CoordinatorServiceAdapter.swift */; };
-		F38DE6482D8243E7008B5C6D /* BatteryActivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F38DE6472D8243E2008B5C6D /* BatteryActivityManager.swift */; };
 		F8BF30F20D1A8178832EF9FD /* CapsuleHomeFragmentContribution.swift in Sources */ = {isa = PBXBuildFile; fileRef = B60CA8D6E821426716B1CF83 /* CapsuleHomeFragmentContribution.swift */; };
 		FBA2DBE4454EC311AC2DB2A0 /* HostPermissionsAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91812C3399BEC10335B7C2C4 /* HostPermissionsAPI.swift */; };
 /* End PBXBuildFile section */
@@ -199,6 +197,27 @@
 			remoteGlobalIDString = 7A4E8284933D001FDA7A6C09;
 			remoteInfo = TipsExtension;
 		};
+		45143B38F20B30AC9C4ECFE4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 14CEF40A2C5CAED200855D72 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0FC796EDF06B266BC2265428;
+			remoteInfo = CapsuleKit;
+		};
+		57F429137945B25CDE6ECE15 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4C06C0CD6AF2A9FDAD4A3C2A /* BatteryExtension.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FB566BD26E4FC304D54974CC;
+			remoteInfo = BatteryExtension;
+		};
+		6D6307B1930BC8EFA46520CB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 14CEF40A2C5CAED200855D72 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0FC796EDF06B266BC2265428;
+			remoteInfo = CapsuleKit;
+		};
 		A00000000000000000000012 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A00000000000000000000014 /* WebcamExtension.xcodeproj */;
@@ -213,19 +232,12 @@
 			remoteGlobalIDString = 7A4E8284933D001FDA7A6C09;
 			remoteInfo = WebcamExtension;
 		};
-		45143B38F20B30AC9C4ECFE4 /* PBXContainerItemProxy */ = {
+		F9EA3A2BBA1AA4D24AC31BE8 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 14CEF40A2C5CAED200855D72 /* Project object */;
+			containerPortal = 4C06C0CD6AF2A9FDAD4A3C2A /* BatteryExtension.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 0FC796EDF06B266BC2265428;
-			remoteInfo = CapsuleKit;
-		};
-		6D6307B1930BC8EFA46520CB /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 14CEF40A2C5CAED200855D72 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 0FC796EDF06B266BC2265428;
-			remoteInfo = CapsuleKit;
+			remoteGlobalIDString = B3C095FFA8600DC2E434EC57;
+			remoteInfo = BatteryExtension;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -249,6 +261,7 @@
 			files = (
 				AAD58F01A7E993B11065A12A /* TipsExtension.notchext in Embed Plug-ins */,
 				A00000000000000000000011 /* WebcamExtension.notchext in Embed Plug-ins */,
+				229D585E0AC09ADFC0C169DB /* BatteryExtension.notchext in Embed Plug-ins */,
 			);
 			name = "Embed Plug-ins";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -358,8 +371,6 @@
 		14D570C12C5EAFBF0011E668 /* EmptyState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyState.swift; sourceTree = "<group>"; };
 		14D570C52C5F38210011E668 /* CapsuleHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsuleHeader.swift; sourceTree = "<group>"; };
 		14D570C82C5F38890011E668 /* CapsuleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsuleViewModel.swift; sourceTree = "<group>"; };
-		14D570CA2C5F4B2C0011E668 /* BatteryStatusViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryStatusViewModel.swift; sourceTree = "<group>"; };
-		14D570CC2C5F4BB70011E668 /* CapsuleBattery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsuleBattery.swift; sourceTree = "<group>"; };
 		14D570D12C5F6C6A0011E668 /* CapsuleExtrasMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsuleExtrasMenu.swift; sourceTree = "<group>"; };
 		14E9FEA92C70BF610062E83F /* DownloadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadView.swift; sourceTree = "<group>"; };
 		14E9FEAD2C7325770062E83F /* Button+Bouncing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Button+Bouncing.swift"; sourceTree = "<group>"; };
@@ -376,6 +387,7 @@
 		46ABFA89DCE93616908F6EFB /* CapsuleTabContribution.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CapsuleKit/Sources/Contributions/CapsuleTabContribution.swift; sourceTree = SOURCE_ROOT; };
 		475783AF5C06D9A2B5A65BA7 /* CapsulePermissionKind.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CapsuleKit/Sources/Permissions/CapsulePermissionKind.swift; sourceTree = SOURCE_ROOT; };
 		485FAB98153D542448AD665D /* CapsuleCoordinatorHost.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CapsuleKit/Sources/Services/CapsuleCoordinatorHost.swift; sourceTree = SOURCE_ROOT; };
+		4C06C0CD6AF2A9FDAD4A3C2A /* BatteryExtension.xcodeproj */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.pb-project"; name = BatteryExtension.xcodeproj; path = ../Extensions/Battery/BatteryExtension.xcodeproj; sourceTree = SOURCE_ROOT; };
 		507266DA2C908E2E00A2D00D /* HoverButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoverButton.swift; sourceTree = "<group>"; };
 		520FB1B48A977624391FBEE2 /* Capsule-Bridging-Header.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Capsule-Bridging-Header.h"; sourceTree = "<group>"; };
 		5298F87A3960B14010C4D517 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = CapsuleKit/Resources/Info.plist; sourceTree = SOURCE_ROOT; };
@@ -386,7 +398,7 @@
 		6D36122D77955CC7FF52F57B /* CapsuleSlotLifecycle.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CapsuleKit/Sources/CapsuleSlotLifecycle.swift; sourceTree = SOURCE_ROOT; };
 		70BC31206A0DB7773122A6FD /* ScreenServiceAdapter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Host/Services/ScreenServiceAdapter.swift; sourceTree = SOURCE_ROOT; };
 		74CA84B2EF07A0A1A88C43BD /* TipsExtension.notchext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TipsExtension.notchext; sourceTree = BUILT_PRODUCTS_DIR; };
-		A00000000000000000000015 /* WebcamExtension.notchext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WebcamExtension.notchext; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D4C979EFC367577B90E0968 /* BatteryExtension.notchext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BatteryExtension.notchext; sourceTree = BUILT_PRODUCTS_DIR; };
 		91812C3399BEC10335B7C2C4 /* HostPermissionsAPI.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HostPermissionsAPI.swift; sourceTree = "<group>"; };
 		9A0887312C7A693000C160EA /* TabButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabButton.swift; sourceTree = "<group>"; };
 		9A0887342C7AFF8E00C160EA /* TabSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabSelectionView.swift; sourceTree = "<group>"; };
@@ -396,6 +408,8 @@
 		9B7F59E420EE1F6787E73593 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
 		9EC9CC9F1CC52B114795B8E6 /* CapsuleKitVersion.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CapsuleKit/Sources/Version/CapsuleKitVersion.swift; sourceTree = SOURCE_ROOT; };
 		9F7B4A14FEBBDDEBE1E7CA18 /* ExtensionHost.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ExtensionHost.swift; sourceTree = "<group>"; };
+		A00000000000000000000014 /* WebcamExtension.xcodeproj */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.pb-project"; name = WebcamExtension.xcodeproj; path = ../Extensions/Webcam/WebcamExtension.xcodeproj; sourceTree = SOURCE_ROOT; };
+		A00000000000000000000015 /* WebcamExtension.notchext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WebcamExtension.notchext; sourceTree = BUILT_PRODUCTS_DIR; };
 		A545EA48BE266E1AFEFBBB28 /* HostSettingsStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HostSettingsStore.swift; sourceTree = "<group>"; };
 		A75690F87ED391961B609239 /* CoordinatorServiceAdapter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Host/Services/CoordinatorServiceAdapter.swift; sourceTree = SOURCE_ROOT; };
 		B10348D82C74E56000475897 /* ConditionalModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionalModifier.swift; sourceTree = "<group>"; };
@@ -432,8 +446,6 @@
 		E4D0D52F81C2656E6C4CF764 /* CapsuleScreenHost.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CapsuleKit/Sources/Services/CapsuleScreenHost.swift; sourceTree = SOURCE_ROOT; };
 		E664244E7BD4E461D568F32C /* CapsulePermissionsAPI.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CapsuleKit/Sources/Permissions/CapsulePermissionsAPI.swift; sourceTree = SOURCE_ROOT; };
 		ED66C1672A4CEC085C6BC93C /* TipsExtension.xcodeproj */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.pb-project"; name = TipsExtension.xcodeproj; path = ../Extensions/Tips/TipsExtension.xcodeproj; sourceTree = SOURCE_ROOT; };
-		A00000000000000000000014 /* WebcamExtension.xcodeproj */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.pb-project"; name = WebcamExtension.xcodeproj; path = ../Extensions/Webcam/WebcamExtension.xcodeproj; sourceTree = SOURCE_ROOT; };
-		F38DE6472D8243E2008B5C6D /* BatteryActivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryActivityManager.swift; sourceTree = "<group>"; };
 		F97315D05E16C74D28DC9E7D /* NotchStateServiceAdapter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Host/Services/NotchStateServiceAdapter.swift; sourceTree = SOURCE_ROOT; };
 		FDA82FFC5F03BDA86D39E5F7 /* CapsuleKeyboardShortcutContribution.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CapsuleKit/Sources/Contributions/CapsuleKeyboardShortcutContribution.swift; sourceTree = SOURCE_ROOT; };
 		FFA59B43D3A84184C8DA4F32 /* CapsuleSettingsPaneContribution.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CapsuleKit/Sources/Contributions/CapsuleSettingsPaneContribution.swift; sourceTree = SOURCE_ROOT; };
@@ -682,7 +694,6 @@
 			isa = PBXGroup;
 			children = (
 				11D58EA12E760AE100FA8377 /* ImageService.swift */,
-				F38DE6472D8243E2008B5C6D /* BatteryActivityManager.swift */,
 				112FB7342CCF16F70015238C /* NotchSpaceManager.swift */,
 				147163992C5D35FF0068B555 /* MusicManager.swift */,
 				14C08BB52C8DE42D000F8AA0 /* CalendarManager.swift */,
@@ -711,6 +722,8 @@
 				6F94994510695E0663E7B0CC /* Core */,
 				ED66C1672A4CEC085C6BC93C /* TipsExtension.xcodeproj */,
 				A00000000000000000000014 /* WebcamExtension.xcodeproj */,
+				4C06C0CD6AF2A9FDAD4A3C2A /* BatteryExtension.xcodeproj */,
+				FAE855B60F43F6CA0902DDBD /* Products */,
 			);
 			sourceTree = "<group>";
 		};
@@ -723,6 +736,7 @@
 				24171E71B8C396404EE2EDAA /* CapsuleKit.framework */,
 				74CA84B2EF07A0A1A88C43BD /* TipsExtension.notchext */,
 				A00000000000000000000015 /* WebcamExtension.notchext */,
+				8D4C979EFC367577B90E0968 /* BatteryExtension.notchext */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -811,7 +825,6 @@
 				1163988C2DF5CAB40052E6AF /* EventModel.swift */,
 				B19016232CC15B4D00E3F12E /* Constants.swift */,
 				14D570C82C5F38890011E668 /* CapsuleViewModel.swift */,
-				14D570CA2C5F4B2C0011E668 /* BatteryStatusViewModel.swift */,
 				1153BD902D986DB300979FB0 /* PlaybackState.swift */,
 			);
 			path = Models;
@@ -821,14 +834,6 @@
 			isa = PBXGroup;
 			children = (
 				16C9A1E02FAADDC200BA0DF2 /* TipsExtension.bundle */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		A00000000000000000000016 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				A00000000000000000000017 /* WebcamExtension.bundle */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -914,6 +919,14 @@
 			path = Shelf;
 			sourceTree = "<group>";
 		};
+		A00000000000000000000016 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A00000000000000000000017 /* WebcamExtension.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		B141C23B2CA5F50900AC8CC8 /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
@@ -987,7 +1000,6 @@
 			isa = PBXGroup;
 			children = (
 				115C12EB2ED3D003009754CA /* OpenNotchHUD.swift */,
-				14D570CC2C5F4BB70011E668 /* CapsuleBattery.swift */,
 				B1C974332C642B6D0000E707 /* MarqueeTextView.swift */,
 				B1D365CD2C6A979C0047BDBC /* LiveActivityModifier.swift */,
 				B1D365CF2C6A9A6C0047BDBC /* SystemEventIndicatorModifier.swift */,
@@ -1091,6 +1103,14 @@
 			path = Observation;
 			sourceTree = "<group>";
 		};
+		FAE855B60F43F6CA0902DDBD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				26D57DD14E38FD077732F425 /* BatteryExtension.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1162,6 +1182,7 @@
 				00F4F45554451D9FEEA85D95 /* PBXTargetDependency */,
 				19262A58E2F5980B4BB57750 /* PBXTargetDependency */,
 				A00000000000000000000018 /* PBXTargetDependency */,
+				71C20539BACBFB0189011C5E /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				112FB72F2CCF12CC0015238C /* Private */,
@@ -1202,7 +1223,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 14CEF40D2C5CAED200855D72 /* Build configuration list for PBXProject "Notch" */;
+			buildConfigurationList = 14CEF40D2C5CAED200855D72 /* Build configuration list for PBXProject "Capsule" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -1232,6 +1253,10 @@
 					ProductGroup = A00000000000000000000016 /* Products */;
 					ProjectRef = A00000000000000000000014 /* WebcamExtension.xcodeproj */;
 				},
+				{
+					ProductGroup = FAE855B60F43F6CA0902DDBD /* Products */;
+					ProjectRef = 4C06C0CD6AF2A9FDAD4A3C2A /* BatteryExtension.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -1249,6 +1274,14 @@
 			name = TipsExtension.bundle;
 			path = TipsExtension.notchext;
 			remoteRef = 16C9A1DF2FAADDC200BA0DF2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		26D57DD14E38FD077732F425 /* BatteryExtension.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = "wrapper.plug-in";
+			name = BatteryExtension.bundle;
+			path = BatteryExtension.notchext;
+			remoteRef = 57F429137945B25CDE6ECE15 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		A00000000000000000000017 /* WebcamExtension.bundle */ = {
@@ -1308,7 +1341,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e\nfor EXT_NAME in TipsExtension WebcamExtension; do\n  EXT_PRODUCT=\"${BUILT_PRODUCTS_DIR}/${EXT_NAME}.notchext\"\n  if [ -d \"${EXT_PRODUCT}\" ]; then\n    echo \"${EXT_NAME}.notchext is present at ${EXT_PRODUCT}\"\n    echo \"Binary: $(file \"${EXT_PRODUCT}/Contents/MacOS/${EXT_NAME}\" 2>/dev/null || echo 'not found')\"\n  else\n    echo \"Error: ${EXT_NAME}.notchext not found at ${EXT_PRODUCT}\"\n    echo \"Make sure ${EXT_NAME} target built successfully.\"\n    exit 1\n  fi\ndone\n";
+			shellScript = "set -e\nfor EXT_NAME in TipsExtension WebcamExtension BatteryExtension; do\n  EXT_PRODUCT=\"${BUILT_PRODUCTS_DIR}/${EXT_NAME}.notchext\"\n  if [ -d \"${EXT_PRODUCT}\" ]; then\n    echo \"${EXT_NAME}.notchext is present at ${EXT_PRODUCT}\"\n    echo \"Binary: $(file \"${EXT_PRODUCT}/Contents/MacOS/${EXT_NAME}\" 2>/dev/null || echo 'not found')\"\n  else\n    echo \"Error: ${EXT_NAME}.notchext not found at ${EXT_PRODUCT}\"\n    echo \"Make sure ${EXT_NAME} target built successfully.\"\n    exit 1\n  fi\ndone\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1341,7 +1374,6 @@
 				B1D365D02C6A9A6C0047BDBC /* SystemEventIndicatorModifier.swift in Sources */,
 				1194E87C2EA19E09009C82D6 /* ImageProcessingService.swift in Sources */,
 				1194E8872EA6DDA7009C82D6 /* CapsuleSkyLightWindow.swift in Sources */,
-				14D570CB2C5F4B2C0011E668 /* BatteryStatusViewModel.swift in Sources */,
 				9A0887322C7A693000C160EA /* TabButton.swift in Sources */,
 				1153BD9C2D98853B00979FB0 /* NowPlayingController.swift in Sources */,
 				1194E9402EACC652009C82D6 /* Color+AccentColor.swift in Sources */,
@@ -1392,7 +1424,6 @@
 				14D570C62C5F38210011E668 /* CapsuleHeader.swift in Sources */,
 				B17266E32C65F7FB0031BA0D /* WhatsNewView.swift in Sources */,
 				14C08BB62C8DE42D000F8AA0 /* CalendarManager.swift in Sources */,
-				14D570CD2C5F4BB70011E668 /* CapsuleBattery.swift in Sources */,
 				B10F84A32C6C9596009F3026 /* TestView.swift in Sources */,
 				1443E7F32C609DCE0027C1FC /* matters.swift in Sources */,
 				11C5E3162DFE88510065821E /* SettingsView.swift in Sources */,
@@ -1411,7 +1442,6 @@
 				B17266DF2C64DFA00031BA0D /* BundleInfos.swift in Sources */,
 				118EBE3B2E9720C500D54B5A /* ShelfStateViewModel.swift in Sources */,
 				11F747CE2EC75CEA00F841DB /* DragPreviewView.swift in Sources */,
-				F38DE6482D8243E7008B5C6D /* BatteryActivityManager.swift in Sources */,
 				B10348D92C74E56000475897 /* ConditionalModifier.swift in Sources */,
 				118D1FD12E98FF5F00A2FF63 /* SharingStateManager.swift in Sources */,
 				14D570C22C5EAFBF0011E668 /* EmptyState.swift in Sources */,
@@ -1495,6 +1525,11 @@
 			isa = PBXTargetDependency;
 			name = TipsExtension;
 			targetProxy = 14D316BF01F440E8C1719D3F /* PBXContainerItemProxy */;
+		};
+		71C20539BACBFB0189011C5E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = BatteryExtension;
+			targetProxy = F9EA3A2BBA1AA4D24AC31BE8 /* PBXContainerItemProxy */;
 		};
 		A00000000000000000000018 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1877,7 +1912,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		14CEF40D2C5CAED200855D72 /* Build configuration list for PBXProject "Notch" */ = {
+		14CEF40D2C5CAED200855D72 /* Build configuration list for PBXProject "Capsule" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				14CEF41F2C5CAED400855D72 /* Debug */,

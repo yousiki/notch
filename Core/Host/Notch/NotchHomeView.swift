@@ -414,7 +414,6 @@ struct VolumeControlView: View {
 
 struct NotchHomeView: View {
     @EnvironmentObject var vm: CapsuleViewModel
-    @ObservedObject var batteryModel = BatteryStatusViewModel.shared
     @ObservedObject var coordinator = CapsuleViewCoordinator.shared
     let albumArtNamespace: Namespace.ID
 

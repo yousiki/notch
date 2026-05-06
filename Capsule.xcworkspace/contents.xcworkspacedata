@@ -3,4 +3,5 @@
    <FileRef location="group:Core/Capsule.xcodeproj"></FileRef>
    <FileRef location="group:Extensions/Tips/TipsExtension.xcodeproj"></FileRef>
    <FileRef location="group:Extensions/Webcam/WebcamExtension.xcodeproj"></FileRef>
+   <FileRef location="group:Extensions/Battery/BatteryExtension.xcodeproj"></FileRef>
 </Workspace>

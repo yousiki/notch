@@ -1,5 +1,13 @@
 import SwiftUI
-import Defaults
+
+private enum BatteryDefaults {
+    static func bool(_ key: String, default defaultValue: Bool) -> Bool {
+        if let value = UserDefaults.standard.object(forKey: key) as? Bool {
+            return value
+        }
+        return defaultValue
+    }
+}
 
 /// A view that displays the battery status with an icon and charging indicator.
 struct BatteryView: View {
@@ -59,7 +67,7 @@ struct BatteryView: View {
                 )
                 .padding(.leading, 2)
 
-            if iconStatus != "" && (isForNotification || Defaults[.showPowerStatusIcons]) {
+            if iconStatus != "" && (isForNotification || BatteryDefaults.bool("showPowerStatusIcons", default: true)) {
                 ZStack {
                     Image(iconStatus)
                         .resizable()
@@ -184,8 +192,6 @@ struct CapsuleBatteryView: View {
     @State private var isHoveringPopover: Bool = false
     @State private var hideTask: Task<Void, Never>? = nil
 
-    @EnvironmentObject var vm: CapsuleViewModel
-
     var body: some View {
         Button(action: {
             withAnimation {
@@ -193,7 +199,7 @@ struct CapsuleBatteryView: View {
             }
         }) {
             HStack {
-                if Defaults[.showBatteryPercentage] {
+                if BatteryDefaults.bool("showBatteryPercentage", default: true) {
                     Text("\(Int32(levelBattery))%")
                         .font(.callout)
                         .foregroundStyle(.white)
@@ -232,9 +238,6 @@ struct CapsuleBatteryView: View {
                     scheduleHideIfNeeded()
                 }
             }
-        }
-        .onChange(of: showPopupMenu) {
-            vm.isBatteryPopoverActive = showPopupMenu
         }
         .onDisappear {
             hideTask?.cancel()

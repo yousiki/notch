@@ -1,7 +1,7 @@
 import Cocoa
-import Defaults
 import Foundation
 import IOKit.ps
+import CapsuleKit
 import SwiftUI
 
 /// A view model that manages and monitors the battery status of the device
@@ -11,7 +11,7 @@ class BatteryStatusViewModel: ObservableObject {
     private var powerSourceChangedCallback: IOPowerSourceCallbackType?
     private var runLoopSource: Unmanaged<CFRunLoopSource>?
 
-    @ObservedObject var coordinator = CapsuleViewCoordinator.shared
+    private var coordinatorHost: CapsuleCoordinatorHost?
 
     @Published private(set) var levelBattery: Float = 0.0
     @Published private(set) var maxCapacity: Float = 0.0
@@ -27,11 +27,14 @@ class BatteryStatusViewModel: ObservableObject {
 
     static let shared = BatteryStatusViewModel()
 
-    /// Initializes the view model with a given CapsuleViewModel instance
-    /// - Parameter vm: The CapsuleViewModel instance
+    /// Initializes the view model and starts battery monitoring.
     private init() {
         setupPowerStatus()
         setupMonitor()
+    }
+
+    func configure(coordinatorHost: CapsuleCoordinatorHost?) {
+        self.coordinatorHost = coordinatorHost
     }
 
     /// Sets up the initial power status by fetching battery information
@@ -123,7 +126,11 @@ class BatteryStatusViewModel: ObservableObject {
     private func notifyImportanChangeStatus(delay: Double = 0.0) {
         Task {
             try? await Task.sleep(for: .seconds(delay))
-            self.coordinator.toggleExpandingView(status: true, kind: "battery")
+            self.coordinatorHost?.toggleExpandedItem(
+                kind: "battery",
+                value: Double(self.levelBattery),
+                durationSeconds: 3
+            )
         }
     }
 

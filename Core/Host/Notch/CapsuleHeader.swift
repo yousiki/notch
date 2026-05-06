@@ -6,11 +6,11 @@
 //
 
 import Defaults
+import CapsuleKit
 import SwiftUI
 
 struct CapsuleHeader: View {
     @EnvironmentObject var vm: CapsuleViewModel
-    @ObservedObject var batteryModel = BatteryStatusViewModel.shared
     @ObservedObject var coordinator = CapsuleViewCoordinator.shared
     @StateObject var tvm = ShelfStateViewModel.shared
     var body: some View {
@@ -61,17 +61,9 @@ struct CapsuleHeader: View {
                             }
                             .buttonStyle(PlainButtonStyle())
                         }
-                        if Defaults[.showBatteryIndicator] {
-                            CapsuleBatteryView(
-                                batteryWidth: 30,
-                                isCharging: batteryModel.isCharging,
-                                isInLowPowerMode: batteryModel.isInLowPowerMode,
-                                isPluggedIn: batteryModel.isPluggedIn,
-                                levelBattery: batteryModel.levelBattery,
-                                maxCapacity: batteryModel.maxCapacity,
-                                timeToFullCharge: batteryModel.timeToFullCharge,
-                                isForNotification: false
-                            )
+                        if Defaults[.showBatteryIndicator],
+                           let item = ExtensionHost.shared.closedChinItems.first(where: { $0.identifier == "moe.siki.Capsule.battery.chin" }) {
+                            ContributionViewControllerHost(make: item.makeViewController)
                         }
                     }
                 }
