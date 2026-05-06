@@ -367,7 +367,7 @@
 		475783AF5C06D9A2B5A65BA7 /* CapsulePermissionKind.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CapsuleKit/Sources/Permissions/CapsulePermissionKind.swift; sourceTree = SOURCE_ROOT; };
 		485FAB98153D542448AD665D /* CapsuleCoordinatorHost.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CapsuleKit/Sources/Services/CapsuleCoordinatorHost.swift; sourceTree = SOURCE_ROOT; };
 		507266DA2C908E2E00A2D00D /* HoverButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoverButton.swift; sourceTree = "<group>"; };
-		520FB1B48A977624391FBEE2 /* Notch-Bridging-Header.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Notch-Bridging-Header.h"; sourceTree = "<group>"; };
+		520FB1B48A977624391FBEE2 /* Capsule-Bridging-Header.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Capsule-Bridging-Header.h"; sourceTree = "<group>"; };
 		5298F87A3960B14010C4D517 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = CapsuleKit/Resources/Info.plist; sourceTree = SOURCE_ROOT; };
 		5917FD102E57891600E87F1C /* MediaKeyInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaKeyInterceptor.swift; sourceTree = "<group>"; };
 		5955950C2E900ED800C66711 /* ApplicationRelauncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationRelauncher.swift; sourceTree = "<group>"; };
@@ -756,7 +756,7 @@
 				755357F72D0CE39F4747CBB0 /* Permissions */,
 				0AF2732BA37E372CD61BD80D /* ObjCExceptionCatcher.h */,
 				3551BBE443A79F19A856CE24 /* ObjCExceptionCatcher.m */,
-				520FB1B48A977624391FBEE2 /* Notch-Bridging-Header.h */,
+				520FB1B48A977624391FBEE2 /* Capsule-Bridging-Header.h */,
 				9F7B4A14FEBBDDEBE1E7CA18 /* ExtensionHost.swift */,
 				E0FDF482E31E1EF32067883D /* ExtensionLoader.swift */,
 				78EC980F3AF13DD59EA32629 /* Services */,
@@ -1707,7 +1707,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "Host/Notch-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Host/Capsule-Bridging-Header.h";
 				SWIFT_STRICT_CONCURRENCY = targeted;
 				SWIFT_VERSION = 5.0;
 				SYSTEM_FRAMEWORK_SEARCH_PATHS = (
@@ -1762,7 +1762,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "Host/Notch-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Host/Capsule-Bridging-Header.h";
 				SWIFT_STRICT_CONCURRENCY = targeted;
 				SWIFT_VERSION = 5.0;
 				SYSTEM_FRAMEWORK_SEARCH_PATHS = (
