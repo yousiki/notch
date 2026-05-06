@@ -4,7 +4,7 @@ import NotchKit
 final class ScreenServiceAdapter: NSObject, NotchScreenHost {
 
     private let coordinator: BoringViewCoordinator
-    private var observers: [(String) -> Void] = []
+    private var observers: [UUID: (String) -> Void] = [:]
     private let lock = NSLock()
 
     init(coordinator: BoringViewCoordinator) {
@@ -20,18 +20,19 @@ final class ScreenServiceAdapter: NSObject, NotchScreenHost {
     }
 
     @objc func observeSelectedScreen(_ handler: @escaping (String) -> Void) -> NotchObservation {
-        lock.lock(); observers.append(handler); lock.unlock()
+        let id = UUID()
+        lock.lock(); observers[id] = handler; lock.unlock()
         return NotchObservation { [weak self] in
             guard let self else { return }
             self.lock.lock()
-            self.observers.removeAll { ($0 as AnyObject) === (handler as AnyObject) }
+            self.observers.removeValue(forKey: id)
             self.lock.unlock()
         }
     }
 
     @objc private func screenChanged() {
         let uuid = MainActor.assumeIsolated { coordinator.selectedScreenUUID }
-        lock.lock(); let copy = observers; lock.unlock()
+        lock.lock(); let copy = Array(observers.values); lock.unlock()
         copy.forEach { $0(uuid) }
     }
 }

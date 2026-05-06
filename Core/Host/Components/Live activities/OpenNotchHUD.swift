@@ -14,7 +14,7 @@ struct OpenNotchHUD: View {
     @Binding var value: CGFloat
     @Binding var icon: String
     @Default(.showOpenNotchHUDPercentage) var showPercentage
-
+    
     var body: some View {
         HStack(spacing: 8) {
             // Icon
@@ -45,7 +45,7 @@ struct OpenNotchHUD: View {
             .font(.system(size: 14, weight: .medium))
             .foregroundStyle(.white)
             .frame(width: 20, alignment: .center)
-
+            
             // Slider or Status Text
             if type != "mic" {
                 DraggableProgressBar(value: $value, onChange: { newVal in
@@ -58,7 +58,7 @@ struct OpenNotchHUD: View {
                     .foregroundStyle(.white)
                     .fixedSize()
             }
-
+            
             // Percentage Text
             if type != "mic" && showPercentage {
                 Text("\(Int(value * 100))%")

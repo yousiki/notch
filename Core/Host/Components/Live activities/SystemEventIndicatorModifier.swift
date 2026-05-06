@@ -22,7 +22,7 @@ struct SystemEventIndicatorModifier: View {
     @Binding var icon: String
     let showSlider: Bool = false
     var sendEventBack: (CGFloat) -> Void
-
+    
     var body: some View {
         HStack(spacing: 14) {
             switch (eventType) {

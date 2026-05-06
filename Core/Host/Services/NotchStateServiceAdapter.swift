@@ -8,8 +8,8 @@ final class NotchStateServiceAdapter: NSObject, NotchNotchStateHost {
 
     private let viewModel: BoringViewModel
     private var cancellables: Set<AnyCancellable> = []
-    private var notchStateHandlers: [(NotchOpenState) -> Void] = []
-    private var hoverHandlers: [(Bool) -> Void] = []
+    private var notchStateHandlers: [UUID: (NotchOpenState) -> Void] = [:]
+    private var hoverHandlers: [UUID: (Bool) -> Void] = [:]
     private let lock = NSLock()
 
     init(viewModel: BoringViewModel) {
@@ -20,7 +20,7 @@ final class NotchStateServiceAdapter: NSObject, NotchNotchStateHost {
             guard let self else { return }
             let mapped: NotchOpenState = (state == .open ? .open : .closed)
             self.lock.lock()
-            let handlers = self.notchStateHandlers
+            let handlers = Array(self.notchStateHandlers.values)
             self.lock.unlock()
             handlers.forEach { $0(mapped) }
         }.store(in: &cancellables)
@@ -28,7 +28,7 @@ final class NotchStateServiceAdapter: NSObject, NotchNotchStateHost {
         viewModel.$hovering.sink { [weak self] hovering in
             guard let self else { return }
             self.lock.lock()
-            let handlers = self.hoverHandlers
+            let handlers = Array(self.hoverHandlers.values)
             self.lock.unlock()
             handlers.forEach { $0(hovering) }
         }.store(in: &cancellables)
@@ -41,21 +41,23 @@ final class NotchStateServiceAdapter: NSObject, NotchNotchStateHost {
     @objc var hovering: Bool { viewModel.hovering }
 
     @objc func observeNotchState(_ handler: @escaping (NotchOpenState) -> Void) -> NotchObservation {
-        lock.lock(); notchStateHandlers.append(handler); lock.unlock()
+        let id = UUID()
+        lock.lock(); notchStateHandlers[id] = handler; lock.unlock()
         return NotchObservation { [weak self] in
             guard let self else { return }
             self.lock.lock()
-            self.notchStateHandlers.removeAll { ($0 as AnyObject) === (handler as AnyObject) }
+            self.notchStateHandlers.removeValue(forKey: id)
             self.lock.unlock()
         }
     }
 
     @objc func observeHover(_ handler: @escaping (Bool) -> Void) -> NotchObservation {
-        lock.lock(); hoverHandlers.append(handler); lock.unlock()
+        let id = UUID()
+        lock.lock(); hoverHandlers[id] = handler; lock.unlock()
         return NotchObservation { [weak self] in
             guard let self else { return }
             self.lock.lock()
-            self.hoverHandlers.removeAll { ($0 as AnyObject) === (handler as AnyObject) }
+            self.hoverHandlers.removeValue(forKey: id)
             self.lock.unlock()
         }
     }

@@ -4,7 +4,7 @@ import NotchKit
 final class CoordinatorServiceAdapter: NSObject, NotchCoordinatorHost {
 
     private let coordinator: BoringViewCoordinator
-    private var tabHandlers: [(String) -> Void] = []
+    private var tabHandlers: [UUID: (String) -> Void] = [:]
     private let lock = NSLock()
 
     init(coordinator: BoringViewCoordinator) {
@@ -20,11 +20,12 @@ final class CoordinatorServiceAdapter: NSObject, NotchCoordinatorHost {
     }
 
     @objc func observeCurrentTab(_ handler: @escaping (String) -> Void) -> NotchObservation {
-        lock.lock(); tabHandlers.append(handler); lock.unlock()
+        let id = UUID()
+        lock.lock(); tabHandlers[id] = handler; lock.unlock()
         return NotchObservation { [weak self] in
             guard let self else { return }
             self.lock.lock()
-            self.tabHandlers.removeAll { ($0 as AnyObject) === (handler as AnyObject) }
+            self.tabHandlers.removeValue(forKey: id)
             self.lock.unlock()
         }
     }
@@ -49,7 +50,7 @@ final class CoordinatorServiceAdapter: NSObject, NotchCoordinatorHost {
 
     @objc private func currentTabChanged() {
         let id = MainActor.assumeIsolated { coordinator.currentTabIdentifier }
-        lock.lock(); let copy = tabHandlers; lock.unlock()
+        lock.lock(); let copy = Array(tabHandlers.values); lock.unlock()
         copy.forEach { $0(id) }
     }
 }
