@@ -19,7 +19,7 @@ permissions:
 
 jobs:
   build:
-    name: Build Boring Notch
+    name: Build Capsule
     strategy:
       matrix:
         platform:
@@ -27,7 +27,7 @@ jobs:
         xcode:
           - ^16
         scheme:
-          - boringNotch
+          - Capsule
     runs-on: macos-latest
     steps:
     - name: Code Checkout
@@ -43,11 +43,11 @@ jobs:
         verbosity: xcpretty
         upload-logs: always
         configuration: release
-    - name: Verify NotchKit framework deduplication
+    - name: Verify CapsuleKit framework deduplication
       run: |
-        APP=$(find ~/Library/Developer/Xcode/DerivedData -name "boringNotch.app" -type d 2>/dev/null | grep -v Index | head -1)
+        APP=$(find ~/Library/Developer/Xcode/DerivedData -name "Capsule.app" -type d 2>/dev/null | grep -v Index | head -1)
         if [ -n "$APP" ]; then
-          ./scripts/check_no_notchkit_embed.sh "$APP"
+          ./scripts/check_no_capsulekit_embed.sh "$APP"
         else
-          echo "::warning::Could not locate boringNotch.app in DerivedData; skipping verification"
+          echo "::warning::Could not locate Capsule.app in DerivedData; skipping verification"
         fi
