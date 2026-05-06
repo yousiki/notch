@@ -9,7 +9,7 @@
 
 ## What this is
 
-A large refactor turning the forked `boringNotch` macOS app into a minimal core (host app + `NotchKit.framework`) plus dynamic `.notchext` plug-in bundles loaded at runtime. All current features (Music, Shelf, Calendar, Battery, HUD, Webcam, Live Activities, Tips) will eventually ship as built-in extensions.
+A large refactor turning the forked `boringNotch` macOS app into a minimal core (host app + `NotchKit.framework`) plus dynamic `.capsule` plug-in bundles loaded at runtime. All current features (Music, Shelf, Calendar, Battery, HUD, Webcam, Live Activities, Tips) will eventually ship as built-in extensions.
 
 **Authoritative documents:**
 - Spec: `docs/superpowers/specs/2026-05-05-notch-core-extensions-design.md`
@@ -32,7 +32,7 @@ c537489 Implement host's NotchHost adapters and ExtensionLoader
 ed792ae Add TipsExtension.xcodeproj scaffold (no source yet)
 b0d9241 TipsExtension principal class + move TipStore.swift
 7ae36d2 Boot ExtensionHost from boringNotchApp.applicationDidFinishLaunching
-4fa649d CI lint: forbid NotchKit embedding inside .notchext bundles
+4fa649d CI lint: forbid NotchKit embedding inside .capsule bundles
 91d24bf Untrack .claude/settings.json and ignore workspace state
 ```
 
@@ -42,7 +42,7 @@ Verified via `xcodebuild` — final state:
 
 - `xcodebuild -workspace Notch.xcworkspace -scheme boringNotch ... build` → **BUILD SUCCEEDED**
 - `boringNotch.app/Contents/Frameworks/` contains `NotchKit.framework` (alongside Lottie, MediaRemoteAdapter, Sparkle)
-- `boringNotch.app/Contents/PlugIns/` contains `TipsExtension.notchext`
+- `boringNotch.app/Contents/PlugIns/` contains `TipsExtension.capsule`
 - `scripts/check_no_notchkit_embed.sh "$APP"` → `OK: no extension embeds NotchKit.framework`
 - `NSPrincipalClass = "TipsExtension.TipsExtension"` in the embedded bundle's Info.plist
 - Hardened Runtime enabled; `com.apple.security.cs.disable-library-validation = true` in entitlements
@@ -50,7 +50,7 @@ Verified via `xcodebuild` — final state:
 **What's NOT verified yet** (this is what the next session needs to do first):
 - Has `Bundle.load()` + `principalClass` instantiation actually worked at runtime?
 - Is there exactly one `NotchKit.framework` in the dyld image graph (no duplication)?
-- Does the user-installed extension path (`~/Library/Application Support/Notch/Extensions/`) load?
+- Does the user-installed extension path (`~/Library/Application Support/Capsule/Extensions/`) load?
 
 ## Repo / build layout (current state)
 
@@ -63,7 +63,7 @@ Notch.xcworkspace/                            # workspace
 │   │   ├── BoringViewCoordinator.swift       # global coordinator (still uses SneakContentType enum — Phase B replaces)
 │   │   ├── ContentView.swift                 # main view (still hard-codes feature views — Phase B replaces with registry iteration)
 │   │   ├── ExtensionHost.swift               # NEW: NotchHost impl, contribution registry
-│   │   ├── ExtensionLoader.swift             # NEW: scans + dlopens .notchext bundles
+│   │   ├── ExtensionLoader.swift             # NEW: scans + dlopens .capsule bundles
 │   │   ├── ObjCExceptionCatcher.{h,m}        # NEW: best-effort NSException trap during activate
 │   │   ├── Notch-Bridging-Header.h           # NEW
 │   │   ├── Logger/HostLogger.swift           # NEW: NotchLogger backing
@@ -142,19 +142,19 @@ The Phase C plan tasks for TipsExtension don't currently address this. When migr
 The plan said "add `TipsExtension` as a target dependency of the host". The Ruby `xcodeproj` gem doesn't expose cross-project `PBXContainerItemProxy` cleanly. Implementer used:
 
 1. **Cross-project target dependency** (added via gem) — guarantees TipsExtension builds before boringNotch in the workspace.
-2. **"Build Built-in Extensions" run-script phase** on boringNotch — verifies `TipsExtension.notchext` is present in `BUILT_PRODUCTS_DIR`. (Earlier version of this script invoked nested xcodebuild but caused DB locking; current version is a presence check only.)
-3. **Embed Plug-ins phase** references `BUILT_PRODUCTS_DIR/TipsExtension.notchext` with `CodeSignOnCopy`.
+2. **"Build Built-in Extensions" run-script phase** on boringNotch — verifies `TipsExtension.capsule` is present in `BUILT_PRODUCTS_DIR`. (Earlier version of this script invoked nested xcodebuild but caused DB locking; current version is a presence check only.)
+3. **Embed Plug-ins phase** references `BUILT_PRODUCTS_DIR/TipsExtension.capsule` with `CodeSignOnCopy`.
 4. **`ENABLE_USER_SCRIPT_SANDBOXING = NO`** set on boringNotch target so the run-script can read `$BUILT_PRODUCTS_DIR`.
 
 **Implication for Phase C:** every new extension (Music, Shelf, Calendar, Battery, HUD, Webcam, LiveActivities) follows the same pattern. Replicate the wiring from `commit ed792ae` (the Tips scaffold).
 
 ### Deviation 4 — Sandbox + plug-in loading
 
-The host has `com.apple.security.app-sandbox = true` *and* now also `com.apple.security.cs.disable-library-validation = true`. These can co-exist, but the App Sandbox restricts file-system access. The user-installed extension directory `~/Library/Application Support/Notch/Extensions/` is **not** in the host's sandbox container — it's in the user's home Application Support, which sandboxed apps can't read by default.
+The host has `com.apple.security.app-sandbox = true` *and* now also `com.apple.security.cs.disable-library-validation = true`. These can co-exist, but the App Sandbox restricts file-system access. The user-installed extension directory `~/Library/Application Support/Capsule/Extensions/` is **not** in the host's sandbox container — it's in the user's home Application Support, which sandboxed apps can't read by default.
 
 If A18 step 5 (third-party extension load) fails with a sandbox error, the host needs a sandbox extension to read that directory. Options:
 - Use a security-scoped bookmark stored in user defaults that the user grants on first run
-- Drop the user-extensions directory inside the host's sandbox container (e.g., `~/Library/Containers/com.theboredteam.boringNotch/Data/Library/Application Support/Notch/Extensions/`)
+- Drop the user-extensions directory inside the host's sandbox container (e.g., `~/Library/Containers/com.theboredteam.boringNotch/Data/Library/Application Support/Capsule/Extensions/`)
 - Disable App Sandbox
 
 **This was flagged as a concern but not addressed in Phase A.** Phase A only tested the built-in (`Contents/PlugIns/`) path. Treat user-installed loading as a known unknown.
@@ -192,7 +192,7 @@ The user is moving to a Claude Code session inside Xcode for this. The Xcode-res
    ```
    Must show one `NotchTabContribution` with identifier `"com.theboredteam.notch.tips.tab"`. Empty array means the bundle didn't load or principalClass instantiation failed; check the Xcode console for `ExtensionLoader` failure messages.
 4. **Tips tab will NOT appear in the UI yet.** That's expected — Phase A only proves the loader works. Phase B switches `ContentView` from hard-coded enum-based rendering to registry-iteration, which makes the Tips tab visible.
-5. **(Optional) third-party load test:** copy the embedded `TipsExtension.notchext` to `~/Library/Application Support/Notch/Extensions/`, ad-hoc re-sign with `codesign --force --sign -`, relaunch. `[ExtensionHost shared].tabs` should now have **two** entries. If the load fails with a sandbox error, that's Deviation 4 manifesting — flag it but don't block on it.
+5. **(Optional) third-party load test:** copy the embedded `TipsExtension.capsule` to `~/Library/Application Support/Capsule/Extensions/`, ad-hoc re-sign with `codesign --force --sign -`, relaunch. `[ExtensionHost shared].tabs` should now have **two** entries. If the load fails with a sandbox error, that's Deviation 4 manifesting — flag it but don't block on it.
 
 ### After A18 passes: Phase B (B1-B7)
 

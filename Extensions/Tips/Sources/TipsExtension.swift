@@ -32,7 +32,7 @@ private struct TipsTabView: View {
                 .font(.system(size: 32))
             Text("Tips")
                 .font(.headline)
-            Text("Loaded from TipsExtension.notchext")
+            Text("Loaded from TipsExtension.capsule")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
         }

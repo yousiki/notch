@@ -1,6 +1,6 @@
 import Foundation
 
-/// Principal-class protocol that every `.notchext` bundle must implement.
+/// Principal-class protocol that every `.capsule` bundle must implement.
 ///
 /// Exactly one class in the bundle conforms to this protocol and is declared
 /// as `NSPrincipalClass` in the bundle's `Info.plist`. The host loader

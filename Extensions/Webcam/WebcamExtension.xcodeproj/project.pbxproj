@@ -239,7 +239,7 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = NO;
 				SWIFT_VERSION = 5.0;
-				WRAPPER_EXTENSION = notchext;
+				WRAPPER_EXTENSION = capsule;
 			};
 			name = Debug;
 		};
@@ -269,7 +269,7 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = NO;
 				SWIFT_VERSION = 5.0;
-				WRAPPER_EXTENSION = notchext;
+				WRAPPER_EXTENSION = capsule;
 			};
 			name = Release;
 		};

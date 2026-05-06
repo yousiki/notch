@@ -4,9 +4,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Refactor the forked Boring Notch macOS app into a minimal core (host app + `NotchKit.framework`) plus a set of dynamic `.notchext` bundles loaded at runtime. All current features (Music, Shelf, Calendar, Battery, HUD, Webcam, Live Activities, Tips) ship as built-in extensions.
+**Goal:** Refactor the forked Boring Notch macOS app into a minimal core (host app + `NotchKit.framework`) plus a set of dynamic `.capsule` bundles loaded at runtime. All current features (Music, Shelf, Calendar, Battery, HUD, Webcam, Live Activities, Tips) ship as built-in extensions.
 
-**Architecture:** Single-process, in-process plug-in loading. Extensions are `.notchext` bundles whose `Info.plist` declares `NSPrincipalClass` conforming to a `NotchExtension` `@objc` protocol from `NotchKit`. The host opts out of library validation (Hardened Runtime + entitlement) so unsigned third-party extensions can load from `~/Library/Application Support/Notch/Extensions/`. Built-ins ship inside `boringNotch.app/Contents/PlugIns/`. UI contributions return `NSViewController`s; cross-bundle state access goes through host-service `@objc` protocols.
+**Architecture:** Single-process, in-process plug-in loading. Extensions are `.capsule` bundles whose `Info.plist` declares `NSPrincipalClass` conforming to a `NotchExtension` `@objc` protocol from `NotchKit`. The host opts out of library validation (Hardened Runtime + entitlement) so unsigned third-party extensions can load from `~/Library/Application Support/Capsule/Extensions/`. Built-ins ship inside `boringNotch.app/Contents/PlugIns/`. UI contributions return `NSViewController`s; cross-bundle state access goes through host-service `@objc` protocols.
 
 **Tech Stack:** Swift, SwiftUI, AppKit, Xcode 16+, macOS 14+, `Defaults` (Sindre Sorhus), Sparkle, Combine, KeyboardShortcuts.
 
@@ -99,7 +99,7 @@ See per-task tables in Phase A and Phase C. Every existing Swift file in `boring
 
 # Phase A — Plug-in plumbing proves end-to-end
 
-Goal of Phase A: the app launches, the extension loader finds and instantiates `TipsExtension.notchext`, and `lldb` confirms a single `NotchKit.framework` load image is shared between host and extension.
+Goal of Phase A: the app launches, the extension loader finds and instantiates `TipsExtension.capsule`, and `lldb` confirms a single `NotchKit.framework` load image is shared between host and extension.
 
 ### Task A1: Create the workspace skeleton and bring the existing project under it
 
@@ -368,7 +368,7 @@ git commit -m "Add NotchKit framework target with @rpath install name"
 ```swift
 import Foundation
 
-/// Principal-class protocol that every `.notchext` bundle must implement.
+/// Principal-class protocol that every `.capsule` bundle must implement.
 ///
 /// Exactly one class in the bundle conforms to this protocol and is declared
 /// as `NSPrincipalClass` in the bundle's `Info.plist`. The host loader
@@ -1297,7 +1297,7 @@ import AppKit
 import Foundation
 import NotchKit
 
-/// Discovers `.notchext` bundles, loads them, and activates each on the
+/// Discovers `.capsule` bundles, loads them, and activates each on the
 /// supplied host. Failures are logged and skipped — one bad extension does
 /// not abort loading.
 final class ExtensionLoader {
@@ -1324,11 +1324,11 @@ final class ExtensionLoader {
             urls.append(contentsOf: scan(directory: plugInsURL))
         }
 
-        // 2. User-installed: ~/Library/Application Support/Notch/Extensions
+        // 2. User-installed: ~/Library/Application Support/Capsule/Extensions
         if let appSupport = FileManager.default.urls(
             for: .applicationSupportDirectory, in: .userDomainMask).first {
             let userDir = appSupport
-                .appendingPathComponent("Notch", isDirectory: true)
+                .appendingPathComponent("Capsule", isDirectory: true)
                 .appendingPathComponent("Extensions", isDirectory: true)
             urls.append(contentsOf: scan(directory: userDir))
         }
@@ -1338,7 +1338,7 @@ final class ExtensionLoader {
     private func scan(directory: URL) -> [URL] {
         guard let entries = try? FileManager.default.contentsOfDirectory(
             at: directory, includingPropertiesForKeys: nil) else { return [] }
-        return entries.filter { $0.pathExtension == "notchext" }
+        return entries.filter { $0.pathExtension == "capsule" }
     }
 
     private func loadBundle(url: URL, into host: ExtensionHost) {
@@ -1541,7 +1541,7 @@ In Xcode: select host target → Signing & Capabilities → confirm "Hardened Ru
 
 ```bash
 git add -A
-git commit -m "Disable library validation on host to allow third-party .notchext loading"
+git commit -m "Disable library validation on host to allow third-party .capsule loading"
 ```
 
 ---
@@ -1620,7 +1620,7 @@ File → New → Project → macOS → Bundle. Project name: `TipsExtension`. Sa
 
 Select `TipsExtension` target → Build Settings:
 
-- **Wrapper Extension:** `notchext`
+- **Wrapper Extension:** `capsule`
 - **Info.plist File:** `Extensions/Tips/Resources/Info.plist`
 - **Product Bundle Identifier:** `com.theboredteam.notch.extensions.tips`
 - **Deployment Target:** macOS 14.0
@@ -1642,7 +1642,7 @@ Select `TipsExtension` target → Build Phases:
 
 Select host `Notch` target → Build Phases → "Target Dependencies" → `+` → add `TipsExtension`.
 
-Add to host's "Embed Plug-ins" phase: `+` → `TipsExtension.notchext` (the product). Set "Code Sign on Copy = ✓".
+Add to host's "Embed Plug-ins" phase: `+` → `TipsExtension.capsule` (the product). Set "Code Sign on Copy = ✓".
 
 - [ ] **Step 7: Verify project layout**
 
@@ -1726,7 +1726,7 @@ private struct TipsTabView: View {
                 .font(.system(size: 32))
             Text("Tips")
                 .font(.headline)
-            Text("Loaded from TipsExtension.notchext")
+            Text("Loaded from TipsExtension.capsule")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
         }
@@ -1741,12 +1741,12 @@ Drag `TipsExtension.swift` into the Xcode `TipsExtension` group. Confirm target 
 
 - [ ] **Step 6: Build the extension target alone**
 
-In Xcode, select the `TipsExtension` scheme, ⌘B. Expected: BUILD SUCCEEDED. The product `TipsExtension.notchext` should appear in DerivedData.
+In Xcode, select the `TipsExtension` scheme, ⌘B. Expected: BUILD SUCCEEDED. The product `TipsExtension.capsule` should appear in DerivedData.
 
 - [ ] **Step 7: Verify the bundle structure**
 
 ```bash
-find ~/Library/Developer/Xcode/DerivedData -name "TipsExtension.notchext" -type d 2>/dev/null | head -1
+find ~/Library/Developer/Xcode/DerivedData -name "TipsExtension.capsule" -type d 2>/dev/null | head -1
 ```
 
 Inspect `Contents/`:
@@ -1794,7 +1794,7 @@ In `applicationDidFinishLaunching`, immediately after the `if !Defaults[.showOnA
 
 - [ ] **Step 3: Build and run**
 
-⌘R. Expected: app launches normally; in the Xcode console, log lines from `ExtensionLoader` appear if any bundle fails. With `TipsExtension.notchext` correctly embedded, no failures should appear.
+⌘R. Expected: app launches normally; in the Xcode console, log lines from `ExtensionLoader` appear if any bundle fails. With `TipsExtension.capsule` correctly embedded, no failures should appear.
 
 - [ ] **Step 4: Verify in lldb that the loader instantiated TipsExtension**
 
@@ -1836,7 +1836,7 @@ Create `scripts/check_no_notchkit_embed.sh`:
 
 ```bash
 #!/usr/bin/env bash
-# Verifies that no .notchext bundle embeds NotchKit.framework. Extensions
+# Verifies that no .capsule bundle embeds NotchKit.framework. Extensions
 # must link against the host-embedded copy via @rpath; embedding leads to
 # two separate type identities at runtime.
 set -euo pipefail
@@ -1849,7 +1849,7 @@ if [ ! -d "$APP_PATH/Contents/PlugIns" ]; then
 fi
 
 failures=0
-for ext in "$APP_PATH/Contents/PlugIns"/*.notchext; do
+for ext in "$APP_PATH/Contents/PlugIns"/*.capsule; do
     if [ -d "$ext/Contents/Frameworks/NotchKit.framework" ]; then
         echo "ERROR: $ext embeds NotchKit.framework — extensions must NOT embed NotchKit."
         failures=$((failures + 1))
@@ -1890,7 +1890,7 @@ Edit `.github/workflows/cicd.yml`. After the existing build step that produces t
 
 ```bash
 git add -A
-git commit -m "CI lint: forbid NotchKit embedding inside .notchext bundles"
+git commit -m "CI lint: forbid NotchKit embedding inside .capsule bundles"
 ```
 
 ---
@@ -1910,11 +1910,11 @@ Expected: app launches with no errors, the existing notch UI appears unchanged (
 Build TipsExtension separately with `xcodebuild`, copy the output to the user directory:
 
 ```bash
-mkdir -p ~/Library/Application\ Support/Notch/Extensions/
-cp -R "$(find ~/Library/Developer/Xcode/DerivedData -name TipsExtension.notchext -type d | head -1)" \
-      ~/Library/Application\ Support/Notch/Extensions/TipsUserCopy.notchext
+mkdir -p ~/Library/Application\ Support/Capsule/Extensions/
+cp -R "$(find ~/Library/Developer/Xcode/DerivedData -name TipsExtension.capsule -type d | head -1)" \
+      ~/Library/Application\ Support/Capsule/Extensions/TipsUserCopy.capsule
 # Re-sign with an ad-hoc identity to simulate a third-party
-codesign --force --sign - ~/Library/Application\ Support/Notch/Extensions/TipsUserCopy.notchext
+codesign --force --sign - ~/Library/Application\ Support/Capsule/Extensions/TipsUserCopy.capsule
 ```
 
 Relaunch the app. Expected: `ExtensionHost.shared.tabs` contains *two* tab contributions (the built-in Tips and the user-installed copy), confirming the loader scans both directories and library validation is correctly disabled.
@@ -1922,7 +1922,7 @@ Relaunch the app. Expected: `ExtensionHost.shared.tabs` contains *two* tab contr
 - [ ] **Step 3: Clean up the user-installed copy before continuing**
 
 ```bash
-rm -rf ~/Library/Application\ Support/Notch/Extensions/TipsUserCopy.notchext
+rm -rf ~/Library/Application\ Support/Capsule/Extensions/TipsUserCopy.capsule
 ```
 
 - [ ] **Step 4: Document the verification result**
@@ -2681,7 +2681,7 @@ where `NotchStateBridge` is a small extension-internal `ObservableObject` that w
 
 **Verification:** webcam mirror toggles in/out; permission prompt shows on first use; closed/open notch hover still works.
 
-**Commit message:** `Migrate WebcamManager and WebcamView into WebcamExtension.notchext`
+**Commit message:** `Migrate WebcamManager and WebcamView into WebcamExtension.capsule`
 
 ### Task C2: BatteryExtension
 
@@ -2749,7 +2749,7 @@ private struct BatteryExpandedView: View {
 
 **Verification:** plug/unplug power adapter — battery sneak-peek pill appears; expanded item shows charging stats.
 
-**Commit message:** `Migrate Battery feature into BatteryExtension.notchext`
+**Commit message:** `Migrate Battery feature into BatteryExtension.capsule`
 
 ### Task C3: CalendarExtension
 
@@ -2802,7 +2802,7 @@ public final class CalendarExtension: NSObject, NotchExtension {
 
 **Verification:** open notch → calendar tab shows today's events; permission prompt on first launch.
 
-**Commit message:** `Migrate Calendar feature into CalendarExtension.notchext`
+**Commit message:** `Migrate Calendar feature into CalendarExtension.capsule`
 
 ### Task C4: LiveActivitiesExtension (downloads + marquee + modifier)
 
@@ -2978,7 +2978,7 @@ public final class ShelfExtension: NSObject, NotchExtension {
 - `ShelfStateViewModel.swift`: has `static let shared` — keep. Previously referenced from `BoringViewCoordinator.swift:68` (the `alwaysShowTabs.didSet` block); we already removed that reference in Task B2's coordinator edits, so the host no longer reaches into Shelf state.
 - `QuickShareService.swift`: previously assigned to `appDelegate.quickShareService`. Drop that line from `boringNotchApp.swift` (already done in Task A2 / B-series host edits).
 
-**Commit message:** `Migrate Shelf feature into ShelfExtension.notchext`
+**Commit message:** `Migrate Shelf feature into ShelfExtension.capsule`
 
 ### Task C7: MusicExtension
 
@@ -3123,7 +3123,7 @@ Run the full app one more time and check the upstream README's screenshots — e
 - [ ] Menu bar dropdown shows built-ins (Settings / Updates / Restart / Quit) and any extension-contributed entries.
 - [ ] No regression in onboarding (welcome step + per-feature permission steps).
 - [ ] Persistent settings from a pre-refactor build are preserved (test by running the pre-refactor build briefly to set `Defaults`, then running the new build and confirming the values survived).
-- [ ] Drop a third-party-signed `.notchext` into `~/Library/Application Support/Notch/Extensions/` — it loads.
+- [ ] Drop a third-party-signed `.capsule` into `~/Library/Application Support/Capsule/Extensions/` — it loads.
 
 ---
 

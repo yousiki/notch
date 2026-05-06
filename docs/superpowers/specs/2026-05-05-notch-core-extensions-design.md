@@ -13,9 +13,9 @@
 Split the current monolithic `boringNotch` app target into:
 
 - A minimal **core** (host app + `NotchKit.framework`) that owns app lifecycle, the notch window/screen plumbing, and an extension API.
-- A set of **extensions** — dynamic `.notchext` bundles loaded at runtime — that implement every user-visible feature (Music, Shelf, Calendar, Battery, HUD, Webcam, Live Activities, Tips).
+- A set of **extensions** — dynamic `.capsule` bundles loaded at runtime — that implement every user-visible feature (Music, Shelf, Calendar, Battery, HUD, Webcam, Live Activities, Tips).
 
-Built-in features ship as extensions inside the host bundle. Third parties can ship extensions independently by dropping a `.notchext` into a known user directory.
+Built-in features ship as extensions inside the host bundle. Third parties can ship extensions independently by dropping a `.capsule` into a known user directory.
 
 ## 2. Design constraints (must-honor rules)
 
@@ -60,14 +60,14 @@ Notch.xcworkspace
 │   ├── NotchKit (framework target)          → NotchKit.framework
 │   └── BoringNotchXPCHelper                 (preserved, unchanged)
 ├── Extensions/
-│   ├── Music/MusicExtension.xcodeproj             → MusicExtension.notchext
-│   ├── Shelf/ShelfExtension.xcodeproj             → ShelfExtension.notchext
-│   ├── Calendar/CalendarExtension.xcodeproj       → CalendarExtension.notchext
-│   ├── Battery/BatteryExtension.xcodeproj         → BatteryExtension.notchext
-│   ├── HUD/HUDExtension.xcodeproj                 → HUDExtension.notchext
-│   ├── Webcam/WebcamExtension.xcodeproj           → WebcamExtension.notchext
-│   ├── LiveActivities/LiveActivitiesExtension.xcodeproj → LiveActivitiesExtension.notchext
-│   └── Tips/TipsExtension.xcodeproj               → TipsExtension.notchext
+│   ├── Music/MusicExtension.xcodeproj             → MusicExtension.capsule
+│   ├── Shelf/ShelfExtension.xcodeproj             → ShelfExtension.capsule
+│   ├── Calendar/CalendarExtension.xcodeproj       → CalendarExtension.capsule
+│   ├── Battery/BatteryExtension.xcodeproj         → BatteryExtension.capsule
+│   ├── HUD/HUDExtension.xcodeproj                 → HUDExtension.capsule
+│   ├── Webcam/WebcamExtension.xcodeproj           → WebcamExtension.capsule
+│   ├── LiveActivities/LiveActivitiesExtension.xcodeproj → LiveActivitiesExtension.capsule
+│   └── Tips/TipsExtension.xcodeproj               → TipsExtension.capsule
 └── mediaremote-adapter/                     (preserved, unchanged)
 ```
 
@@ -76,16 +76,16 @@ Notch.xcworkspace
 ### 3.2 Process & loading model
 
 - Single process. All extensions load in-process at app launch.
-- Extension is a `.notchext` bundle whose `Info.plist` declares `NSPrincipalClass` conforming to the `@objc` `NotchExtension` protocol from `NotchKit`.
+- Extension is a `.capsule` bundle whose `Info.plist` declares `NSPrincipalClass` conforming to the `@objc` `NotchExtension` protocol from `NotchKit`.
 - Loader scans, in order:
-  1. `Notch.app/Contents/PlugIns/*.notchext` (built-ins)
-  2. `~/Library/Application Support/Notch/Extensions/*.notchext` (user-installed)
+  1. `Notch.app/Contents/PlugIns/*.capsule` (built-ins)
+  2. `~/Library/Application Support/Capsule/Extensions/*.capsule` (user-installed)
 - No in-app signature gating in v1; loading is allowed for any code-signed bundle the OS lets through (see §3.4 for the entitlement story). Risk documented in §8.
 - Built-in extensions ship via the host's "Copy Files (PlugIns)" build phase with **Code Sign on Copy** enabled, fed from each extension project's product. Build dependency: host target depends on every extension target so they build first.
 
 ### 3.4 Code-signing & loading policy
 
-The host today has accessibility, camera, mic, and calendar entitlements. Apple's Hardened Runtime enables library validation by default, which forbids loading code unless it is Apple-signed or shares the host's Team ID. To allow third-party `.notchext` bundles dropped into `~/Library/Application Support/Notch/Extensions/`, the host must opt out of library validation:
+The host today has accessibility, camera, mic, and calendar entitlements. Apple's Hardened Runtime enables library validation by default, which forbids loading code unless it is Apple-signed or shares the host's Team ID. To allow third-party `.capsule` bundles dropped into `~/Library/Application Support/Capsule/Extensions/`, the host must opt out of library validation:
 
 - Host adds the `com.apple.security.cs.disable-library-validation` entitlement.
 - Host keeps Hardened Runtime enabled (a hard requirement for the entitlement to be respected).
@@ -97,7 +97,7 @@ The host today has accessibility, camera, mic, and calendar entitlements. Apple'
 
 - `NotchKit.framework`'s install name is `@rpath/NotchKit.framework/Versions/A/NotchKit`.
 - Host's `LD_RUNPATH_SEARCH_PATHS` includes `@executable_path/../Frameworks`.
-- Each extension's `LD_RUNPATH_SEARCH_PATHS` includes `@loader_path/../../../../Frameworks` so an extension at `boringNotch.app/Contents/PlugIns/Foo.notchext/Contents/MacOS/Foo` resolves NotchKit out of the host's `Frameworks` directory. User-installed extensions inherit the same value; the loader rebases relative to the host before linking.
+- Each extension's `LD_RUNPATH_SEARCH_PATHS` includes `@loader_path/../../../../Frameworks` so an extension at `boringNotch.app/Contents/PlugIns/Foo.capsule/Contents/MacOS/Foo` resolves NotchKit out of the host's `Frameworks` directory. User-installed extensions inherit the same value; the loader rebases relative to the host before linking.
 - Extension targets must explicitly *not* embed NotchKit. CI lints reject any plugin product that contains `NotchKit.framework` in its bundle.
 
 ### 3.3 Boot sequence
@@ -424,7 +424,7 @@ Existing `Defaults` keys are preserved verbatim — extensions read the same key
 
 ## 8. Risks (accepted for v1)
 
-- **No in-app code-signing gate on extensions.** The host opts out of library validation (§3.4) so user-installed `.notchext`s with any signing identity load. Combined with the host's accessibility / camera / mic / calendar entitlements, this is a real attack surface — a malicious extension inherits all of those grants without a separate user dialog. Mitigated only by the user directory being inside the user's home (not world-writable). v2 adds in-app per-extension trust prompts.
+- **No in-app code-signing gate on extensions.** The host opts out of library validation (§3.4) so user-installed `.capsule`s with any signing identity load. Combined with the host's accessibility / camera / mic / calendar entitlements, this is a real attack surface — a malicious extension inherits all of those grants without a separate user dialog. Mitigated only by the user directory being inside the user's home (not world-writable). v2 adds in-app per-extension trust prompts.
 - **TCC consent inheritance.** macOS scopes calendar / camera / mic / accessibility consent at the host bundle level. A loaded extension reads through the host's already-granted permissions without ever surfacing a per-extension consent UI. Documented; v2 designs an explicit consent layer.
 - **No process isolation.** A pure-Swift `fatalError`, deadlock, or memory corruption in any extension takes down the host. Mitigation: best-effort `@objc` exception catching at API entry points; no Swift-level safety net.
 - **`@objc` API ceiling.** New API surfaces requiring Swift-only types (generics, value types, async sequences) cannot be added without redesign. Workaround pattern: data crossing the boundary uses `Codable` JSON via `Data` parameters when expressing it as Foundation types is awkward.
@@ -437,16 +437,16 @@ Existing `Defaults` keys are preserved verbatim — extensions read the same key
 ## 9. Testing & verification
 
 - `NotchKit` gets a tests target with unit tests on the contribution registry, settings-store namespacing, and permission-status round-trip.
-- A `MockExtension.notchext` test fixture registers one of every slot type to exercise the loader and contribution-iteration paths.
+- A `MockExtension.capsule` test fixture registers one of every slot type to exercise the loader and contribution-iteration paths.
 - Existing tests (if any) move with their files via `git mv`. New per-feature tests are not required by this refactor.
-- **Manual verification gate before merge:** dev runs the host with all built-in `.notchext`s embedded and exercises every flow the upstream README screenshots demonstrate — music live activity, shelf drop + AirDrop, calendar tab, battery notifications, HUD replacement (volume / brightness / backlight), webcam mirror, sneak-peek, expanded-item, onboarding (first-launch + permissions).
+- **Manual verification gate before merge:** dev runs the host with all built-in `.capsule`s embedded and exercises every flow the upstream README screenshots demonstrate — music live activity, shelf drop + AirDrop, calendar tab, battery notifications, HUD replacement (volume / brightness / backlight), webcam mirror, sneak-peek, expanded-item, onboarding (first-launch + permissions).
 
 ## 10. Scope summary
 
 ### In scope (v1 — must ship)
 
 - `NotchKit` API: extension protocol, slot registration, per-slot lifecycle, settings store, permissions, keyboard shortcuts, menubar contributions, onboarding contributions.
-- Extension loader scanning `Notch.app/Contents/PlugIns/` + `~/Library/Application Support/Notch/Extensions/`.
+- Extension loader scanning `Notch.app/Contents/PlugIns/` + `~/Library/Application Support/Capsule/Extensions/`.
 - All current features rewritten as extensions (Music, Shelf, Calendar, Battery, HUD, Webcam, Live Activities, Tips).
 - Settings window aggregates extension-contributed panes.
 - Onboarding aggregates extension-contributed permission steps.
@@ -481,7 +481,7 @@ Smallest viable end-state: workspace, `NotchKit.framework`, host app stub, **Tip
 - Configure host entitlements (Hardened Runtime + library-validation disable), `LD_RUNPATH_SEARCH_PATHS`, install names, Code Sign on Copy.
 - Create `Extensions/Tips/TipsExtension.xcodeproj`, link NotchKit, ship a `TipsExtension.swift` principal class registering one minimal contribution.
 - Verify: host launches, loader finds the bundle, principal class instantiates, contribution registers, registry lookup works, `NotchKit.framework` is *not* duplicated in the loaded image graph (verify with `lldb` or `dyldinfo`).
-- Verify: a manually-signed third-party `.notchext` placed in `~/Library/Application Support/Notch/Extensions/` also loads.
+- Verify: a manually-signed third-party `.capsule` placed in `~/Library/Application Support/Capsule/Extensions/` also loads.
 
 Phase A is the *technical* gate. If any of the dyld / signing / `@objc` mechanics don't work, this phase fails fast before any feature migration begins.
 

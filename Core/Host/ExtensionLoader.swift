@@ -2,7 +2,7 @@ import AppKit
 import Foundation
 import CapsuleKit
 
-/// Discovers `.notchext` bundles, loads them, and activates each on the
+/// Discovers `.capsule` bundles, loads them, and activates each on the
 /// supplied host. Failures are logged and skipped — one bad extension does
 /// not abort loading.
 final class ExtensionLoader {
@@ -16,7 +16,7 @@ final class ExtensionLoader {
 
     func load(into host: ExtensionHost) {
         let urls = scanBundles()
-        NSLog("[ExtensionLoader] Discovered %d .notchext bundle(s): %@",
+        NSLog("[ExtensionLoader] Discovered %d .capsule bundle(s): %@",
               urls.count, urls.map(\.lastPathComponent).joined(separator: ", "))
         for url in urls {
             loadBundle(url: url, into: host)
@@ -42,7 +42,7 @@ final class ExtensionLoader {
         if let appSupport = FileManager.default.urls(
             for: .applicationSupportDirectory, in: .userDomainMask).first {
             let userDir = appSupport
-                .appendingPathComponent("Notch", isDirectory: true)
+                .appendingPathComponent("Capsule", isDirectory: true)
                 .appendingPathComponent("Extensions", isDirectory: true)
             urls.append(contentsOf: scan(directory: userDir))
         }
@@ -52,7 +52,7 @@ final class ExtensionLoader {
     private func scan(directory: URL) -> [URL] {
         guard let entries = try? FileManager.default.contentsOfDirectory(
             at: directory, includingPropertiesForKeys: nil) else { return [] }
-        return entries.filter { $0.pathExtension == "notchext" }
+        return entries.filter { $0.pathExtension == "capsule" }
     }
 
     private func loadBundle(url: URL, into host: ExtensionHost) {

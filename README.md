@@ -37,7 +37,7 @@ Build and run the `Capsule` scheme.
 Capsule consists of:
 
 - **Capsule.app** — the host application that owns the notch UI and lifecycle.
-- **CapsuleKit.framework** — the public extension SDK. Third-party `.notchext` extensions link against this framework to contribute UI and behavior.
+- **CapsuleKit.framework** — the public extension SDK. Third-party `.capsule` extensions link against this framework to contribute UI and behavior.
 - **CapsuleXPCHelper** — privileged helper for system-level integrations (volume, brightness, etc.).
 - **First-party extensions** — `Extensions/` contains shipped extensions (Tips, Battery, Music, etc.).
 
