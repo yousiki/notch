@@ -334,7 +334,7 @@
 		14C08BB52C8DE42D000F8AA0 /* CalendarManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarManager.swift; sourceTree = "<group>"; };
 		14C08BB82C8DE4B1000F8AA0 /* CapsuleCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsuleCalendar.swift; sourceTree = "<group>"; };
 		14C08BC02C8E03AD000F8AA0 /* NSImage+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSImage+Extensions.swift"; sourceTree = "<group>"; };
-		14CEF4122C5CAED300855D72 /* boringNotch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = boringNotch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		14CEF4122C5CAED300855D72 /* Capsule.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Capsule.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		14CEF4152C5CAED300855D72 /* CapsuleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsuleApp.swift; sourceTree = "<group>"; };
 		14CEF4172C5CAED300855D72 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		14CEF4192C5CAED400855D72 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -716,7 +716,7 @@
 		14CEF4132C5CAED300855D72 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				14CEF4122C5CAED300855D72 /* boringNotch.app */,
+				14CEF4122C5CAED300855D72 /* Capsule.app */,
 				11F7484F2EC9AABA00F841DB /* CapsuleXPCHelper.xpc */,
 				654B12E048FDE9441033C254 /* NotchKit.framework */,
 				24171E71B8C396404EE2EDAA /* NotchKit.framework */,
@@ -1132,9 +1132,9 @@
 			productReference = 11F7484F2EC9AABA00F841DB /* CapsuleXPCHelper.xpc */;
 			productType = "com.apple.product-type.xpc-service";
 		};
-		14CEF4112C5CAED300855D72 /* boringNotch */ = {
+		14CEF4112C5CAED300855D72 /* Capsule */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 14CEF4212C5CAED400855D72 /* Build configuration list for PBXNativeTarget "boringNotch" */;
+			buildConfigurationList = 14CEF4212C5CAED400855D72 /* Build configuration list for PBXNativeTarget "Capsule" */;
 			buildPhases = (
 				14CEF40E2C5CAED300855D72 /* Sources */,
 				14CEF40F2C5CAED300855D72 /* Frameworks */,
@@ -1155,7 +1155,7 @@
 			fileSystemSynchronizedGroups = (
 				112FB72F2CCF12CC0015238C /* private */,
 			);
-			name = boringNotch;
+			name = Capsule;
 			packageProductDependencies = (
 				14D032192C68F32E0096E6A1 /* LaunchAtLogin */,
 				14D0321C2C68F3350096E6A1 /* Sparkle */,
@@ -1171,7 +1171,7 @@
 				111BEA6E2ED166E20079DD4E /* MacroVisionKit */,
 			);
 			productName = dynamicNotch;
-			productReference = 14CEF4122C5CAED300855D72 /* boringNotch.app */;
+			productReference = 14CEF4122C5CAED300855D72 /* Capsule.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -1225,7 +1225,7 @@
 			);
 			projectRoot = "";
 			targets = (
-				14CEF4112C5CAED300855D72 /* boringNotch */,
+				14CEF4112C5CAED300855D72 /* Capsule */,
 				11F7484E2EC9AABA00F841DB /* CapsuleXPCHelper */,
 				0FC796EDF06B266BC2265428 /* NotchKit */,
 			);
@@ -1865,7 +1865,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		14CEF4212C5CAED400855D72 /* Build configuration list for PBXNativeTarget "boringNotch" */ = {
+		14CEF4212C5CAED400855D72 /* Build configuration list for PBXNativeTarget "Capsule" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				14CEF4222C5CAED400855D72 /* Debug */,
