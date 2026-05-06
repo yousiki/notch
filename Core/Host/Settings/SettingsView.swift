@@ -488,7 +488,6 @@ struct HUD: View {
                     Defaults.Toggle("", key: .hudReplacement)
                     .labelsHidden()
                     .toggleStyle(.switch)
-                    .controlSize(.large)
                     .disabled(!accessibilityAuthorized)
                 }
                 
