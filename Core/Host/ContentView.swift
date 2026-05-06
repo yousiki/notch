@@ -17,7 +17,6 @@ import SwiftUIIntrospect
 @MainActor
 struct ContentView: View {
     @EnvironmentObject var vm: CapsuleViewModel
-    @ObservedObject var webcamManager = WebcamManager.shared
 
     @ObservedObject var coordinator = CapsuleViewCoordinator.shared
     @ObservedObject var musicManager = MusicManager.shared

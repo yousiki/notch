@@ -89,8 +89,6 @@
 		147163982C5D35B70068B555 /* MusicVisualizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147163972C5D35B70068B555 /* MusicVisualizer.swift */; };
 		1471639A2C5D35FF0068B555 /* MusicManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147163992C5D35FF0068B555 /* MusicManager.swift */; };
 		1471A8592C6281BD0058408D /* CapsuleWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1471A8582C6281BD0058408D /* CapsuleWindow.swift */; };
-		149E0B972C737D00006418B1 /* WebcamManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 149E0B962C737D00006418B1 /* WebcamManager.swift */; };
-		149E0B9A2C737D40006418B1 /* WebcamView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 149E0B992C737D40006418B1 /* WebcamView.swift */; };
 		14A7E5882C64A89C008C1BE9 /* HelloAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14A7E5872C64A89C008C1BE9 /* HelloAnimation.swift */; };
 		14A7E5972C65FD31008C1BE9 /* capsule.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 14A7E5962C65FD31008C1BE9 /* capsule.m4a */; };
 		14C08BB62C8DE42D000F8AA0 /* CalendarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C08BB52C8DE42D000F8AA0 /* CalendarManager.swift */; };
@@ -138,6 +136,7 @@
 		9CB26F5685F7F0AC4CF6031B /* CapsuleHUDContribution.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07CE6C93526D1E5F4FFF54D /* CapsuleHUDContribution.swift */; };
 		A0C2460FD9ED628C37E90E20 /* CapsuleLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4215957D03737509A99A32A5 /* CapsuleLogger.swift */; };
 		A27116D43ABFC37C182B09D6 /* CapsuleKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 654B12E048FDE9441033C254 /* CapsuleKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A00000000000000000000011 /* WebcamExtension.notchext in Embed Plug-ins */ = {isa = PBXBuildFile; fileRef = A00000000000000000000015 /* WebcamExtension.notchext */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		AAD58F01A7E993B11065A12A /* TipsExtension.notchext in Embed Plug-ins */ = {isa = PBXBuildFile; fileRef = 74CA84B2EF07A0A1A88C43BD /* TipsExtension.notchext */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		B064A3B81A1E86286B8D4704 /* CapsuleSneakPeekContribution.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A45994A5E5BF181E22FA8F4 /* CapsuleSneakPeekContribution.swift */; };
 		B10348D92C74E56000475897 /* ConditionalModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10348D82C74E56000475897 /* ConditionalModifier.swift */; };
@@ -202,6 +201,20 @@
 			remoteGlobalIDString = 7A4E8284933D001FDA7A6C09;
 			remoteInfo = TipsExtension;
 		};
+		A00000000000000000000012 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A00000000000000000000014 /* WebcamExtension.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = A3407980F3FE1D757951D9AB;
+			remoteInfo = WebcamExtension;
+		};
+		A00000000000000000000013 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A00000000000000000000014 /* WebcamExtension.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7A4E8284933D001FDA7A6C09;
+			remoteInfo = WebcamExtension;
+		};
 		45143B38F20B30AC9C4ECFE4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 14CEF40A2C5CAED200855D72 /* Project object */;
@@ -237,6 +250,7 @@
 			dstSubfolderSpec = 13;
 			files = (
 				AAD58F01A7E993B11065A12A /* TipsExtension.notchext in Embed Plug-ins */,
+				A00000000000000000000011 /* WebcamExtension.notchext in Embed Plug-ins */,
 			);
 			name = "Embed Plug-ins";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -327,8 +341,6 @@
 		147163972C5D35B70068B555 /* MusicVisualizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicVisualizer.swift; sourceTree = "<group>"; };
 		147163992C5D35FF0068B555 /* MusicManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicManager.swift; sourceTree = "<group>"; };
 		1471A8582C6281BD0058408D /* CapsuleWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsuleWindow.swift; sourceTree = "<group>"; };
-		149E0B962C737D00006418B1 /* WebcamManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebcamManager.swift; sourceTree = "<group>"; };
-		149E0B992C737D40006418B1 /* WebcamView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebcamView.swift; sourceTree = "<group>"; };
 		14A7E5872C64A89C008C1BE9 /* HelloAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelloAnimation.swift; sourceTree = "<group>"; };
 		14A7E5962C65FD31008C1BE9 /* capsule.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = capsule.m4a; sourceTree = "<group>"; };
 		14C08BB52C8DE42D000F8AA0 /* CalendarManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarManager.swift; sourceTree = "<group>"; };
@@ -376,6 +388,7 @@
 		6D36122D77955CC7FF52F57B /* CapsuleSlotLifecycle.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CapsuleKit/Sources/CapsuleSlotLifecycle.swift; sourceTree = SOURCE_ROOT; };
 		70BC31206A0DB7773122A6FD /* ScreenServiceAdapter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Host/Services/ScreenServiceAdapter.swift; sourceTree = SOURCE_ROOT; };
 		74CA84B2EF07A0A1A88C43BD /* TipsExtension.notchext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TipsExtension.notchext; sourceTree = BUILT_PRODUCTS_DIR; };
+		A00000000000000000000015 /* WebcamExtension.notchext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WebcamExtension.notchext; sourceTree = BUILT_PRODUCTS_DIR; };
 		91812C3399BEC10335B7C2C4 /* HostPermissionsAPI.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HostPermissionsAPI.swift; sourceTree = "<group>"; };
 		9A0887312C7A693000C160EA /* TabButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabButton.swift; sourceTree = "<group>"; };
 		9A0887342C7AFF8E00C160EA /* TabSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabSelectionView.swift; sourceTree = "<group>"; };
@@ -421,6 +434,7 @@
 		E4D0D52F81C2656E6C4CF764 /* CapsuleScreenHost.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CapsuleKit/Sources/Services/CapsuleScreenHost.swift; sourceTree = SOURCE_ROOT; };
 		E664244E7BD4E461D568F32C /* CapsulePermissionsAPI.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CapsuleKit/Sources/Permissions/CapsulePermissionsAPI.swift; sourceTree = SOURCE_ROOT; };
 		ED66C1672A4CEC085C6BC93C /* TipsExtension.xcodeproj */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.pb-project"; name = TipsExtension.xcodeproj; path = ../Extensions/Tips/TipsExtension.xcodeproj; sourceTree = SOURCE_ROOT; };
+		A00000000000000000000014 /* WebcamExtension.xcodeproj */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.pb-project"; name = WebcamExtension.xcodeproj; path = ../Extensions/Webcam/WebcamExtension.xcodeproj; sourceTree = SOURCE_ROOT; };
 		F38DE6472D8243E2008B5C6D /* BatteryActivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryActivityManager.swift; sourceTree = "<group>"; };
 		F97315D05E16C74D28DC9E7D /* NotchStateServiceAdapter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Host/Services/NotchStateServiceAdapter.swift; sourceTree = SOURCE_ROOT; };
 		FDA82FFC5F03BDA86D39E5F7 /* CapsuleKeyboardShortcutContribution.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CapsuleKit/Sources/Contributions/CapsuleKeyboardShortcutContribution.swift; sourceTree = SOURCE_ROOT; };
@@ -652,7 +666,6 @@
 				B1C448992C97375A001F0858 /* Tips */,
 				14C08BB72C8DE49E000F8AA0 /* Calendar */,
 				9A987A042C73CA66005CA465 /* Shelf */,
-				149E0B982C737D26006418B1 /* Webcam */,
 				B18654312C6F45AE000B926A /* Live activities */,
 				B18654302C6F4590000B926A /* Settings */,
 				B186542F2C6F455E000B926A /* Notch */,
@@ -676,20 +689,11 @@
 				F38DE6472D8243E2008B5C6D /* BatteryActivityManager.swift */,
 				112FB7342CCF16F70015238C /* NotchSpaceManager.swift */,
 				147163992C5D35FF0068B555 /* MusicManager.swift */,
-				149E0B962C737D00006418B1 /* WebcamManager.swift */,
 				14C08BB52C8DE42D000F8AA0 /* CalendarManager.swift */,
 				B1F0A0012E60000100000001 /* BrightnessManager.swift */,
 				59D8C23B2E589FAA00147B33 /* VolumeManager.swift */,
 			);
 			path = managers;
-			sourceTree = "<group>";
-		};
-		149E0B982C737D26006418B1 /* Webcam */ = {
-			isa = PBXGroup;
-			children = (
-				149E0B992C737D40006418B1 /* WebcamView.swift */,
-			);
-			path = Webcam;
 			sourceTree = "<group>";
 		};
 		14C08BB72C8DE49E000F8AA0 /* Calendar */ = {
@@ -710,6 +714,7 @@
 				14D031EC2C689DB70096E6A1 /* Frameworks */,
 				6F94994510695E0663E7B0CC /* Core */,
 				ED66C1672A4CEC085C6BC93C /* TipsExtension.xcodeproj */,
+				A00000000000000000000014 /* WebcamExtension.xcodeproj */,
 			);
 			sourceTree = "<group>";
 		};
@@ -721,6 +726,7 @@
 				654B12E048FDE9441033C254 /* CapsuleKit.framework */,
 				24171E71B8C396404EE2EDAA /* CapsuleKit.framework */,
 				74CA84B2EF07A0A1A88C43BD /* TipsExtension.notchext */,
+				A00000000000000000000015 /* WebcamExtension.notchext */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -819,6 +825,14 @@
 			isa = PBXGroup;
 			children = (
 				16C9A1E02FAADDC200BA0DF2 /* TipsExtension.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A00000000000000000000016 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A00000000000000000000017 /* WebcamExtension.bundle */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1151,6 +1165,7 @@
 				D9A66422040D37DBF7814015 /* PBXTargetDependency */,
 				00F4F45554451D9FEEA85D95 /* PBXTargetDependency */,
 				19262A58E2F5980B4BB57750 /* PBXTargetDependency */,
+				A00000000000000000000018 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				112FB72F2CCF12CC0015238C /* private */,
@@ -1222,6 +1237,10 @@
 					ProductGroup = 16C9A1DC2FAADDC100BA0DF2 /* Products */;
 					ProjectRef = ED66C1672A4CEC085C6BC93C /* TipsExtension.xcodeproj */;
 				},
+				{
+					ProductGroup = A00000000000000000000016 /* Products */;
+					ProjectRef = A00000000000000000000014 /* WebcamExtension.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -1239,6 +1258,14 @@
 			name = TipsExtension.bundle;
 			path = TipsExtension.notchext;
 			remoteRef = 16C9A1DF2FAADDC200BA0DF2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A00000000000000000000017 /* WebcamExtension.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = "wrapper.plug-in";
+			name = WebcamExtension.bundle;
+			path = WebcamExtension.notchext;
+			remoteRef = A00000000000000000000013 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -1290,7 +1317,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e\nEXT_PRODUCT=\"${BUILT_PRODUCTS_DIR}/TipsExtension.notchext\"\nif [ -d \"${EXT_PRODUCT}\" ]; then\n  echo \"TipsExtension.notchext is present at ${EXT_PRODUCT}\"\n  echo \"Binary: $(file \"${EXT_PRODUCT}/Contents/MacOS/TipsExtension\" 2>/dev/null || echo 'not found')\"\nelse\n  echo \"Error: TipsExtension.notchext not found at ${EXT_PRODUCT}\"\n  echo \"Make sure TipsExtension target built successfully.\"\n  exit 1\nfi\n";
+			shellScript = "set -e\nfor EXT_NAME in TipsExtension WebcamExtension; do\n  EXT_PRODUCT=\"${BUILT_PRODUCTS_DIR}/${EXT_NAME}.notchext\"\n  if [ -d \"${EXT_PRODUCT}\" ]; then\n    echo \"${EXT_NAME}.notchext is present at ${EXT_PRODUCT}\"\n    echo \"Binary: $(file \"${EXT_PRODUCT}/Contents/MacOS/${EXT_NAME}\" 2>/dev/null || echo 'not found')\"\n  else\n    echo \"Error: ${EXT_NAME}.notchext not found at ${EXT_PRODUCT}\"\n    echo \"Make sure ${EXT_NAME} target built successfully.\"\n    exit 1\n  fi\ndone\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1352,7 +1379,6 @@
 				1160F8D82DD98230006FBB94 /* NotchShape.swift in Sources */,
 				5917FD112E57891600E87F1C /* MediaKeyInterceptor.swift in Sources */,
 				14C08BC12C8E03AD000F8AA0 /* NSImage+Extensions.swift in Sources */,
-				149E0B9A2C737D40006418B1 /* WebcamView.swift in Sources */,
 				1471639A2C5D35FF0068B555 /* MusicManager.swift in Sources */,
 				B1B112932C6A577E00093D8F /* MouseTracker.swift in Sources */,
 				B1C448962C9712C4001F0858 /* ActionBar.swift in Sources */,
@@ -1413,7 +1439,6 @@
 				11D58EA22E760AE100FA8377 /* ImageService.swift in Sources */,
 				11F748822ECB07A400F841DB /* MusicControlButton.swift in Sources */,
 				14288DDC2C6E015000B9F80C /* AudioPlayer.swift in Sources */,
-				149E0B972C737D00006418B1 /* WebcamManager.swift in Sources */,
 				14288E0C2C6F8EC000B9F80C /* AppIcons.swift in Sources */,
 				B1C448982C972CC4001F0858 /* ListItemPopover.swift in Sources */,
 				B19016242CC15B5000E3F12E /* Constants.swift in Sources */,
@@ -1479,6 +1504,11 @@
 			isa = PBXTargetDependency;
 			name = TipsExtension;
 			targetProxy = 14D316BF01F440E8C1719D3F /* PBXContainerItemProxy */;
+		};
+		A00000000000000000000018 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = WebcamExtension;
+			targetProxy = A00000000000000000000012 /* PBXContainerItemProxy */;
 		};
 		D9A66422040D37DBF7814015 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

@@ -6,11 +6,9 @@
 //
 
 import AVFoundation
-import Defaults
 import SwiftUI
 
 struct CameraPreviewView: View {
-    @EnvironmentObject var vm: CapsuleViewModel
     @ObservedObject var webcamManager: WebcamManager
     
     // Track if authorization request is in progress to avoid multiple requests
@@ -22,14 +20,14 @@ struct CameraPreviewView: View {
                 if let previewLayer = webcamManager.previewLayer {
                     CameraPreviewLayerView(previewLayer: previewLayer)
                         .scaleEffect(x: -1, y: 1)
-                        .clipShape(RoundedRectangle(cornerRadius: Defaults[.mirrorShape] == .rectangle ? !Defaults[.cornerRadiusScaling] ? MusicPlayerImageSizes.cornerRadiusInset.closed : MusicPlayerImageSizes.cornerRadiusInset.opened : 100))
+                        .clipShape(RoundedRectangle(cornerRadius: previewCornerRadius))
                         .frame(width: geometry.size.width, height: geometry.size.width)
                         .opacity(webcamManager.isSessionRunning ? 1 : 0)
                 }
 
                 if !webcamManager.isSessionRunning {
                     ZStack {
-                        RoundedRectangle(cornerRadius: Defaults[.mirrorShape] == .rectangle ? !Defaults[.cornerRadiusScaling] ? MusicPlayerImageSizes.cornerRadiusInset.closed : 12 : 100)
+                        RoundedRectangle(cornerRadius: placeholderCornerRadius)
                             .fill(Color(red: 20/255, green: 20/255, blue: 20/255))
                             .strokeBorder(.white.opacity(0.04), lineWidth: 1)
                             .frame(width: geometry.size.width, height: geometry.size.width)
@@ -52,6 +50,24 @@ struct CameraPreviewView: View {
             }
         }
         .aspectRatio(1, contentMode: .fit)
+    }
+
+    private var mirrorShapeIsRectangle: Bool {
+        let shape = UserDefaults.standard.string(forKey: "mirrorShape")
+        return shape != "Circular" && shape != "circle"
+    }
+
+    private var cornerRadiusScaling: Bool {
+        guard UserDefaults.standard.object(forKey: "cornerRadiusScaling") != nil else { return true }
+        return UserDefaults.standard.bool(forKey: "cornerRadiusScaling")
+    }
+
+    private var previewCornerRadius: CGFloat {
+        mirrorShapeIsRectangle ? (cornerRadiusScaling ? 13 : 4) : 100
+    }
+
+    private var placeholderCornerRadius: CGFloat {
+        mirrorShapeIsRectangle ? (cornerRadiusScaling ? 12 : 4) : 100
     }
     
     private func handleCameraTap() {

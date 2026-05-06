@@ -2,4 +2,5 @@
 <Workspace version="1.0">
    <FileRef location="group:Core/Capsule.xcodeproj"></FileRef>
    <FileRef location="group:Extensions/Tips/TipsExtension.xcodeproj"></FileRef>
+   <FileRef location="group:Extensions/Webcam/WebcamExtension.xcodeproj"></FileRef>
 </Workspace>
