@@ -219,7 +219,7 @@
 					"-framework",
 					NotchKit,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.theboredteam.notch.extensions.tips;
+				PRODUCT_BUNDLE_IDENTIFIER = moe.siki.Capsule.extensions.tips;
 				PRODUCT_NAME = TipsExtension;
 				SDKROOT = macosx;
 				SKIP_INSTALL = NO;
@@ -249,7 +249,7 @@
 					"-framework",
 					NotchKit,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.theboredteam.notch.extensions.tips;
+				PRODUCT_BUNDLE_IDENTIFIER = moe.siki.Capsule.extensions.tips;
 				PRODUCT_NAME = TipsExtension;
 				SDKROOT = macosx;
 				SKIP_INSTALL = NO;
