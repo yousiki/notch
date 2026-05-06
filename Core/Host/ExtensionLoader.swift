@@ -16,9 +16,20 @@ final class ExtensionLoader {
 
     func load(into host: ExtensionHost) {
         let urls = scanBundles()
+        NSLog("[ExtensionLoader] Discovered %d .notchext bundle(s): %@",
+              urls.count, urls.map(\.lastPathComponent).joined(separator: ", "))
         for url in urls {
             loadBundle(url: url, into: host)
         }
+        if failures.isEmpty {
+            NSLog("[ExtensionLoader] All bundles loaded successfully")
+        } else {
+            for f in failures {
+                NSLog("[ExtensionLoader] FAILED: %@ — %@", f.bundleURL.lastPathComponent, f.reason)
+            }
+        }
+        NSLog("[ExtensionLoader] Registered tabs: %@",
+              host.tabs.map(\.identifier).joined(separator: ", "))
     }
 
     private func scanBundles() -> [URL] {
@@ -62,6 +73,7 @@ final class ExtensionLoader {
         }
 
         let ext = extType.make()
+        NSLog("[ExtensionLoader] Activating extension: %@ (%@)", ext.displayName, ext.identifier)
         let exception = ObjCExceptionCatcher.try {
             ext.activate(host: host)
         }
