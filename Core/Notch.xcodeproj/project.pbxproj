@@ -92,7 +92,7 @@
 		149E0B972C737D00006418B1 /* WebcamManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 149E0B962C737D00006418B1 /* WebcamManager.swift */; };
 		149E0B9A2C737D40006418B1 /* WebcamView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 149E0B992C737D40006418B1 /* WebcamView.swift */; };
 		14A7E5882C64A89C008C1BE9 /* HelloAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14A7E5872C64A89C008C1BE9 /* HelloAnimation.swift */; };
-		14A7E5972C65FD31008C1BE9 /* boring.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 14A7E5962C65FD31008C1BE9 /* boring.m4a */; };
+		14A7E5972C65FD31008C1BE9 /* capsule.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 14A7E5962C65FD31008C1BE9 /* capsule.m4a */; };
 		14C08BB62C8DE42D000F8AA0 /* CalendarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C08BB52C8DE42D000F8AA0 /* CalendarManager.swift */; };
 		14C08BB92C8DE4B1000F8AA0 /* CapsuleCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C08BB82C8DE4B1000F8AA0 /* CapsuleCalendar.swift */; };
 		14C08BC12C8E03AD000F8AA0 /* NSImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C08BC02C8E03AD000F8AA0 /* NSImage+Extensions.swift */; };
@@ -330,7 +330,7 @@
 		149E0B962C737D00006418B1 /* WebcamManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebcamManager.swift; sourceTree = "<group>"; };
 		149E0B992C737D40006418B1 /* WebcamView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebcamView.swift; sourceTree = "<group>"; };
 		14A7E5872C64A89C008C1BE9 /* HelloAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelloAnimation.swift; sourceTree = "<group>"; };
-		14A7E5962C65FD31008C1BE9 /* boring.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = boring.m4a; sourceTree = "<group>"; };
+		14A7E5962C65FD31008C1BE9 /* capsule.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = capsule.m4a; sourceTree = "<group>"; };
 		14C08BB52C8DE42D000F8AA0 /* CalendarManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarManager.swift; sourceTree = "<group>"; };
 		14C08BB82C8DE4B1000F8AA0 /* CapsuleCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsuleCalendar.swift; sourceTree = "<group>"; };
 		14C08BC02C8E03AD000F8AA0 /* NSImage+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSImage+Extensions.swift"; sourceTree = "<group>"; };
@@ -339,7 +339,7 @@
 		14CEF4172C5CAED300855D72 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		14CEF4192C5CAED400855D72 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		14CEF41C2C5CAED400855D72 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		14CEF41E2C5CAED400855D72 /* boringNotch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = boringNotch.entitlements; sourceTree = "<group>"; };
+		14CEF41E2C5CAED400855D72 /* Capsule.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Capsule.entitlements; sourceTree = "<group>"; };
 		14D031ED2C689DB70096E6A1 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		14D031EF2C689DC00096E6A1 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
 		14D570B82C5E98A20011E668 /* drop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = drop.swift; sourceTree = "<group>"; };
@@ -745,9 +745,9 @@
 				14CEF4172C5CAED300855D72 /* ContentView.swift */,
 				B17266E02C6532560031BA0D /* Localizable.xcstrings */,
 				14CEF4192C5CAED400855D72 /* Assets.xcassets */,
-				14A7E5962C65FD31008C1BE9 /* boring.m4a */,
+				14A7E5962C65FD31008C1BE9 /* capsule.m4a */,
 				1443E7F42C609E650027C1FC /* Info.plist */,
-				14CEF41E2C5CAED400855D72 /* boringNotch.entitlements */,
+				14CEF41E2C5CAED400855D72 /* Capsule.entitlements */,
 				14CEF41B2C5CAED400855D72 /* Preview Content */,
 				112FB72F2CCF12CC0015238C /* private */,
 				11CC44A12CEE614100C7244B /* CapsuleViewCoordinator.swift */,
@@ -1260,7 +1260,7 @@
 				112B0EB82E30DD0F00562D6C /* MediaRemoteAdapterTestClient in Resources */,
 				112B0EB92E30DD0F00562D6C /* mediaremote-adapter.pl in Resources */,
 				B17266E12C6532560031BA0D /* Localizable.xcstrings in Resources */,
-				14A7E5972C65FD31008C1BE9 /* boring.m4a in Resources */,
+				14A7E5972C65FD31008C1BE9 /* capsule.m4a in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1670,7 +1670,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION = YES;
-				CODE_SIGN_ENTITLEMENTS = Host/boringNotch.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Host/Capsule.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
@@ -1725,7 +1725,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION = YES;
-				CODE_SIGN_ENTITLEMENTS = Host/boringNotch.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Host/Capsule.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
