@@ -12,7 +12,6 @@ import Defaults
 import KeyboardShortcuts
 import CapsuleKit
 import SwiftUI
-import SwiftUIIntrospect
 
 @MainActor
 struct ContentView: View {
