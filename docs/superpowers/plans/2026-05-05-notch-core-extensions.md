@@ -1953,8 +1953,8 @@ final class NotchStateServiceAdapter: NSObject, NotchNotchStateHost {
 
     private let viewModel: BoringViewModel
     private var cancellables: Set<AnyCancellable> = []
-    private var notchStateHandlers: [(NotchOpenState) -> Void] = []
-    private var hoverHandlers: [(Bool) -> Void] = []
+    private var notchStateHandlers: [UUID: (NotchOpenState) -> Void] = [:]
+    private var hoverHandlers: [UUID: (Bool) -> Void] = [:]
     private let lock = NSLock()
 
     init(viewModel: BoringViewModel) {
@@ -1965,7 +1965,7 @@ final class NotchStateServiceAdapter: NSObject, NotchNotchStateHost {
             guard let self else { return }
             let mapped: NotchOpenState = (state == .open ? .open : .closed)
             self.lock.lock()
-            let handlers = self.notchStateHandlers
+            let handlers = Array(self.notchStateHandlers.values)
             self.lock.unlock()
             handlers.forEach { $0(mapped) }
         }.store(in: &cancellables)
@@ -1973,7 +1973,7 @@ final class NotchStateServiceAdapter: NSObject, NotchNotchStateHost {
         viewModel.$hovering.sink { [weak self] hovering in
             guard let self else { return }
             self.lock.lock()
-            let handlers = self.hoverHandlers
+            let handlers = Array(self.hoverHandlers.values)
             self.lock.unlock()
             handlers.forEach { $0(hovering) }
         }.store(in: &cancellables)
@@ -1985,22 +1985,29 @@ final class NotchStateServiceAdapter: NSObject, NotchNotchStateHost {
 
     @objc var hovering: Bool { viewModel.hovering }
 
+    // NOTE: handler removal uses UUID tokens, not closure-as-AnyObject identity.
+    // Bridging a Swift closure to AnyObject does not produce a stable identity
+    // (each `as AnyObject` cast may box anew), so `===` would never match the
+    // stored handler and `invalidate()` would silently leak observers.
+
     @objc func observeNotchState(_ handler: @escaping (NotchOpenState) -> Void) -> NotchObservation {
-        lock.lock(); notchStateHandlers.append(handler); lock.unlock()
+        let id = UUID()
+        lock.lock(); notchStateHandlers[id] = handler; lock.unlock()
         return NotchObservation { [weak self] in
             guard let self else { return }
             self.lock.lock()
-            self.notchStateHandlers.removeAll { ($0 as AnyObject) === (handler as AnyObject) }
+            self.notchStateHandlers.removeValue(forKey: id)
             self.lock.unlock()
         }
     }
 
     @objc func observeHover(_ handler: @escaping (Bool) -> Void) -> NotchObservation {
-        lock.lock(); hoverHandlers.append(handler); lock.unlock()
+        let id = UUID()
+        lock.lock(); hoverHandlers[id] = handler; lock.unlock()
         return NotchObservation { [weak self] in
             guard let self else { return }
             self.lock.lock()
-            self.hoverHandlers.removeAll { ($0 as AnyObject) === (handler as AnyObject) }
+            self.hoverHandlers.removeValue(forKey: id)
             self.lock.unlock()
         }
     }
@@ -2021,7 +2028,7 @@ import NotchKit
 final class ScreenServiceAdapter: NSObject, NotchScreenHost {
 
     private let coordinator: BoringViewCoordinator
-    private var observers: [(String) -> Void] = []
+    private var observers: [UUID: (String) -> Void] = [:]
     private let lock = NSLock()
 
     init(coordinator: BoringViewCoordinator) {
@@ -2035,18 +2042,19 @@ final class ScreenServiceAdapter: NSObject, NotchScreenHost {
     @objc var selectedScreenUUID: String { coordinator.selectedScreenUUID }
 
     @objc func observeSelectedScreen(_ handler: @escaping (String) -> Void) -> NotchObservation {
-        lock.lock(); observers.append(handler); lock.unlock()
+        let id = UUID()
+        lock.lock(); observers[id] = handler; lock.unlock()
         return NotchObservation { [weak self] in
             guard let self else { return }
             self.lock.lock()
-            self.observers.removeAll { ($0 as AnyObject) === (handler as AnyObject) }
+            self.observers.removeValue(forKey: id)
             self.lock.unlock()
         }
     }
 
     @objc private func screenChanged() {
         let uuid = coordinator.selectedScreenUUID
-        lock.lock(); let copy = observers; lock.unlock()
+        lock.lock(); let copy = Array(observers.values); lock.unlock()
         copy.forEach { $0(uuid) }
     }
 }
@@ -2061,7 +2069,7 @@ import NotchKit
 final class CoordinatorServiceAdapter: NSObject, NotchCoordinatorHost {
 
     private let coordinator: BoringViewCoordinator
-    private var tabHandlers: [(String) -> Void] = []
+    private var tabHandlers: [UUID: (String) -> Void] = [:]
     private let lock = NSLock()
 
     init(coordinator: BoringViewCoordinator) {
@@ -2075,11 +2083,12 @@ final class CoordinatorServiceAdapter: NSObject, NotchCoordinatorHost {
     @objc var currentTabIdentifier: String { coordinator.currentTabIdentifier }
 
     @objc func observeCurrentTab(_ handler: @escaping (String) -> Void) -> NotchObservation {
-        lock.lock(); tabHandlers.append(handler); lock.unlock()
+        let id = UUID()
+        lock.lock(); tabHandlers[id] = handler; lock.unlock()
         return NotchObservation { [weak self] in
             guard let self else { return }
             self.lock.lock()
-            self.tabHandlers.removeAll { ($0 as AnyObject) === (handler as AnyObject) }
+            self.tabHandlers.removeValue(forKey: id)
             self.lock.unlock()
         }
     }
@@ -2098,7 +2107,7 @@ final class CoordinatorServiceAdapter: NSObject, NotchCoordinatorHost {
 
     @objc private func currentTabChanged() {
         let id = coordinator.currentTabIdentifier
-        lock.lock(); let copy = tabHandlers; lock.unlock()
+        lock.lock(); let copy = Array(tabHandlers.values); lock.unlock()
         copy.forEach { $0(id) }
     }
 }
