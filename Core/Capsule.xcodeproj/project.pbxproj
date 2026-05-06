@@ -452,7 +452,7 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		112FB72F2CCF12CC0015238C /* private */ = {
+		112FB72F2CCF12CC0015238C /* Private */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 			);
@@ -460,7 +460,7 @@
 			};
 			explicitFolders = (
 			);
-			path = private;
+			path = Private;
 			sourceTree = "<group>";
 		};
 		11F748502EC9AABA00F841DB /* ../CapsuleXPCHelper */ = {
@@ -628,7 +628,7 @@
 			path = XPCHelperClient;
 			sourceTree = "<group>";
 		};
-		14288DD92C6E015000B9F80C /* helpers */ = {
+		14288DD92C6E015000B9F80C /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
 				118EBE242E92DCCB00D54B5A /* AssociatedObject.swift */,
@@ -638,28 +638,28 @@
 				5955950C2E900ED800C66711 /* ApplicationRelauncher.swift */,
 				14288E0B2C6F8EC000B9F80C /* AppIcons.swift */,
 			);
-			path = helpers;
+			path = Helpers;
 			sourceTree = "<group>";
 		};
-		14288DE22C6E016F00B9F80C /* observers */ = {
+		14288DE22C6E016F00B9F80C /* Observers */ = {
 			isa = PBXGroup;
 			children = (
 				111BE9942ECF2DEF0079DD4E /* DragDetector.swift */,
 				B1A78C812C8BA08100BD51B0 /* FullscreenMediaDetection.swift */,
 				5917FD102E57891600E87F1C /* MediaKeyInterceptor.swift */,
 			);
-			path = observers;
+			path = Observers;
 			sourceTree = "<group>";
 		};
-		1443E7F12C609DB90027C1FC /* sizing */ = {
+		1443E7F12C609DB90027C1FC /* Sizing */ = {
 			isa = PBXGroup;
 			children = (
 				1443E7F22C609DCE0027C1FC /* matters.swift */,
 			);
-			path = sizing;
+			path = Sizing;
 			sourceTree = "<group>";
 		};
-		1471639B2C5D362F0068B555 /* components */ = {
+		1471639B2C5D362F0068B555 /* Components */ = {
 			isa = PBXGroup;
 			children = (
 				B141C23B2CA5F50900AC8CC8 /* Onboarding */,
@@ -679,10 +679,10 @@
 				507266DA2C908E2E00A2D00D /* HoverButton.swift */,
 				B1F747F82EC7E94000F841DB /* LottieView.swift */,
 			);
-			path = components;
+			path = Components;
 			sourceTree = "<group>";
 		};
-		147163B52C5D804B0068B555 /* managers */ = {
+		147163B52C5D804B0068B555 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
 				11D58EA12E760AE100FA8377 /* ImageService.swift */,
@@ -693,7 +693,7 @@
 				B1F0A0012E60000100000001 /* BrightnessManager.swift */,
 				59D8C23B2E589FAA00147B33 /* VolumeManager.swift */,
 			);
-			path = managers;
+			path = Managers;
 			sourceTree = "<group>";
 		};
 		14C08BB72C8DE49E000F8AA0 /* Calendar */ = {
@@ -736,17 +736,17 @@
 			children = (
 				11F748672EC9AC9600F841DB /* XPCHelperClient */,
 				116398942DF5D6B40052E6AF /* Providers */,
-				14288DE22C6E016F00B9F80C /* observers */,
-				14288DD92C6E015000B9F80C /* helpers */,
+				14288DE22C6E016F00B9F80C /* Observers */,
+				14288DD92C6E015000B9F80C /* Helpers */,
 				B186543A2C6F49A4000B926A /* Shortcuts */,
-				1443E7F12C609DB90027C1FC /* sizing */,
-				14D570C72C5F38760011E668 /* models */,
+				1443E7F12C609DB90027C1FC /* Sizing */,
+				14D570C72C5F38760011E668 /* Models */,
 				14D570BA2C5E98E30011E668 /* Models */,
-				14D570B72C5E98960011E668 /* animations */,
-				147163B52C5D804B0068B555 /* managers */,
+				14D570B72C5E98960011E668 /* Animations */,
+				147163B52C5D804B0068B555 /* Managers */,
 				1153BD8E2D986B1F00979FB0 /* MediaControllers */,
-				B15063502C63D3F600EBB0E3 /* extensions */,
-				1471639B2C5D362F0068B555 /* components */,
+				B15063502C63D3F600EBB0E3 /* Extensions */,
+				1471639B2C5D362F0068B555 /* Components */,
 				14CEF4152C5CAED300855D72 /* CapsuleApp.swift */,
 				14CEF4172C5CAED300855D72 /* ContentView.swift */,
 				B17266E02C6532560031BA0D /* Localizable.xcstrings */,
@@ -755,7 +755,7 @@
 				1443E7F42C609E650027C1FC /* Info.plist */,
 				14CEF41E2C5CAED400855D72 /* Capsule.entitlements */,
 				14CEF41B2C5CAED400855D72 /* Preview Content */,
-				112FB72F2CCF12CC0015238C /* private */,
+				112FB72F2CCF12CC0015238C /* Private */,
 				11CC44A12CEE614100C7244B /* CapsuleViewCoordinator.swift */,
 				0F95A84CB42B8342C0A56D1E /* Logger */,
 				407B8DC9A19434AF17B52163 /* Settings */,
@@ -789,13 +789,13 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		14D570B72C5E98960011E668 /* animations */ = {
+		14D570B72C5E98960011E668 /* Animations */ = {
 			isa = PBXGroup;
 			children = (
 				14D570B82C5E98A20011E668 /* drop.swift */,
 				14A7E5872C64A89C008C1BE9 /* HelloAnimation.swift */,
 			);
-			path = animations;
+			path = Animations;
 			sourceTree = "<group>";
 		};
 		14D570BA2C5E98E30011E668 /* Models */ = {
@@ -806,7 +806,7 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		14D570C72C5F38760011E668 /* models */ = {
+		14D570C72C5F38760011E668 /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				11F748812ECB07A400F841DB /* MusicControlButton.swift */,
@@ -818,7 +818,7 @@
 				14D570CA2C5F4B2C0011E668 /* BatteryStatusViewModel.swift */,
 				1153BD902D986DB300979FB0 /* PlaybackState.swift */,
 			);
-			path = models;
+			path = Models;
 			sourceTree = "<group>";
 		};
 		16C9A1DC2FAADDC100BA0DF2 /* Products */ = {
@@ -931,7 +931,7 @@
 			path = ../Onboarding;
 			sourceTree = "<group>";
 		};
-		B15063502C63D3F600EBB0E3 /* extensions */ = {
+		B15063502C63D3F600EBB0E3 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
 				111BEA602ED09B1B0079DD4E /* NSScreen+UUID.swift */,
@@ -949,7 +949,7 @@
 				14FC6E4F2C7DED5600C7BEA5 /* DataTypes+Extensions.swift */,
 				B1C448952C9712C4001F0858 /* ActionBar.swift */,
 			);
-			path = extensions;
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		B186542E2C6F453B000B926A /* Music */ = {
@@ -1168,7 +1168,7 @@
 				A00000000000000000000018 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				112FB72F2CCF12CC0015238C /* private */,
+				112FB72F2CCF12CC0015238C /* Private */,
 			);
 			name = Capsule;
 			packageProductDependencies = (
