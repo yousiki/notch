@@ -1,5 +1,7 @@
 # Notch Core+Extensions Refactor — Handoff (Phase A complete, mechanical)
 
+> **Note (2026-05-06, post-Capsule-rebrand):** This handoff describes Phase A as it existed BEFORE the boringNotch → Capsule rebrand. File paths (`Notch.xcworkspace`, `Core/Notch.xcodeproj`, `Core/NotchKit/`, `Notch-Bridging-Header.h`), type names (`NotchHost`, `NotchExtension`, `Notch*Contribution`, …), scheme names (`boringNotch`, `NotchKit`), and bundle IDs in this document are historical. The post-rebrand equivalents are `Capsule.xcworkspace`, `Core/Capsule.xcodeproj`, `Core/CapsuleKit/`, `Capsule-Bridging-Header.h`, the `Capsule*` / `CapsuleKit` symbols, and the `Capsule` / `CapsuleKit` schemes. The active rebrand plan is at `docs/superpowers/plans/2026-05-06-capsule-rebrand.md`.
+
 **Handoff date:** 2026-05-06
 **Branch:** `refactor/core-extensions` (12 commits ahead of `main`)
 **Working directory:** `/Users/yousiki/Documents/notch`

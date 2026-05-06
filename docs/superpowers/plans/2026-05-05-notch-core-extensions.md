@@ -1,5 +1,7 @@
 # Notch Core + Extensions Refactor Implementation Plan
 
+> **Note (2026-05-06, post-Capsule-rebrand):** This plan describes the Phase A / Phase B / Phase C refactor as it was scoped BEFORE the boringNotch → Capsule rebrand. File paths (`Core/NotchKit/`, `Core/Notch.xcodeproj`, `Notch.xcworkspace`, `Notch-Bridging-Header.h`), type names (`NotchKit`, `NotchHost`, `NotchExtension`, `Notch*Contribution`, …), and bundle IDs in this document are historical. The active rebrand plan is at `docs/superpowers/plans/2026-05-06-capsule-rebrand.md`; the post-rebrand equivalents are `Core/CapsuleKit/`, `Core/Capsule.xcodeproj`, `Capsule.xcworkspace`, `Capsule-Bridging-Header.h`, and the `Capsule*` / `CapsuleKit` symbols.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Refactor the forked Boring Notch macOS app into a minimal core (host app + `NotchKit.framework`) plus a set of dynamic `.notchext` bundles loaded at runtime. All current features (Music, Shelf, Calendar, Battery, HUD, Webcam, Live Activities, Tips) ship as built-in extensions.

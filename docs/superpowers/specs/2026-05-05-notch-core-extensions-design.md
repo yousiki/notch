@@ -1,5 +1,7 @@
 # Notch — Core + Extension System Refactor
 
+> **Note (2026-05-06, post-Capsule-rebrand):** This design was authored BEFORE the boringNotch → Capsule rebrand. File paths (`Core/NotchKit/`, `Core/Notch.xcodeproj`, `Notch.xcworkspace`), type names (`NotchKit`, `NotchHost`, `NotchExtension`, `Notch*Contribution`, …), and bundle IDs in this document are historical. The post-rebrand equivalents are `Core/CapsuleKit/`, `Core/Capsule.xcodeproj`, `Capsule.xcworkspace`, and the `Capsule*` / `CapsuleKit` symbols. The rebrand plan is at `docs/superpowers/plans/2026-05-06-capsule-rebrand.md`.
+
 **Date:** 2026-05-05
 **Status:** Design approved, implementation plan pending
 **Scope:** Refactor the forked Boring Notch app into a minimal core + dynamic-bundle extension system. v1.
