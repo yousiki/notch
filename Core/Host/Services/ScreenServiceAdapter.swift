@@ -3,12 +3,12 @@ import NotchKit
 
 final class ScreenServiceAdapter: NSObject, NotchScreenHost {
 
-    private let coordinator: BoringViewCoordinator
+    private let coordinator: CapsuleViewCoordinator
     private var observers: [UUID: (String) -> Void] = [:]
     private var cachedScreenUUID: String
     private let lock = NSLock()
 
-    init(coordinator: BoringViewCoordinator) {
+    init(coordinator: CapsuleViewCoordinator) {
         self.coordinator = coordinator
         // Read once at init under MainActor (init is called from host start() on main).
         self.cachedScreenUUID = MainActor.assumeIsolated { coordinator.selectedScreenUUID }

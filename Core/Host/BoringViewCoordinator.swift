@@ -1,5 +1,5 @@
 //
-//  BoringViewCoordinator.swift
+//  CapsuleViewCoordinator.swift
 //  Capsule
 //
 //  Created by Alexander on 2024-11-20.
@@ -48,8 +48,8 @@ struct ExpandedItem {
 }
 
 @MainActor
-class BoringViewCoordinator: ObservableObject {
-    static let shared = BoringViewCoordinator()
+class CapsuleViewCoordinator: ObservableObject {
+    static let shared = CapsuleViewCoordinator()
 
     @Published var currentView: NotchViews = .home {
         didSet {

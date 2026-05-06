@@ -2,16 +2,16 @@ import Combine
 import Foundation
 import NotchKit
 
-/// Adapts a single `BoringViewModel` to the `NotchNotchStateHost` protocol.
+/// Adapts a single `CapsuleViewModel` to the `NotchNotchStateHost` protocol.
 final class NotchStateServiceAdapter: NSObject, NotchNotchStateHost {
 
-    private let viewModel: BoringViewModel
+    private let viewModel: CapsuleViewModel
     private var cancellables: Set<AnyCancellable> = []
     private var notchStateHandlers: [UUID: (NotchOpenState) -> Void] = [:]
     private var hoverHandlers: [UUID: (Bool) -> Void] = [:]
     private let lock = NSLock()
 
-    init(viewModel: BoringViewModel) {
+    init(viewModel: CapsuleViewModel) {
         self.viewModel = viewModel
         super.init()
 

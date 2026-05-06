@@ -1,5 +1,5 @@
 //
-//  BoringViewModel.swift
+//  CapsuleViewModel.swift
 //  Capsule
 //
 //  Created by Harsh Vardhan  Goswami  on 04/08/24.
@@ -9,11 +9,11 @@ import Combine
 import Defaults
 import SwiftUI
 
-class BoringViewModel: NSObject, ObservableObject {
-    @ObservedObject var coordinator = BoringViewCoordinator.shared
+class CapsuleViewModel: NSObject, ObservableObject {
+    @ObservedObject var coordinator = CapsuleViewCoordinator.shared
     @ObservedObject var detector = FullscreenMediaDetector.shared
 
-    let animationLibrary: BoringAnimations = .init()
+    let animationLibrary: CapsuleAnimations = .init()
     let animation: Animation?
 
     @Published var contentType: ContentType = .normal

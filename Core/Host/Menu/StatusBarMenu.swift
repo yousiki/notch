@@ -1,7 +1,7 @@
 import Cocoa
 import NotchKit
 
-class BoringStatusMenu: NSMenu {
+class CapsuleStatusMenu: NSMenu {
     
     var statusItem: NSStatusItem!
     

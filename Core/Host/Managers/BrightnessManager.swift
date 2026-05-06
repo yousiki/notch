@@ -37,7 +37,7 @@ final class BrightnessManager: ObservableObject {
 			} else {
 				refresh()
 			}
-			BoringViewCoordinator.shared.toggleSneakPeek(status: true, kind: "brightness", value: CGFloat(target))
+			CapsuleViewCoordinator.shared.toggleSneakPeek(status: true, kind: "brightness", value: CGFloat(target))
 		}
 	}
 
@@ -98,7 +98,7 @@ final class KeyboardBacklightManager: ObservableObject {
 			} else {
 				refresh()
 			}
-			BoringViewCoordinator.shared.toggleSneakPeek(
+			CapsuleViewCoordinator.shared.toggleSneakPeek(
 				status: true,
 				kind: "backlight",
 				value: CGFloat(target)
