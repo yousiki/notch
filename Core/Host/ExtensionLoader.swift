@@ -1,6 +1,6 @@
 import AppKit
 import Foundation
-import NotchKit
+import CapsuleKit
 
 /// Discovers `.notchext` bundles, loads them, and activates each on the
 /// supplied host. Failures are logged and skipped — one bad extension does
@@ -67,8 +67,8 @@ final class ExtensionLoader {
             return
         }
         guard let principalClass = bundle.principalClass as? NSObject.Type,
-              let extType = principalClass as? NotchExtension.Type else {
-            failures.append(.init(bundleURL: url, reason: "principalClass is not NotchExtension"))
+              let extType = principalClass as? CapsuleExtension.Type else {
+            failures.append(.init(bundleURL: url, reason: "principalClass is not CapsuleExtension"))
             return
         }
 

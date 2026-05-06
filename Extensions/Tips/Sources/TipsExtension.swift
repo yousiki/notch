@@ -1,21 +1,21 @@
 import AppKit
-import NotchKit
+import CapsuleKit
 import SwiftUI
 
 @objc(TipsExtension)
-public final class TipsExtension: NSObject, NotchExtension {
+public final class TipsExtension: NSObject, CapsuleExtension {
 
-    @objc public static func make() -> NotchExtension { TipsExtension() }
+    @objc public static func make() -> CapsuleExtension { TipsExtension() }
 
     @objc public var identifier: String { "com.theboredteam.notch.tips" }
     @objc public var displayName: String { "Tips" }
 
-    @objc public func activate(host: NotchHost) {
+    @objc public func activate(host: CapsuleHost) {
         let factory: @convention(block) () -> NSViewController = {
             NSHostingController(rootView: TipsTabView())
         }
 
-        host.register(tab: NotchTabContribution(
+        host.register(tab: CapsuleTabContribution(
             identifier: "com.theboredteam.notch.tips.tab",
             title: "Tips",
             systemImage: "lightbulb",

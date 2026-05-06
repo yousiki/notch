@@ -1,25 +1,25 @@
 import AppKit
 import Foundation
-import NotchKit
+import CapsuleKit
 
-/// Concrete implementation of `NotchHost`. Singleton owned by the host app.
-final class ExtensionHost: NSObject, NotchHost {
+/// Concrete implementation of `CapsuleHost`. Singleton owned by the host app.
+final class ExtensionHost: NSObject, CapsuleHost {
 
     static let shared = ExtensionHost()
 
     // MARK: - Registries
 
-    private(set) var tabs: [NotchTabContribution] = []
-    private(set) var homeFragments: [NotchHomeFragmentContribution] = []
-    private(set) var closedChinItems: [NotchClosedChinContribution] = []
-    private(set) var sneakPeeks: [String: NotchSneakPeekContribution] = [:]
-    private(set) var expandedItems: [String: NotchExpandedItemContribution] = [:]
-    private(set) var hudReplacements: [String: NotchHUDContribution] = [:]
-    private(set) var settingsPanes: [NotchSettingsPaneContribution] = []
-    private(set) var menuBarItems: [NotchMenuItemContribution] = []
-    private(set) var onboardingSteps: [NotchOnboardingContribution] = []
-    private(set) var keyboardShortcuts: [NotchKeyboardShortcutContribution] = []
-    private(set) var permissionRequests: [NotchPermissionRequest] = []
+    private(set) var tabs: [CapsuleTabContribution] = []
+    private(set) var homeFragments: [CapsuleHomeFragmentContribution] = []
+    private(set) var closedChinItems: [CapsuleClosedChinContribution] = []
+    private(set) var sneakPeeks: [String: CapsuleSneakPeekContribution] = [:]
+    private(set) var expandedItems: [String: CapsuleExpandedItemContribution] = [:]
+    private(set) var hudReplacements: [String: CapsuleHUDContribution] = [:]
+    private(set) var settingsPanes: [CapsuleSettingsPaneContribution] = []
+    private(set) var menuBarItems: [CapsuleMenuItemContribution] = []
+    private(set) var onboardingSteps: [CapsuleOnboardingContribution] = []
+    private(set) var keyboardShortcuts: [CapsuleKeyboardShortcutContribution] = []
+    private(set) var permissionRequests: [CapsulePermissionRequest] = []
 
     static let didLoadExtensionsNotification = Notification.Name("NotchExtensionsDidLoad")
 
@@ -70,95 +70,95 @@ final class ExtensionHost: NSObject, NotchHost {
         }
     }
 
-    // MARK: - NotchHost
+    // MARK: - CapsuleHost
 
-    @objc func register(tab: NotchTabContribution) {
+    @objc func register(tab: CapsuleTabContribution) {
         if tabs.contains(where: { $0.identifier == tab.identifier }) {
-            NSLog("⚠️ NotchKit: tab identifier \(tab.identifier) already registered — dropping duplicate")
+            NSLog("⚠️ CapsuleKit: tab identifier \(tab.identifier) already registered — dropping duplicate")
             return
         }
         tabs.append(tab)
     }
-    @objc func register(homeFragment: NotchHomeFragmentContribution) {
+    @objc func register(homeFragment: CapsuleHomeFragmentContribution) {
         if homeFragments.contains(where: { $0.identifier == homeFragment.identifier }) {
-            NSLog("⚠️ NotchKit: home-fragment identifier \(homeFragment.identifier) already registered — dropping duplicate")
+            NSLog("⚠️ CapsuleKit: home-fragment identifier \(homeFragment.identifier) already registered — dropping duplicate")
             return
         }
         homeFragments.append(homeFragment)
         homeFragments.sort { $0.priority < $1.priority }
     }
-    @objc func register(closedChinItem: NotchClosedChinContribution) {
+    @objc func register(closedChinItem: CapsuleClosedChinContribution) {
         if closedChinItems.contains(where: { $0.identifier == closedChinItem.identifier }) {
-            NSLog("⚠️ NotchKit: closed-chin identifier \(closedChinItem.identifier) already registered — dropping duplicate")
+            NSLog("⚠️ CapsuleKit: closed-chin identifier \(closedChinItem.identifier) already registered — dropping duplicate")
             return
         }
         closedChinItems.append(closedChinItem)
         closedChinItems.sort { $0.priority < $1.priority }
     }
-    @objc func register(sneakPeek: NotchSneakPeekContribution) {
+    @objc func register(sneakPeek: CapsuleSneakPeekContribution) {
         if sneakPeeks[sneakPeek.kind] != nil {
-            NSLog("⚠️ NotchKit: sneak-peek kind \(sneakPeek.kind) already registered — dropping duplicate")
+            NSLog("⚠️ CapsuleKit: sneak-peek kind \(sneakPeek.kind) already registered — dropping duplicate")
             return
         }
         sneakPeeks[sneakPeek.kind] = sneakPeek
     }
-    @objc func register(expandedItem: NotchExpandedItemContribution) {
+    @objc func register(expandedItem: CapsuleExpandedItemContribution) {
         if expandedItems[expandedItem.kind] != nil {
-            NSLog("⚠️ NotchKit: expanded-item kind \(expandedItem.kind) already registered — dropping duplicate")
+            NSLog("⚠️ CapsuleKit: expanded-item kind \(expandedItem.kind) already registered — dropping duplicate")
             return
         }
         expandedItems[expandedItem.kind] = expandedItem
     }
-    @objc func register(hudReplacement: NotchHUDContribution) {
+    @objc func register(hudReplacement: CapsuleHUDContribution) {
         if hudReplacements[hudReplacement.kind] != nil {
-            NSLog("⚠️ NotchKit: HUD kind \(hudReplacement.kind) already registered — dropping duplicate")
+            NSLog("⚠️ CapsuleKit: HUD kind \(hudReplacement.kind) already registered — dropping duplicate")
             return
         }
         hudReplacements[hudReplacement.kind] = hudReplacement
     }
-    @objc func register(settingsPane: NotchSettingsPaneContribution) {
+    @objc func register(settingsPane: CapsuleSettingsPaneContribution) {
         if settingsPanes.contains(where: { $0.identifier == settingsPane.identifier }) {
-            NSLog("⚠️ NotchKit: settings-pane identifier \(settingsPane.identifier) already registered — dropping duplicate")
+            NSLog("⚠️ CapsuleKit: settings-pane identifier \(settingsPane.identifier) already registered — dropping duplicate")
             return
         }
         settingsPanes.append(settingsPane)
         settingsPanes.sort { $0.priority < $1.priority }
     }
-    @objc func register(menuBarItems: [NotchMenuItemContribution]) {
+    @objc func register(menuBarItems: [CapsuleMenuItemContribution]) {
         for item in menuBarItems {
             if self.menuBarItems.contains(where: { $0.title == item.title }) {
-                NSLog("⚠️ NotchKit: menu-bar item title \(item.title) already registered — dropping duplicate")
+                NSLog("⚠️ CapsuleKit: menu-bar item title \(item.title) already registered — dropping duplicate")
                 continue
             }
             self.menuBarItems.append(item)
         }
     }
-    @objc func register(onboardingStep: NotchOnboardingContribution) {
+    @objc func register(onboardingStep: CapsuleOnboardingContribution) {
         if onboardingSteps.contains(where: { $0.identifier == onboardingStep.identifier }) {
-            NSLog("⚠️ NotchKit: onboarding-step identifier \(onboardingStep.identifier) already registered — dropping duplicate")
+            NSLog("⚠️ CapsuleKit: onboarding-step identifier \(onboardingStep.identifier) already registered — dropping duplicate")
             return
         }
         onboardingSteps.append(onboardingStep)
         onboardingSteps.sort { $0.priority < $1.priority }
     }
-    @objc func register(keyboardShortcut: NotchKeyboardShortcutContribution) {
+    @objc func register(keyboardShortcut: CapsuleKeyboardShortcutContribution) {
         if keyboardShortcuts.contains(where: { $0.identifier == keyboardShortcut.identifier }) {
-            NSLog("⚠️ NotchKit: keyboard-shortcut identifier \(keyboardShortcut.identifier) already registered — dropping duplicate")
+            NSLog("⚠️ CapsuleKit: keyboard-shortcut identifier \(keyboardShortcut.identifier) already registered — dropping duplicate")
             return
         }
         keyboardShortcuts.append(keyboardShortcut)
     }
-    @objc func register(permission: NotchPermissionRequest) {
+    @objc func register(permission: CapsulePermissionRequest) {
         if permissionRequests.contains(where: { $0.kind == permission.kind }) {
-            NSLog("⚠️ NotchKit: permission kind \(permission.kind.rawValue) already registered — dropping duplicate")
+            NSLog("⚠️ CapsuleKit: permission kind \(permission.kind.rawValue) already registered — dropping duplicate")
             return
         }
         permissionRequests.append(permission)
     }
 
-    @objc lazy var settings: NotchSettingsStore = HostSettingsStore()
-    @objc lazy var permissions: NotchPermissionsAPI = HostPermissionsAPI()
-    @objc lazy var logger: NotchLogger = HostLogger()
+    @objc lazy var settings: CapsuleSettingsStore = HostSettingsStore()
+    @objc lazy var permissions: CapsulePermissionsAPI = HostPermissionsAPI()
+    @objc lazy var logger: CapsuleLogger = HostLogger()
 
     @objc func service(of kind: String) -> NSObject? {
         serviceFactories[kind]?()

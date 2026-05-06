@@ -1,7 +1,7 @@
 import Foundation
-import NotchKit
+import CapsuleKit
 
-final class CoordinatorServiceAdapter: NSObject, NotchCoordinatorHost {
+final class CoordinatorServiceAdapter: NSObject, CapsuleCoordinatorHost {
 
     private let coordinator: CapsuleViewCoordinator
     private var tabHandlers: [UUID: (String) -> Void] = [:]
@@ -23,10 +23,10 @@ final class CoordinatorServiceAdapter: NSObject, NotchCoordinatorHost {
         return cachedTabIdentifier
     }
 
-    @objc func observeCurrentTab(_ handler: @escaping (String) -> Void) -> NotchObservation {
+    @objc func observeCurrentTab(_ handler: @escaping (String) -> Void) -> CapsuleObservation {
         let id = UUID()
         lock.lock(); tabHandlers[id] = handler; lock.unlock()
-        return NotchObservation { [weak self] in
+        return CapsuleObservation { [weak self] in
             guard let self else { return }
             self.lock.lock()
             self.tabHandlers.removeValue(forKey: id)

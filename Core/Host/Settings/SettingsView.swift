@@ -10,7 +10,7 @@ import Defaults
 import EventKit
 import KeyboardShortcuts
 import LaunchAtLogin
-import NotchKit
+import CapsuleKit
 import Sparkle
 import SwiftUI
 import SwiftUIIntrospect

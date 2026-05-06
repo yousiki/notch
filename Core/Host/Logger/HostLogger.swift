@@ -1,8 +1,8 @@
 import Foundation
-import NotchKit
+import CapsuleKit
 import os
 
-final class HostLogger: NSObject, NotchLogger {
+final class HostLogger: NSObject, CapsuleLogger {
     private let logger = os.Logger(subsystem: "com.theboredteam.notch", category: "extension")
 
     @objc func log(level: NotchLogLevel, message: String) {

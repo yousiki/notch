@@ -1,10 +1,10 @@
 import Foundation
-import NotchKit
+import CapsuleKit
 
 /// `UserDefaults`-backed settings store. Keys are *not* namespaced in v1 to
 /// preserve existing user defaults across the refactor. v2 will introduce
 /// extension-id prefixes via a migration step.
-final class HostSettingsStore: NSObject, NotchSettingsStore {
+final class HostSettingsStore: NSObject, CapsuleSettingsStore {
 
     private let defaults = UserDefaults.standard
     private var observers: [String: Set<ObjectIdentifier>] = [:]
@@ -20,7 +20,7 @@ final class HostSettingsStore: NSObject, NotchSettingsStore {
     }
 
     @objc func observe(key: String,
-                       handler: @escaping (Any?) -> Void) -> NotchObservation {
+                       handler: @escaping (Any?) -> Void) -> CapsuleObservation {
         let kvoToken = NSObject()
         let id = ObjectIdentifier(kvoToken)
         lock.lock()
@@ -30,7 +30,7 @@ final class HostSettingsStore: NSObject, NotchSettingsStore {
 
         defaults.addObserver(self, forKeyPath: key, options: [.new], context: nil)
 
-        return NotchObservation { [weak self] in
+        return CapsuleObservation { [weak self] in
             guard let self else { return }
             self.lock.lock()
             self.observers[key]?.remove(id)

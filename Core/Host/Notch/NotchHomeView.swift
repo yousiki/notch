@@ -8,7 +8,7 @@
 
 import Combine
 import Defaults
-import NotchKit
+import CapsuleKit
 import SwiftUI
 
 // MARK: - Music Player Components

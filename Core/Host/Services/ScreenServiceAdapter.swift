@@ -1,7 +1,7 @@
 import Foundation
-import NotchKit
+import CapsuleKit
 
-final class ScreenServiceAdapter: NSObject, NotchScreenHost {
+final class ScreenServiceAdapter: NSObject, CapsuleScreenHost {
 
     private let coordinator: CapsuleViewCoordinator
     private var observers: [UUID: (String) -> Void] = [:]
@@ -23,10 +23,10 @@ final class ScreenServiceAdapter: NSObject, NotchScreenHost {
         return cachedScreenUUID
     }
 
-    @objc func observeSelectedScreen(_ handler: @escaping (String) -> Void) -> NotchObservation {
+    @objc func observeSelectedScreen(_ handler: @escaping (String) -> Void) -> CapsuleObservation {
         let id = UUID()
         lock.lock(); observers[id] = handler; lock.unlock()
-        return NotchObservation { [weak self] in
+        return CapsuleObservation { [weak self] in
             guard let self else { return }
             self.lock.lock()
             self.observers.removeValue(forKey: id)

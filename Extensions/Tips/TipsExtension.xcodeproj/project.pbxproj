@@ -217,7 +217,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				OTHER_LDFLAGS = (
 					"-framework",
-					NotchKit,
+					CapsuleKit,
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = moe.siki.Capsule.extensions.tips;
 				PRODUCT_NAME = TipsExtension;
@@ -247,7 +247,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				OTHER_LDFLAGS = (
 					"-framework",
-					NotchKit,
+					CapsuleKit,
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = moe.siki.Capsule.extensions.tips;
 				PRODUCT_NAME = TipsExtension;

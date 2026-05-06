@@ -1,11 +1,11 @@
 import AVFoundation
 import EventKit
 import Foundation
-import NotchKit
+import CapsuleKit
 
-final class HostPermissionsAPI: NSObject, NotchPermissionsAPI {
+final class HostPermissionsAPI: NSObject, CapsulePermissionsAPI {
 
-    @objc func status(for permission: NotchPermissionKind) -> NotchPermissionStatus {
+    @objc func status(for permission: CapsulePermissionKind) -> NotchPermissionStatus {
         switch permission {
         case .calendar:      return mapEK(EKEventStore.authorizationStatus(for: .event))
         case .reminders:     return mapEK(EKEventStore.authorizationStatus(for: .reminder))
@@ -18,7 +18,7 @@ final class HostPermissionsAPI: NSObject, NotchPermissionsAPI {
         }
     }
 
-    @objc func request(_ permission: NotchPermissionKind,
+    @objc func request(_ permission: CapsulePermissionKind,
                        completion: @escaping (NotchPermissionStatus) -> Void) {
         switch permission {
         case .calendar:

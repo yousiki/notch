@@ -10,7 +10,7 @@ import AVFoundation
 import Combine
 import Defaults
 import KeyboardShortcuts
-import NotchKit
+import CapsuleKit
 import SwiftUI
 import SwiftUIIntrospect
 

@@ -1,5 +1,5 @@
 import Cocoa
-import NotchKit
+import CapsuleKit
 
 class CapsuleStatusMenu: NSMenu {
     
