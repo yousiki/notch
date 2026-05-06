@@ -2019,6 +2019,8 @@ final class NotchStateServiceAdapter: NSObject, NotchNotchStateHost {
 
 (If `BoringViewModel` doesn't currently expose `hovering` as `@Published`, that's a known gap — handle it by having the adapter publish from `BoringViewModel`'s existing hover state mechanism or, if absent, default to `false` and update in B5.)
 
+NOTE: `NotchStateServiceAdapter` does NOT need the cached-snapshot pattern used by the other two adapters below. `BoringViewModel` is not `@MainActor`-isolated, so `viewModel.notchState` and `viewModel.hovering` are safe to read from any thread via the `@objc` getters above. The Combine `.sink` callbacks already deliver on the publisher's queue (typically main), and `Task { @MainActor in viewModel.open() }` handles the `@MainActor`-only methods on `BoringViewModel` (currently none, but the open/close path goes through MainActor anyway).
+
 - [ ] **Step 2: Create `ScreenServiceAdapter.swift`**
 
 ```swift
@@ -2029,17 +2031,28 @@ final class ScreenServiceAdapter: NSObject, NotchScreenHost {
 
     private let coordinator: BoringViewCoordinator
     private var observers: [UUID: (String) -> Void] = [:]
+    private var cachedScreenUUID: String
     private let lock = NSLock()
 
     init(coordinator: BoringViewCoordinator) {
         self.coordinator = coordinator
+        // Read once at init under MainActor (init is called from host start() on main).
+        self.cachedScreenUUID = MainActor.assumeIsolated { coordinator.selectedScreenUUID }
         super.init()
         NotificationCenter.default.addObserver(self,
             selector: #selector(screenChanged),
             name: .selectedScreenChanged, object: nil)
     }
 
-    @objc var selectedScreenUUID: String { coordinator.selectedScreenUUID }
+    // NOTE: BoringViewCoordinator is @MainActor-isolated; the @objc protocol surface
+    // is nonisolated. Extensions are free to invoke this getter from a background
+    // queue, so we cannot use MainActor.assumeIsolated here (it would trap). Instead
+    // we keep a cached snapshot guarded by the same lock used for handler storage,
+    // refreshed on the .selectedScreenChanged notification.
+    @objc var selectedScreenUUID: String {
+        lock.lock(); defer { lock.unlock() }
+        return cachedScreenUUID
+    }
 
     @objc func observeSelectedScreen(_ handler: @escaping (String) -> Void) -> NotchObservation {
         let id = UUID()
@@ -2053,9 +2066,17 @@ final class ScreenServiceAdapter: NSObject, NotchScreenHost {
     }
 
     @objc private func screenChanged() {
-        let uuid = coordinator.selectedScreenUUID
-        lock.lock(); let copy = Array(observers.values); lock.unlock()
-        copy.forEach { $0(uuid) }
+        // Notification can fire on any thread; hop to MainActor to read the
+        // @MainActor-isolated coordinator, then refresh the cached snapshot
+        // and dispatch to observers.
+        Task { @MainActor in
+            let uuid = self.coordinator.selectedScreenUUID
+            self.lock.lock()
+            self.cachedScreenUUID = uuid
+            let copy = Array(self.observers.values)
+            self.lock.unlock()
+            copy.forEach { $0(uuid) }
+        }
     }
 }
 ```
@@ -2070,17 +2091,24 @@ final class CoordinatorServiceAdapter: NSObject, NotchCoordinatorHost {
 
     private let coordinator: BoringViewCoordinator
     private var tabHandlers: [UUID: (String) -> Void] = [:]
+    private var cachedTabIdentifier: String
     private let lock = NSLock()
 
     init(coordinator: BoringViewCoordinator) {
         self.coordinator = coordinator
+        // Read once at init under MainActor (init is called from host start() on main).
+        self.cachedTabIdentifier = MainActor.assumeIsolated { coordinator.currentTabIdentifier }
         super.init()
         NotificationCenter.default.addObserver(self,
             selector: #selector(currentTabChanged),
             name: .currentTabIdentifierChanged, object: nil)
     }
 
-    @objc var currentTabIdentifier: String { coordinator.currentTabIdentifier }
+    // See ScreenServiceAdapter for the rationale on cached-snapshot reads.
+    @objc var currentTabIdentifier: String {
+        lock.lock(); defer { lock.unlock() }
+        return cachedTabIdentifier
+    }
 
     @objc func observeCurrentTab(_ handler: @escaping (String) -> Void) -> NotchObservation {
         let id = UUID()
@@ -2093,29 +2121,48 @@ final class CoordinatorServiceAdapter: NSObject, NotchCoordinatorHost {
         }
     }
 
-    @objc func showTab(_ identifier: String) { coordinator.currentTabIdentifier = identifier }
+    @objc func showTab(_ identifier: String) {
+        // TODO(B4): writing currentTabIdentifier doesn't yet flow back to
+        // ContentView's tab switch — ContentView still observes
+        // coordinator.currentView (the NotchViews enum). Task B4 rewrites
+        // ContentView to iterate ExtensionHost.shared.tabs keyed by
+        // currentTabIdentifier; until then, calls to showTab from
+        // extensions are visible to other adapters/observers but won't
+        // change the rendered tab.
+        Task { @MainActor in coordinator.currentTabIdentifier = identifier }
+    }
 
     @objc func toggleSneakPeek(kind: String, value: Double, icon: String, durationSeconds: Double) {
-        coordinator.toggleSneakPeek(
-            status: true, kind: kind, duration: durationSeconds, value: CGFloat(value), icon: icon)
+        Task { @MainActor in
+            coordinator.toggleSneakPeek(
+                status: true, kind: kind, duration: durationSeconds, value: CGFloat(value), icon: icon)
+        }
     }
 
     @objc func toggleExpandedItem(kind: String, value: Double, durationSeconds: Double) {
-        coordinator.toggleExpandingView(
-            status: true, kind: kind, value: CGFloat(value))
+        Task { @MainActor in
+            coordinator.toggleExpandingView(
+                status: true, kind: kind, duration: durationSeconds, value: CGFloat(value))
+        }
     }
 
     @objc private func currentTabChanged() {
-        let id = coordinator.currentTabIdentifier
-        lock.lock(); let copy = Array(tabHandlers.values); lock.unlock()
-        copy.forEach { $0(id) }
+        // Notification can fire on any thread; hop to MainActor to read the
+        // @MainActor-isolated coordinator, then refresh the cached snapshot
+        // and dispatch to observers.
+        Task { @MainActor in
+            let id = self.coordinator.currentTabIdentifier
+            self.lock.lock()
+            self.cachedTabIdentifier = id
+            let copy = Array(self.tabHandlers.values)
+            self.lock.unlock()
+            copy.forEach { $0(id) }
+        }
     }
 }
-
-extension Notification.Name {
-    static let currentTabIdentifierChanged = Notification.Name("CurrentTabIdentifierChanged")
-}
 ```
+
+NOTE: B2 must add a `duration: TimeInterval? = nil` parameter to `BoringViewCoordinator.toggleExpandingView` so `toggleExpandedItem`'s `durationSeconds` flows through. The coordinator stores it in a private `expandingViewDurationOverride: TimeInterval?` field that the `expandingView.didSet` consumes (overriding the existing 2-or-3-second hardcoded fallback). The `Notification.Name.currentTabIdentifierChanged` extension lives in `BoringViewCoordinator.swift` (next to where the notification is posted) — not in `CoordinatorServiceAdapter.swift`.
 
 - [ ] **Step 4: Add files to host target, build**
 
@@ -2200,6 +2247,8 @@ In the body, replace `if type != .music` with `if kind != "music"`. Replace `sel
 - [ ] **Step 5: Update `toggleExpandingView`**
 
 Same treatment: parameter name `type: SneakContentType` → `kind: String`. Body comparisons: `expandingView.type == .download` → `expandingView.kind == "download"`.
+
+Also add a `duration: TimeInterval? = nil` parameter and a private `expandingViewDurationOverride: TimeInterval?` field. The function body sets `expandingViewDurationOverride = duration`. The `expandingView.didSet` reads `expandingViewDurationOverride ?? (expandingView.kind == "download" ? 2 : 3)` to choose the auto-hide duration. This lets `CoordinatorServiceAdapter.toggleExpandedItem(durationSeconds:)` flow through to the actual auto-hide timer instead of being silently swallowed.
 
 - [ ] **Step 6: Add `currentTabIdentifier`**
 
