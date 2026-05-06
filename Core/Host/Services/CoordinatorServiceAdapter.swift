@@ -5,10 +5,13 @@ final class CoordinatorServiceAdapter: NSObject, NotchCoordinatorHost {
 
     private let coordinator: BoringViewCoordinator
     private var tabHandlers: [UUID: (String) -> Void] = [:]
+    private var cachedTabIdentifier: String
     private let lock = NSLock()
 
     init(coordinator: BoringViewCoordinator) {
         self.coordinator = coordinator
+        // Read once at init under MainActor (init is called from host start() on main).
+        self.cachedTabIdentifier = MainActor.assumeIsolated { coordinator.currentTabIdentifier }
         super.init()
         NotificationCenter.default.addObserver(self,
             selector: #selector(currentTabChanged),
@@ -16,7 +19,8 @@ final class CoordinatorServiceAdapter: NSObject, NotchCoordinatorHost {
     }
 
     @objc var currentTabIdentifier: String {
-        MainActor.assumeIsolated { coordinator.currentTabIdentifier }
+        lock.lock(); defer { lock.unlock() }
+        return cachedTabIdentifier
     }
 
     @objc func observeCurrentTab(_ handler: @escaping (String) -> Void) -> NotchObservation {
@@ -31,6 +35,13 @@ final class CoordinatorServiceAdapter: NSObject, NotchCoordinatorHost {
     }
 
     @objc func showTab(_ identifier: String) {
+        // TODO(B4): writing currentTabIdentifier doesn't yet flow back to
+        // ContentView's tab switch — ContentView still observes
+        // coordinator.currentView (the NotchViews enum). Task B4 rewrites
+        // ContentView to iterate ExtensionHost.shared.tabs keyed by
+        // currentTabIdentifier; until then, calls to showTab from
+        // extensions are visible to other adapters/observers but won't
+        // change the rendered tab.
         Task { @MainActor in coordinator.currentTabIdentifier = identifier }
     }
 
@@ -44,17 +55,21 @@ final class CoordinatorServiceAdapter: NSObject, NotchCoordinatorHost {
     @objc func toggleExpandedItem(kind: String, value: Double, durationSeconds: Double) {
         Task { @MainActor in
             coordinator.toggleExpandingView(
-                status: true, kind: kind, value: CGFloat(value))
+                status: true, kind: kind, duration: durationSeconds, value: CGFloat(value))
         }
     }
 
     @objc private func currentTabChanged() {
-        let id = MainActor.assumeIsolated { coordinator.currentTabIdentifier }
-        lock.lock(); let copy = Array(tabHandlers.values); lock.unlock()
-        copy.forEach { $0(id) }
+        // Notification can fire on any thread; hop to MainActor to read the
+        // @MainActor-isolated coordinator, then refresh the cached snapshot
+        // and dispatch to observers.
+        Task { @MainActor in
+            let id = self.coordinator.currentTabIdentifier
+            self.lock.lock()
+            self.cachedTabIdentifier = id
+            let copy = Array(self.tabHandlers.values)
+            self.lock.unlock()
+            copy.forEach { $0(id) }
+        }
     }
-}
-
-extension Notification.Name {
-    static let currentTabIdentifierChanged = Notification.Name("CurrentTabIdentifierChanged")
 }

@@ -274,9 +274,11 @@ class BoringViewCoordinator: ObservableObject {
     func toggleExpandingView(
         status: Bool,
         kind: String,
+        duration: TimeInterval? = nil,
         value: CGFloat = 0,
         browser: BrowserType = .chromium
     ) {
+        expandingViewDurationOverride = duration
         Task { @MainActor in
             withAnimation(.smooth) {
                 self.expandingView.show = status
@@ -288,12 +290,14 @@ class BoringViewCoordinator: ObservableObject {
     }
 
     private var expandingViewTask: Task<Void, Never>?
+    private var expandingViewDurationOverride: TimeInterval?
 
     @Published var expandingView: ExpandedItem = .init() {
         didSet {
             if expandingView.show {
                 expandingViewTask?.cancel()
-                let duration: TimeInterval = (expandingView.kind == "download" ? 2 : 3)
+                let duration: TimeInterval = expandingViewDurationOverride
+                    ?? (expandingView.kind == "download" ? 2 : 3)
                 let currentKind = expandingView.kind
                 expandingViewTask = Task { [weak self] in
                     try? await Task.sleep(for: .seconds(duration))
@@ -309,4 +313,8 @@ class BoringViewCoordinator: ObservableObject {
     func showEmpty() {
         currentView = .home
     }
+}
+
+extension Notification.Name {
+    static let currentTabIdentifierChanged = Notification.Name("CurrentTabIdentifierChanged")
 }
