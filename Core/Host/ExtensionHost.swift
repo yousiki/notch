@@ -72,12 +72,26 @@ final class ExtensionHost: NSObject, NotchHost {
 
     // MARK: - NotchHost
 
-    @objc func register(tab: NotchTabContribution) { tabs.append(tab) }
+    @objc func register(tab: NotchTabContribution) {
+        if tabs.contains(where: { $0.identifier == tab.identifier }) {
+            NSLog("⚠️ NotchKit: tab identifier \(tab.identifier) already registered — dropping duplicate")
+            return
+        }
+        tabs.append(tab)
+    }
     @objc func register(homeFragment: NotchHomeFragmentContribution) {
+        if homeFragments.contains(where: { $0.identifier == homeFragment.identifier }) {
+            NSLog("⚠️ NotchKit: home-fragment identifier \(homeFragment.identifier) already registered — dropping duplicate")
+            return
+        }
         homeFragments.append(homeFragment)
         homeFragments.sort { $0.priority < $1.priority }
     }
     @objc func register(closedChinItem: NotchClosedChinContribution) {
+        if closedChinItems.contains(where: { $0.identifier == closedChinItem.identifier }) {
+            NSLog("⚠️ NotchKit: closed-chin identifier \(closedChinItem.identifier) already registered — dropping duplicate")
+            return
+        }
         closedChinItems.append(closedChinItem)
         closedChinItems.sort { $0.priority < $1.priority }
     }
@@ -103,20 +117,42 @@ final class ExtensionHost: NSObject, NotchHost {
         hudReplacements[hudReplacement.kind] = hudReplacement
     }
     @objc func register(settingsPane: NotchSettingsPaneContribution) {
+        if settingsPanes.contains(where: { $0.identifier == settingsPane.identifier }) {
+            NSLog("⚠️ NotchKit: settings-pane identifier \(settingsPane.identifier) already registered — dropping duplicate")
+            return
+        }
         settingsPanes.append(settingsPane)
         settingsPanes.sort { $0.priority < $1.priority }
     }
     @objc func register(menuBarItems: [NotchMenuItemContribution]) {
-        self.menuBarItems.append(contentsOf: menuBarItems)
+        for item in menuBarItems {
+            if self.menuBarItems.contains(where: { $0.title == item.title }) {
+                NSLog("⚠️ NotchKit: menu-bar item title \(item.title) already registered — dropping duplicate")
+                continue
+            }
+            self.menuBarItems.append(item)
+        }
     }
     @objc func register(onboardingStep: NotchOnboardingContribution) {
+        if onboardingSteps.contains(where: { $0.identifier == onboardingStep.identifier }) {
+            NSLog("⚠️ NotchKit: onboarding-step identifier \(onboardingStep.identifier) already registered — dropping duplicate")
+            return
+        }
         onboardingSteps.append(onboardingStep)
         onboardingSteps.sort { $0.priority < $1.priority }
     }
     @objc func register(keyboardShortcut: NotchKeyboardShortcutContribution) {
+        if keyboardShortcuts.contains(where: { $0.identifier == keyboardShortcut.identifier }) {
+            NSLog("⚠️ NotchKit: keyboard-shortcut identifier \(keyboardShortcut.identifier) already registered — dropping duplicate")
+            return
+        }
         keyboardShortcuts.append(keyboardShortcut)
     }
     @objc func register(permission: NotchPermissionRequest) {
+        if permissionRequests.contains(where: { $0.kind == permission.kind }) {
+            NSLog("⚠️ NotchKit: permission kind \(permission.kind.rawValue) already registered — dropping duplicate")
+            return
+        }
         permissionRequests.append(permission)
     }
 
