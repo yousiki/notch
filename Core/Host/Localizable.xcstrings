@@ -702,6 +702,7 @@
       }
     },
     "%d%%" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -1502,6 +1503,7 @@
       }
     },
     "Access Denied" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -3403,6 +3405,7 @@
       }
     },
     "Battery Settings" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -3503,6 +3506,7 @@
       }
     },
     "Battery Status" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -4304,6 +4308,7 @@
       }
     },
     "Charging" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -4404,6 +4409,7 @@
       }
     },
     "Charging on Hold: Desktop Mode" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -12112,6 +12118,7 @@
       }
     },
     "Low Power Mode" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -12812,6 +12819,7 @@
       }
     },
     "Max Capacity: %lld%%" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -13612,6 +13620,7 @@
       }
     },
     "Mirror" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -16117,6 +16126,7 @@
       }
     },
     "Plugged In" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -21121,6 +21131,7 @@
       }
     },
     "Time to Full Charge: %lld min" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
