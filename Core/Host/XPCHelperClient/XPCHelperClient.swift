@@ -100,7 +100,15 @@ final class XPCHelperClient: NSObject {
     
     nonisolated func requestAccessibilityAuthorization() {
         let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary
-        AXIsProcessTrustedWithOptions(options)
+        let authorized = AXIsProcessTrustedWithOptions(options)
+
+        guard !authorized else { return }
+
+        Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(500))
+            guard !AXIsProcessTrusted() else { return }
+            Self.openAccessibilitySettings()
+        }
     }
     
     nonisolated func isAccessibilityAuthorized() async -> Bool {
@@ -124,6 +132,21 @@ final class XPCHelperClient: NSObject {
             notifyAuthorizationChange(result)
         }
         return result
+    }
+
+    @MainActor
+    private static func openAccessibilitySettings() {
+        let settingsURLs = [
+            "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility",
+            "x-apple.systempreferences:com.apple.settings.PrivacySecurity.extension?Privacy_Accessibility"
+        ]
+
+        for urlString in settingsURLs {
+            guard let url = URL(string: urlString) else { continue }
+            if NSWorkspace.shared.open(url) {
+                return
+            }
+        }
     }
     
     // MARK: - Keyboard Brightness
@@ -226,4 +249,3 @@ final class XPCHelperClient: NSObject {
 extension Notification.Name {
     static let accessibilityAuthorizationChanged = Notification.Name("accessibilityAuthorizationChanged")
 }
-
