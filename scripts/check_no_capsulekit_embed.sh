@@ -4,7 +4,7 @@
 # two separate type identities at runtime.
 set -euo pipefail
 
-APP_PATH="${1:?Usage: $0 <path-to-boringNotch.app>}"
+APP_PATH="${1:?Usage: $0 <path-to-Capsule.app>}"
 
 if [ ! -d "$APP_PATH/Contents/PlugIns" ]; then
     echo "No PlugIns directory; nothing to check."

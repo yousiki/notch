@@ -5,7 +5,7 @@
   <key>CFBundleIdentifier</key>
   <string>moe.siki.CapsuleKit</string>
   <key>CFBundleName</key>
-  <string>NotchKit</string>
+  <string>CapsuleKit</string>
   <key>CFBundlePackageType</key>
   <string>FMWK</string>
   <key>CFBundleShortVersionString</key>

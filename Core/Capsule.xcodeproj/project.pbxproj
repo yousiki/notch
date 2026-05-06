@@ -1170,7 +1170,7 @@
 				111BEA5E2ED07A340079DD4E /* MacroVisionKit */,
 				111BEA6E2ED166E20079DD4E /* MacroVisionKit */,
 			);
-			productName = dynamicNotch;
+			productName = Capsule;
 			productReference = 14CEF4122C5CAED300855D72 /* Capsule.app */;
 			productType = "com.apple.product-type.application";
 		};
