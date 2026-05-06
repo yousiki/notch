@@ -41,6 +41,8 @@ final class ExtensionHost: NSObject, NotchHost {
         // Single-display path: services bind to the AppDelegate's primary `vm`.
         // Multi-display path: callers pass a screenUUID; we look up per-screen
         // adapters from the AppDelegate's viewModels dictionary.
+        // BoringViewModel is NOT @MainActor-isolated, so its NotchStateServiceAdapter
+        // can be constructed lazily from any thread that resolves service(of:).
         registerService(kind: "notch-state") {
             guard let vm = (NSApp.delegate as? AppDelegate)?.vm else { return nil }
             return NotchStateServiceAdapter(viewModel: vm)
@@ -49,12 +51,17 @@ final class ExtensionHost: NSObject, NotchHost {
             guard let vm = (NSApp.delegate as? AppDelegate)?.viewModels[uuid] else { return nil }
             return NotchStateServiceAdapter(viewModel: vm)
         }
-        registerService(kind: "screen") {
-            ScreenServiceAdapter(coordinator: BoringViewCoordinator.shared)
-        }
-        registerService(kind: "coordinator") {
-            CoordinatorServiceAdapter(coordinator: BoringViewCoordinator.shared)
-        }
+
+        // Adapters that wrap @MainActor-isolated state (BoringViewCoordinator) must
+        // be constructed on main so the snapshot seeding via MainActor.assumeIsolated
+        // is safe. start() runs from applicationDidFinishLaunching (main); we capture
+        // the instances here and the factories return them, regardless of which
+        // thread service(of:) is called from.
+        let screenAdapter = ScreenServiceAdapter(coordinator: BoringViewCoordinator.shared)
+        let coordinatorAdapter = CoordinatorServiceAdapter(coordinator: BoringViewCoordinator.shared)
+
+        registerService(kind: "screen") { screenAdapter }
+        registerService(kind: "coordinator") { coordinatorAdapter }
 
         ExtensionLoader().load(into: self)
         DispatchQueue.main.async {
