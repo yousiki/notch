@@ -55,7 +55,7 @@ class CapsuleViewCoordinator: ObservableObject {
         didSet {
             switch currentView {
             case .home:  currentTabIdentifier = "home"
-            case .shelf: currentTabIdentifier = "com.theboredteam.notch.shelf.tab"
+            case .shelf: currentTabIdentifier = "moe.siki.Capsule.shelf.tab"
             }
         }
     }

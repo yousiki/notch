@@ -293,7 +293,7 @@ struct ContentView: View {
                               .transition(.opacity)
                       } else if (!coordinator.expandingView.show || coordinator.expandingView.kind == "music") && vm.notchState == .closed && (musicManager.isPlaying || !musicManager.isPlayerIdle) && coordinator.musicLiveActivityEnabled && !vm.hideOnClosed {
                           Group {
-                              if let item = ExtensionHost.shared.closedChinItems.first(where: { $0.identifier == "com.theboredteam.notch.music.live-activity" }) {
+                              if let item = ExtensionHost.shared.closedChinItems.first(where: { $0.identifier == "moe.siki.Capsule.music.live-activity" }) {
                                   ContributionViewControllerHost(make: item.makeViewController)
                               } else {
                                   // built-in fallback until C7 migrates Music
@@ -365,7 +365,7 @@ struct ContentView: View {
                         } else if let tab = ExtensionHost.shared.tabs.first(
                             where: { $0.identifier == coordinator.currentTabIdentifier }) {
                             ContributionViewControllerHost(make: tab.makeViewController)
-                        } else if coordinator.currentTabIdentifier == "com.theboredteam.notch.shelf.tab" {
+                        } else if coordinator.currentTabIdentifier == "moe.siki.Capsule.shelf.tab" {
                             // built-in fallback until C6 migrates Shelf
                             ShelfView()
                         } else {

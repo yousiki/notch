@@ -7,7 +7,7 @@ public final class TipsExtension: NSObject, CapsuleExtension {
 
     @objc public static func make() -> CapsuleExtension { TipsExtension() }
 
-    @objc public var identifier: String { "com.theboredteam.notch.tips" }
+    @objc public var identifier: String { "moe.siki.Capsule.tips" }
     @objc public var displayName: String { "Tips" }
 
     @objc public func activate(host: CapsuleHost) {
@@ -16,7 +16,7 @@ public final class TipsExtension: NSObject, CapsuleExtension {
         }
 
         host.register(tab: CapsuleTabContribution(
-            identifier: "com.theboredteam.notch.tips.tab",
+            identifier: "moe.siki.Capsule.tips.tab",
             title: "Tips",
             systemImage: "lightbulb",
             lifecyclePolicy: .onDemand,

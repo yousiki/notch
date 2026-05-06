@@ -3,7 +3,7 @@ import CapsuleKit
 import os
 
 final class HostLogger: NSObject, CapsuleLogger {
-    private let logger = os.Logger(subsystem: "com.theboredteam.notch", category: "extension")
+    private let logger = os.Logger(subsystem: "moe.siki.Capsule", category: "extension")
 
     @objc func log(level: NotchLogLevel, message: String) {
         switch level {
