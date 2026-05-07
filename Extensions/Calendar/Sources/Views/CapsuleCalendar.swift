@@ -19,7 +19,6 @@ struct Config: Equatable {
 }
 
 struct WheelPicker: View {
-    @EnvironmentObject var vm: CapsuleViewModel
     @Binding var selectedDate: Date
     @State private var scrollPosition: Int?
     @State private var haptics: Bool = false
@@ -179,7 +178,7 @@ struct WheelPicker: View {
 }
 
 struct CalendarView: View {
-    @EnvironmentObject var vm: CapsuleViewModel
+    @ObservedObject private var notchState = CalendarStateBridge.shared
     @ObservedObject private var calendarManager = CalendarManager.shared
     @State private var selectedDate = Date()
 
@@ -230,7 +229,7 @@ struct CalendarView: View {
                 await calendarManager.updateCurrentDate(selectedDate)
             }
         }
-        .onChange(of: vm.notchState) { _, _ in
+        .onChange(of: notchState.notchState) { _, _ in
             Task {
                 await calendarManager.updateCurrentDate(Date.now)
                 selectedDate = Date.now
@@ -476,5 +475,4 @@ struct ReminderToggle: View {
     CalendarView()
         .frame(width: 215, height: 130)
         .background(.black)
-        .environmentObject(CapsuleViewModel())
 }

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AVFoundation
+import EventKit
 
 enum OnboardingStep {
     case welcome
@@ -18,7 +19,7 @@ enum OnboardingStep {
     case finished
 }
 
-private let calendarService = CalendarService()
+private let onboardingEventStore = EKEventStore()
 
 struct OnboardingView: View {
     @State var step: OnboardingStep = .welcome
@@ -149,11 +150,19 @@ struct OnboardingView: View {
     }
 
     func requestCalendarPermission() async {
-        _ = try? await calendarService.requestAccess(to: .event)
+        if #available(macOS 14.0, *) {
+            _ = try? await onboardingEventStore.requestFullAccessToEvents()
+        } else {
+            _ = try? await onboardingEventStore.requestAccess(to: .event)
+        }
     }
 
     func requestRemindersPermission() async {
-        _ = try? await calendarService.requestAccess(to: .reminder)
+        if #available(macOS 14.0, *) {
+            _ = try? await onboardingEventStore.requestFullAccessToReminders()
+        } else {
+            _ = try? await onboardingEventStore.requestAccess(to: .reminder)
+        }
     }
     
     func requestAccessibilityPermission() async {

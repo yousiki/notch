@@ -436,20 +436,10 @@ struct NotchHomeView: View {
                     }
                 }
             } else {
-                // built-in fallback until C7 migrates Music and Calendar; once at least one home fragment is
-                // registered this branch goes dead and gets removed in C8 cleanup.
+                // built-in fallback until C7 migrates Music; once Music registers a home
+                // fragment this branch goes dead and gets removed in C8 cleanup.
                 HStack(alignment: .top, spacing: 15) {
                     MusicPlayerView(albumArtNamespace: albumArtNamespace)
-
-                    if Defaults[.showCalendar] {
-                        CalendarView()
-                            .frame(width: 215)
-                            .onHover { isHovering in
-                                vm.isHoveringCalendar = isHovering
-                            }
-                            .environmentObject(vm)
-                            .transition(.opacity)
-                    }
                 }
             }
         }
