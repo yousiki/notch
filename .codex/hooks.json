@@ -1,0 +1,17 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|apply_patch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/bin/sh \"$(git rev-parse --show-toplevel)/.codex/hooks/biome-format-hook.sh\"",
+            "timeout": 30,
+            "statusMessage": "Formatting JS/TS/JSON with Biome"
+          }
+        ]
+      }
+    ]
+  }
+}
