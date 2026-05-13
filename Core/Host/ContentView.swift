@@ -220,7 +220,7 @@ struct ContentView: View {
 
             if isTargeted {
                 if vm.notchState == .closed {
-                    coordinator.currentView = .shelf
+                    coordinator.showTab(CapsuleTabIdentifier.shelf)
                     doOpen()
                 }
                 return
@@ -336,12 +336,12 @@ struct ContentView: View {
             if vm.notchState == .open {
                 VStack {
                     Group {
-                        if coordinator.currentTabIdentifier == "home" {
+                        if coordinator.currentTabIdentifier == CapsuleTabIdentifier.home {
                             NotchHomeView(albumArtNamespace: albumArtNamespace)
                         } else if let tab = ExtensionHost.shared.tabs.first(
                             where: { $0.identifier == coordinator.currentTabIdentifier }) {
                             ContributionViewControllerHost(make: tab.makeViewController)
-                        } else if coordinator.currentTabIdentifier == "moe.siki.Capsule.shelf.tab" {
+                        } else if coordinator.currentTabIdentifier == CapsuleTabIdentifier.shelf {
                             // built-in fallback until C6 migrates Shelf
                             ShelfView()
                         } else {

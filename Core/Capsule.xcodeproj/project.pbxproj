@@ -1366,7 +1366,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e\nfor EXT_NAME in TipsExtension WebcamExtension BatteryExtension; do\n  EXT_PRODUCT=\"${BUILT_PRODUCTS_DIR}/${EXT_NAME}.capsule\"\n  if [ -d \"${EXT_PRODUCT}\" ]; then\n    echo \"${EXT_NAME}.capsule is present at ${EXT_PRODUCT}\"\n    echo \"Binary: $(file \"${EXT_PRODUCT}/Contents/MacOS/${EXT_NAME}\" 2>/dev/null || echo 'not found')\"\n  else\n    echo \"Error: ${EXT_NAME}.capsule not found at ${EXT_PRODUCT}\"\n    echo \"Make sure ${EXT_NAME} target built successfully.\"\n    exit 1\n  fi\ndone\n";
+			shellScript = "set -e\nfor EXT_NAME in TipsExtension WebcamExtension BatteryExtension CalendarExtension; do\n  EXT_PRODUCT=\"${BUILT_PRODUCTS_DIR}/${EXT_NAME}.capsule\"\n  if [ -d \"${EXT_PRODUCT}\" ]; then\n    echo \"${EXT_NAME}.capsule is present at ${EXT_PRODUCT}\"\n    echo \"Binary: $(file \"${EXT_PRODUCT}/Contents/MacOS/${EXT_NAME}\" 2>/dev/null || echo 'not found')\"\n  else\n    echo \"Error: ${EXT_NAME}.capsule not found at ${EXT_PRODUCT}\"\n    echo \"Make sure ${EXT_NAME} target built successfully.\"\n    exit 1\n  fi\ndone\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

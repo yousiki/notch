@@ -47,19 +47,28 @@ struct ExpandedItem {
     var browser: BrowserType = .chromium
 }
 
+enum CapsuleTabIdentifier {
+    static let home = "home"
+    static let shelf = "moe.siki.Capsule.shelf.tab"
+}
+
 @MainActor
 class CapsuleViewCoordinator: ObservableObject {
     static let shared = CapsuleViewCoordinator()
 
-    @Published var currentView: NotchViews = .home {
-        didSet {
-            switch currentView {
-            case .home:  currentTabIdentifier = "home"
-            case .shelf: currentTabIdentifier = "moe.siki.Capsule.shelf.tab"
+    var currentView: NotchViews {
+        get {
+            currentTabIdentifier == CapsuleTabIdentifier.shelf ? .shelf : .home
+        }
+        set {
+            switch newValue {
+            case .home: showTab(CapsuleTabIdentifier.home)
+            case .shelf: showTab(CapsuleTabIdentifier.shelf)
             }
         }
     }
-    @Published var currentTabIdentifier: String = "home" {
+
+    @Published var currentTabIdentifier: String = CapsuleTabIdentifier.home {
         didSet {
             NotificationCenter.default.post(
                 name: .currentTabIdentifierChanged, object: nil)
@@ -80,7 +89,7 @@ class CapsuleViewCoordinator: ObservableObject {
             if !alwaysShowTabs {
                 openLastTabByDefault = false
                 if ShelfStateViewModel.shared.isEmpty || !Defaults[.openShelfByDefault] {
-                    currentView = .home
+                    showTab(CapsuleTabIdentifier.home)
                 }
             }
         }
@@ -311,7 +320,11 @@ class CapsuleViewCoordinator: ObservableObject {
     }
     
     func showEmpty() {
-        currentView = .home
+        showTab(CapsuleTabIdentifier.home)
+    }
+
+    func showTab(_ identifier: String) {
+        currentTabIdentifier = identifier
     }
 }
 

@@ -14,7 +14,11 @@
   <string>1.0.0</string>
   <key>CFBundleVersion</key>
   <string>1</string>
+  <key>NSCalendarsFullAccessUsageDescription</key>
+  <string>Capsule uses Calendar access to display your events in the notch.</string>
   <key>NSPrincipalClass</key>
   <string>$(PRODUCT_MODULE_NAME).CalendarExtension</string>
+  <key>NSRemindersFullAccessUsageDescription</key>
+  <string>Capsule uses Reminders access to display scheduled reminders in the calendar view.</string>
 </dict>
 </plist>

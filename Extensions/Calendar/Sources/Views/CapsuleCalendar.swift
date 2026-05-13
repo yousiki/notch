@@ -8,6 +8,14 @@
 import Defaults
 import SwiftUI
 
+private extension Date {
+    var dayOfMonthString: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd"
+        return dateFormatter.string(from: self)
+    }
+}
+
 struct Config: Equatable {
     //    var count: Int = 10  // 3 days past + today + 7 days future
     var past: Int = 7
@@ -116,7 +124,7 @@ struct WheelPicker: View {
                     Circle()
                         .stroke(Color.gray.opacity(0.3), lineWidth: 0)
                 )
-            Text("\(date.date)")
+            Text(date.dayOfMonthString)
                 .font(.body)
                 .fontWeight(.medium)
                 .foregroundColor(isSelected ? .white : Color(white: isToday ? 0.9 : 0.65))

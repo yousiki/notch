@@ -13,10 +13,17 @@ struct CapsuleHeader: View {
     @EnvironmentObject var vm: CapsuleViewModel
     @ObservedObject var coordinator = CapsuleViewCoordinator.shared
     @StateObject var tvm = ShelfStateViewModel.shared
+    @State private var extensionLoadRevision = 0
+
+    private var hasExtensionTabs: Bool {
+        _ = extensionLoadRevision
+        return !ExtensionHost.shared.tabs.isEmpty
+    }
+
     var body: some View {
         HStack(spacing: 0) {
             HStack {
-                if (!tvm.isEmpty || coordinator.alwaysShowTabs) && Defaults[.capsuleShelf] {
+                if hasExtensionTabs || !tvm.isEmpty || coordinator.alwaysShowTabs {
                     TabSelectionView()
                 } else if vm.notchState == .open {
                     EmptyView()
@@ -76,6 +83,9 @@ struct CapsuleHeader: View {
         }
         .foregroundColor(.gray)
         .environmentObject(vm)
+        .onReceive(NotificationCenter.default.publisher(for: ExtensionHost.didLoadExtensionsNotification)) { _ in
+            extensionLoadRevision += 1
+        }
     }
 
     func isHUDType(_ type: String) -> Bool {

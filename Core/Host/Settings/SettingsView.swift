@@ -7,7 +7,6 @@
 
 import AVFoundation
 import Defaults
-import EventKit
 import KeyboardShortcuts
 import LaunchAtLogin
 import CapsuleKit

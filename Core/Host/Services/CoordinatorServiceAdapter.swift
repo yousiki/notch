@@ -35,14 +35,7 @@ final class CoordinatorServiceAdapter: NSObject, CapsuleCoordinatorHost {
     }
 
     @objc func showTab(_ identifier: String) {
-        // TODO(B4): writing currentTabIdentifier doesn't yet flow back to
-        // ContentView's tab switch — ContentView still observes
-        // coordinator.currentView (the NotchViews enum). Task B4 rewrites
-        // ContentView to iterate ExtensionHost.shared.tabs keyed by
-        // currentTabIdentifier; until then, calls to showTab from
-        // extensions are visible to other adapters/observers but won't
-        // change the rendered tab.
-        Task { @MainActor in coordinator.currentTabIdentifier = identifier }
+        Task { @MainActor in coordinator.showTab(identifier) }
     }
 
     @objc func toggleSneakPeek(kind: String, value: Double, icon: String, durationSeconds: Double) {
