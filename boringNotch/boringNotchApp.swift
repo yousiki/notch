@@ -412,8 +412,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         if !Defaults[.showOnAllDisplays] {
             let viewModel = self.vm
+            guard let initialScreen = NSScreen.main ?? NSScreen.screens.first else { return }
             let window = createBoringNotchWindow(
-                for: NSScreen.main ?? NSScreen.screens.first!, with: viewModel)
+                for: initialScreen, with: viewModel)
             self.window = window
             adjustWindowPosition(changeAlpha: true)
         } else {
