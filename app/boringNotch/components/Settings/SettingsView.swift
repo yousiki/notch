@@ -469,44 +469,40 @@ struct HUD: View {
     @Default(.hudReplacement) var hudReplacement
     @ObservedObject var coordinator = BoringViewCoordinator.shared
     @State private var accessibilityAuthorized = false
+    @State private var pendingHUDReplacementEnable = false
+
+    private var hudReplacementBinding: Binding<Bool> {
+        Binding(
+            get: { Defaults[.hudReplacement] },
+            set: { enabled in
+                setHUDReplacement(enabled)
+            }
+        )
+    }
 
     var body: some View {
         Form {
             Section {
-                HStack {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Replace system HUD")
-                            .font(.headline)
-                        Text(
-                            "Replaces the standard macOS volume, display brightness, and keyboard brightness HUDs with a custom design."
-                        )
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                        .fixedSize(horizontal: false, vertical: true)
-                    }
-                    Spacer(minLength: 40)
-                    Defaults.Toggle("", key: .hudReplacement)
-                        .labelsHidden()
-                        .toggleStyle(.switch)
-                        .controlSize(.large)
-                        .disabled(!accessibilityAuthorized)
+                Toggle(isOn: hudReplacementBinding) {
+                    Text("Replace system HUD")
                 }
 
                 if !accessibilityAuthorized {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Accessibility access is required to replace the system HUD.")
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-
-                        HStack(spacing: 12) {
-                            Button("Request Accessibility") {
-                                XPCHelperClient.shared.requestAccessibilityAuthorization()
-                            }
-                            .buttonStyle(.borderedProminent)
-                        }
+                    Button("Request Accessibility") {
+                        requestAccessibilityForHUDReplacement()
                     }
-                    .padding(.top, 6)
                 }
+            } footer: {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(
+                        "Replaces the standard macOS volume, display brightness, and keyboard brightness HUDs with a custom design."
+                    )
+                    if !accessibilityAuthorized {
+                        Text("Accessibility access is required to replace the system HUD.")
+                    }
+                }
+                .font(.caption)
+                .foregroundStyle(.secondary)
             }
 
             Section {
@@ -576,7 +572,8 @@ struct HUD: View {
         .accentColor(.effectiveAccent)
         .navigationTitle("HUDs")
         .task {
-            accessibilityAuthorized = await XPCHelperClient.shared.isAccessibilityAuthorized()
+            let authorized = await XPCHelperClient.shared.isAccessibilityAuthorized()
+            updateAccessibilityAuthorization(authorized)
         }
         .onAppear {
             XPCHelperClient.shared.startMonitoringAccessibilityAuthorization()
@@ -586,8 +583,48 @@ struct HUD: View {
         }
         .onReceive(NotificationCenter.default.publisher(for: .accessibilityAuthorizationChanged)) { notification in
             if let granted = notification.userInfo?["granted"] as? Bool {
-                accessibilityAuthorized = granted
+                updateAccessibilityAuthorization(granted)
             }
+        }
+    }
+
+    private func setHUDReplacement(_ enabled: Bool) {
+        if !enabled {
+            pendingHUDReplacementEnable = false
+            Defaults[.hudReplacement] = false
+            return
+        }
+
+        guard accessibilityAuthorized else {
+            pendingHUDReplacementEnable = true
+            Defaults[.hudReplacement] = false
+            Task {
+                let authorized = await XPCHelperClient.shared.ensureAccessibilityAuthorization(
+                    promptIfNeeded: true
+                )
+                await MainActor.run {
+                    updateAccessibilityAuthorization(authorized)
+                }
+            }
+            return
+        }
+
+        Defaults[.hudReplacement] = true
+    }
+
+    private func requestAccessibilityForHUDReplacement() {
+        pendingHUDReplacementEnable = true
+        XPCHelperClient.shared.requestAccessibilityAuthorization()
+    }
+
+    private func updateAccessibilityAuthorization(_ granted: Bool) {
+        accessibilityAuthorized = granted
+
+        if granted, pendingHUDReplacementEnable {
+            pendingHUDReplacementEnable = false
+            Defaults[.hudReplacement] = true
+        } else if !granted {
+            Defaults[.hudReplacement] = false
         }
     }
 }
