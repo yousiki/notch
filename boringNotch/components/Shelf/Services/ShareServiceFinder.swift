@@ -7,10 +7,26 @@
 
 import Cocoa
 
-class ShareServiceFinder: NSObject, NSSharingServicePickerDelegate {
+extension NSSharingService: @unchecked Sendable {}
+
+private final class ContinuationGate: @unchecked Sendable {
+    private let lock = NSLock()
+    private var didResume = false
+
+    func tryClaim() -> Bool {
+        lock.lock()
+        defer { lock.unlock() }
+
+        guard !didResume else { return false }
+        didResume = true
+        return true
+    }
+}
+
+final class ShareServiceFinder: NSObject, NSSharingServicePickerDelegate, @unchecked Sendable {
 
     @MainActor
-    private var onServicesCaptured: (([NSSharingService]) -> Void)?
+    private var onServicesCaptured: (@Sendable ([NSSharingService]) -> Void)?
 
     /// Returns share services asynchronously without blocking the UI
     @MainActor
@@ -21,25 +37,20 @@ class ShareServiceFinder: NSObject, NSSharingServicePickerDelegate {
         picker.delegate = self
 
         return await withCheckedContinuation { continuation in
-            var didResume = false
+            let gate = ContinuationGate()
 
             // Capture services callback
-            Task { @MainActor in
-                self.onServicesCaptured = { services in
-                    guard !didResume else { return }
-                    didResume = true
-                    continuation.resume(returning: services)
-                }
+            self.onServicesCaptured = { services in
+                guard gate.tryClaim() else { return }
+                continuation.resume(returning: services)
             }
 
             picker.show(relativeTo: dummyView.bounds, of: dummyView, preferredEdge: .minY)
 
-
             // Timeout task
             Task { @MainActor in
                 try? await Task.sleep(for: .seconds(timeout))
-                guard !didResume else { return }
-                didResume = true
+                guard gate.tryClaim() else { return }
                 print("Warning: timed out waiting for sharing services")
                 continuation.resume(returning: [])
             }
@@ -48,9 +59,11 @@ class ShareServiceFinder: NSObject, NSSharingServicePickerDelegate {
 
     // MARK: NSSharingServicePickerDelegate
 
-    func sharingServicePicker(_ picker: NSSharingServicePicker,
-                              sharingServicesForItems items: [Any],
-                              proposedSharingServices proposed: [NSSharingService]) -> [NSSharingService] {
+    func sharingServicePicker(
+        _ picker: NSSharingServicePicker,
+        sharingServicesForItems items: [Any],
+        proposedSharingServices proposed: [NSSharingService]
+    ) -> [NSSharingService] {
         Task { @MainActor in
             self.onServicesCaptured?(proposed)
         }

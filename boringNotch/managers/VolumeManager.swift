@@ -10,8 +10,8 @@ import Combine
 import CoreAudio
 import Foundation
 
-final class VolumeManager: NSObject, ObservableObject {
-    static let shared = VolumeManager()
+final class VolumeManager: NSObject, ObservableObject, @unchecked Sendable {
+    nonisolated(unsafe) static let shared = VolumeManager()
 
     @Published private(set) var rawVolume: Float = 0
     @Published private(set) var isMuted: Bool = false
@@ -68,9 +68,10 @@ final class VolumeManager: NSObject, ObservableObject {
         }
 
         toggleMuteInternal()
-        BoringViewCoordinator.shared.toggleSneakPeek(status: true, type: .volume, value: CGFloat(willBeMuted ? 0 : resultingVolume))
+        BoringViewCoordinator.shared.toggleSneakPeek(
+            status: true, type: .volume, value: CGFloat(willBeMuted ? 0 : resultingVolume))
     }
-    
+
     func refresh() { fetchCurrentVolume() }
 
     func adjustRelative(delta: Float32) {
@@ -80,7 +81,7 @@ final class VolumeManager: NSObject, ObservableObject {
             return
         }
         let target = max(0, min(1, current + delta))
-        writeVolumeInternal(target)  
+        writeVolumeInternal(target)
         publish(volume: target, muted: isMutedInternal(), touchDate: true)
     }
 
@@ -134,7 +135,7 @@ final class VolumeManager: NSObject, ObservableObject {
         if !volumes.isEmpty {
             let avg = max(0, min(1, volumes.reduce(0, +) / Float32(volumes.count)))
             DispatchQueue.main.async {
-                if self.rawVolume != avg {  
+                if self.rawVolume != avg {
                     if self.didInitialFetch {
                         self.lastChangeAt = Date()
                     }
@@ -157,8 +158,7 @@ final class VolumeManager: NSObject, ObservableObject {
             {
                 var muted: UInt32 = 0
                 var mSize = sizeNeeded
-                if AudioObjectGetPropertyData(deviceID, &muteAddr, 0, nil, &mSize, &muted) == noErr
-                {
+                if AudioObjectGetPropertyData(deviceID, &muteAddr, 0, nil, &mSize, &muted) == noErr {
                     let newMuted = muted != 0
                     DispatchQueue.main.async {
                         if self.isMuted != newMuted { self.lastChangeAt = Date() }
@@ -374,5 +374,3 @@ final class VolumeManager: NSObject, ObservableObject {
 extension Array where Element == Float32 {
     fileprivate var average: Float32? { isEmpty ? nil : reduce(0, +) / Float32(count) }
 }
-
-

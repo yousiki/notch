@@ -19,7 +19,9 @@ enum PanDirection {
 }
 
 extension View {
-    func panGesture(direction: PanDirection, threshold: CGFloat = 4, action: @escaping (CGFloat, NSEvent.Phase) -> Void) -> some View {
+    func panGesture(direction: PanDirection, threshold: CGFloat = 4, action: @escaping (CGFloat, NSEvent.Phase) -> Void)
+        -> some View
+    {
         self
             .gesture(
                 DragGesture(minimumDistance: 0)
@@ -47,8 +49,8 @@ private struct ScrollMonitor: NSViewRepresentable {
     func updateNSView(_ nsView: NSView, context: Context) {}
     static func dismantleNSView(_ nsView: NSView, coordinator: Coordinator) { coordinator.removeMonitor() }
 
-    func makeCoordinator() -> Coordinator { 
-        Coordinator(direction: direction, threshold: threshold, action: action) 
+    func makeCoordinator() -> Coordinator {
+        Coordinator(direction: direction, threshold: threshold, action: action)
     }
 
     @MainActor final class Coordinator: NSObject {
@@ -58,7 +60,7 @@ private struct ScrollMonitor: NSViewRepresentable {
         private var monitor: Any?
         private var accumulated: CGFloat = 0
         private var active = false
-            private var endTask: Task<Void, Never>?
+        private var endTask: Task<Void, Never>?
         private let noiseThreshold: CGFloat = 0.2
 
         init(direction: PanDirection, threshold: CGFloat, action: @escaping (CGFloat, NSEvent.Phase) -> Void) {
@@ -121,7 +123,8 @@ private struct ScrollMonitor: NSViewRepresentable {
             let absDY = abs(event.scrollingDeltaY)
             // Require the movement along the gesture axis to be at least 1.5x the orthogonal axis.
             let axisDominanceFactor: CGFloat = 1.5
-            let isAxisDominant: Bool = direction.isHorizontal ? (absDX >= axisDominanceFactor * absDY) : (absDY >= axisDominanceFactor * absDX)
+            let isAxisDominant: Bool =
+                direction.isHorizontal ? (absDX >= axisDominanceFactor * absDY) : (absDY >= axisDominanceFactor * absDX)
             guard isAxisDominant else { return }
 
             // Scale non-precise (mouse wheel) scrolling deltas so they feel similar to

@@ -20,8 +20,8 @@ enum SneakContentType {
     case download
 }
 
-private extension SneakContentType {
-    init?(sharedValue: String) {
+extension SneakContentType {
+    fileprivate init?(sharedValue: String) {
         switch sharedValue {
         case "brightness":
             self = .brightness
@@ -94,12 +94,12 @@ final class BoringViewCoordinator: ObservableObject {
             }
         }
     }
-    
+
     @Default(.hudReplacement) var hudReplacement: Bool
-    
+
     // Legacy storage for migration
     @AppStorage("preferred_screen_name") private var legacyPreferredScreenName: String?
-    
+
     // New UUID-based storage
     @AppStorage("preferred_screen_uuid") var preferredScreenUUID: String? {
         didSet {
@@ -121,7 +121,8 @@ final class BoringViewCoordinator: ObservableObject {
         if preferredScreenUUID == nil, let legacyName = legacyPreferredScreenName {
             // Try to find screen by name and migrate to UUID
             if let screen = NSScreen.screens.first(where: { $0.localizedName == legacyName }),
-               let uuid = screen.displayUUID {
+                let uuid = screen.displayUUID
+            {
                 preferredScreenUUID = uuid
                 NSLog("✅ Migrated display preference from name '\(legacyName)' to UUID '\(uuid)'")
             } else {
@@ -135,7 +136,7 @@ final class BoringViewCoordinator: ObservableObject {
             // No legacy value, use main screen
             preferredScreenUUID = NSScreen.main?.displayUUID
         }
-        
+
         selectedScreenUUID = preferredScreenUUID ?? NSScreen.main?.displayUUID ?? ""
         // Observe changes to accessibility authorization and react accordingly
         accessibilityObserver = NotificationCenter.default.addObserver(
@@ -161,7 +162,8 @@ final class BoringViewCoordinator: ObservableObject {
 
                     if change.newValue {
                         self.hudEnableTask = Task { @MainActor in
-                            let granted = await XPCHelperClient.shared.ensureAccessibilityAuthorization(promptIfNeeded: true)
+                            let granted = await XPCHelperClient.shared.ensureAccessibilityAuthorization(
+                                promptIfNeeded: true)
                             if Task.isCancelled { return }
 
                             if granted {
@@ -189,7 +191,7 @@ final class BoringViewCoordinator: ObservableObject {
             }
         }
     }
-    
+
     @objc func sneakPeekEvent(_ notification: Notification) {
         guard let data = notification.userInfo?.first?.value as? Data else {
             print("Failed to decode JSON data")
@@ -303,7 +305,7 @@ final class BoringViewCoordinator: ObservableObject {
             }
         }
     }
-    
+
     func showEmpty() {
         currentView = .home
     }

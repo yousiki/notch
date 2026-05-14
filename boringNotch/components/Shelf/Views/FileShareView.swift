@@ -18,20 +18,22 @@ struct FileShareView: View {
     @State private var hostView: NSView?
     @State private var interactionNonce: UUID = .init()
     @State private var isProcessing = false
-    
+
     private var selectedProvider: QuickShareProvider {
-        quickShare.availableProviders.first(where: { $0.id == quickShareProvider }) ?? QuickShareProvider(id: "System Share Menu", imageData: nil, supportsRawText: true)
+        quickShare.availableProviders.first(where: { $0.id == quickShareProvider })
+            ?? QuickShareProvider(id: "System Share Menu", imageData: nil, supportsRawText: true)
     }
 
     var body: some View {
         dropArea
             .background(NSViewHost(view: $hostView))
-            .onDrop(of: [.fileURL, .url, .utf8PlainText, .plainText, .data, .image], isTargeted: $vm.dropZoneTargeting) { providers in
-                interactionNonce = .init()
-                vm.dropEvent = true
-                Task { await handleDrop(providers) }
-                return true
-            }
+            .onDrop(of: [.fileURL, .url, .utf8PlainText, .plainText, .data, .image], isTargeted: $vm.dropZoneTargeting)
+        { providers in
+            interactionNonce = .init()
+            vm.dropEvent = true
+            Task { await handleDrop(providers) }
+            return true
+        }
             .onTapGesture {
                 Task {
                     await handleClick()
@@ -43,7 +45,9 @@ struct FileShareView: View {
         ZStack {
             RoundedRectangle(cornerRadius: 12)
                 .fill(
-                    LinearGradient(colors: [Color.black.opacity(0.35), Color.black.opacity(0.20)], startPoint: .topLeading, endPoint: .bottomTrailing)
+                    LinearGradient(
+                        colors: [Color.black.opacity(0.35), Color.black.opacity(0.20)], startPoint: .topLeading,
+                        endPoint: .bottomTrailing)
                 )
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
@@ -60,9 +64,11 @@ struct FileShareView: View {
             VStack(spacing: 5) {
                 ZStack {
                     Circle()
-                        .fill(Color.white.opacity(
-                            vm.dropZoneTargeting ? 0.11 : 0.09
-                        ))
+                        .fill(
+                            Color.white.opacity(
+                                vm.dropZoneTargeting ? 0.11 : 0.09
+                            )
+                        )
                         .frame(width: 55, height: 55)
                     Image(systemName: "square.and.arrow.up")
                     Group {
@@ -75,13 +81,13 @@ struct FileShareView: View {
                         }
                     }
                     .frame(width: 34, height: 34)
-                        .foregroundStyle(
-                            vm.dropZoneTargeting ? Color.accentColor : Color.gray
-                        )
-                        .scaleEffect(
-                            vm.dropZoneTargeting ? 1.06 : 1.0
-                        )
-                        .animation(.spring(response: 0.36, dampingFraction: 0.7), value: vm.dropZoneTargeting)
+                    .foregroundStyle(
+                        vm.dropZoneTargeting ? Color.accentColor : Color.gray
+                    )
+                    .scaleEffect(
+                        vm.dropZoneTargeting ? 1.06 : 1.0
+                    )
+                    .animation(.spring(response: 0.36, dampingFraction: 0.7), value: vm.dropZoneTargeting)
                 }
 
                 Text(selectedProvider.id)
@@ -90,7 +96,7 @@ struct FileShareView: View {
 
             }
             .padding(18)
-            
+
             // Loading overlay
             if isProcessing || quickShare.isPickerOpen {
                 RoundedRectangle(cornerRadius: 12)
@@ -112,7 +118,7 @@ struct FileShareView: View {
         defer { isProcessing = false }
         await quickShare.shareDroppedFiles(providers, using: selectedProvider, from: hostView)
     }
-    
+
     private func handleClick() async {
         await quickShare.showFilePicker(for: selectedProvider, from: hostView)
     }
@@ -122,13 +128,13 @@ struct FileShareView: View {
 
 private struct NSViewHost: NSViewRepresentable {
     @Binding var view: NSView?
-    
+
     func makeNSView(context: Context) -> NSView {
         let v = NSView(frame: .zero)
         DispatchQueue.main.async { self.view = v }
         return v
     }
-    
+
     func updateNSView(_ nsView: NSView, context: Context) {
         DispatchQueue.main.async { self.view = nsView }
     }

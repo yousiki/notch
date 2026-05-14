@@ -5,8 +5,8 @@
 //  Created by Alexander on 2025-10-08.
 //
 
-import Foundation
 import AppKit
+import Foundation
 
 struct Bookmark: Sendable, Equatable, Codable {
     let data: Data
@@ -17,7 +17,9 @@ struct Bookmark: Sendable, Equatable, Codable {
 
     init(url: URL) throws {
         guard url.isFileURL, FileManager.default.fileExists(atPath: url.path) else {
-            throw NSError(domain: "Bookmark", code: 1, userInfo: [NSLocalizedDescriptionKey: "Not a valid file URL or file does not exist at \(url.path)"])
+            throw NSError(
+                domain: "Bookmark", code: 1,
+                userInfo: [NSLocalizedDescriptionKey: "Not a valid file URL or file does not exist at \(url.path)"])
         }
         do {
             let bookmark = try url.bookmarkData(
@@ -61,7 +63,7 @@ struct Bookmark: Sendable, Equatable, Codable {
     var refreshedData: Data? {
         return resolve().refreshedData
     }
-    
+
     static func update(in items: inout [ShelfItem], for item: ShelfItem, newBookmark: Data) {
         guard let idx = items.firstIndex(where: { $0.id == item.id }) else { return }
         guard case .file = items[idx].kind else { return }

@@ -16,24 +16,24 @@ struct QuickShareProvider: Identifiable, Hashable, Sendable {
     var supportsRawText: Bool
 }
 
-class QuickShareService: ObservableObject {
-    static let shared = QuickShareService()
-    
+class QuickShareService: ObservableObject, @unchecked Sendable {
+    nonisolated(unsafe) static let shared = QuickShareService()
+
     @Published var availableProviders: [QuickShareProvider] = []
     @Published var isPickerOpen = false
     private var cachedServices: [String: NSSharingService] = [:]
     // Hold security-scoped URLs during sharing
     private var sharingAccessingURLs: [URL] = []
     private var lifecycleDelegate: SharingLifecycleDelegate?
-   
+
     init() {
         Task {
             await discoverAvailableProviders()
         }
     }
-    
+
     // MARK: - Provider Discovery
-    
+
     @MainActor
     func discoverAvailableProviders() async {
         let finder = ShareServiceFinder()
@@ -41,8 +41,8 @@ class QuickShareService: ObservableObject {
         // Use simple test items without creating actual temp files
         // This avoids issues with the Share Sheet retaining references to deleted files
         let testItems: [Any] = [
-            URL(string:"http://example.com") ?? URL(fileURLWithPath: "/"),
-            "Test Text" as NSString
+            URL(string: "http://example.com") ?? URL(fileURLWithPath: "/"),
+            "Test Text" as NSString,
         ]
 
         let services = await finder.findApplicableServices(for: testItems)
@@ -59,7 +59,7 @@ class QuickShareService: ObservableObject {
                 cachedServices[title] = svc
             }
         }
-        
+
         if let idx = providers.firstIndex(where: { $0.id == "AirDrop" }) {
             let ad = providers.remove(at: idx)
             providers.insert(ad, at: 0)
@@ -72,7 +72,7 @@ class QuickShareService: ObservableObject {
         self.availableProviders = providers
 
     }
-    
+
     // MARK: - File Picker
     @MainActor
     func showFilePicker(for provider: QuickShareProvider, from view: NSView?) async {
@@ -107,7 +107,7 @@ class QuickShareService: ObservableObject {
         let response = panel.runModal()
         completion(response)
     }
-    
+
     // MARK: - Sharing
     @MainActor
     func shareFilesOrText(_ items: [Any], using provider: QuickShareProvider, from view: NSView?) async {
@@ -146,11 +146,13 @@ class QuickShareService: ObservableObject {
         }
         sharingAccessingURLs.removeAll()
     }
-// MARK: - SharingServiceDelegate
+    // MARK: - SharingServiceDelegate
 
-private class SharingServiceDelegate: NSObject {}
-    
-    func shareDroppedFiles(_ providers: [NSItemProvider], using shareProvider: QuickShareProvider, from view: NSView?) async {
+    private class SharingServiceDelegate: NSObject {}
+
+    func shareDroppedFiles(_ providers: [NSItemProvider], using shareProvider: QuickShareProvider, from view: NSView?)
+        async
+    {
         var itemsToShare: [Any] = []
         var foundText: String?
 
@@ -206,6 +208,7 @@ extension QuickShareProvider {
         if let airdrop = svc.availableProviders.first(where: { $0.id == "AirDrop" }) {
             return airdrop
         }
-        return svc.availableProviders.first ?? QuickShareProvider(id: "System Share Menu", imageData: nil, supportsRawText: true)
+        return svc.availableProviders.first
+            ?? QuickShareProvider(id: "System Share Menu", imageData: nil, supportsRawText: true)
     }
 }

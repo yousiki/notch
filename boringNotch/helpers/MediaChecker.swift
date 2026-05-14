@@ -18,8 +18,9 @@ final class MediaChecker: Sendable {
     func checkDeprecationStatus() async throws -> Bool {
         try await Task.detached(priority: .userInitiated) {
             guard let scriptURL = Bundle.main.url(forResource: "mediaremote-adapter", withExtension: "pl"),
-                  let nowPlayingTestClientPath = Bundle.main.url(forResource: "MediaRemoteAdapterTestClient", withExtension: nil)?.path,
-                  let frameworkPath = Bundle.main.privateFrameworksPath?.appending("/MediaRemoteAdapter.framework")
+                let nowPlayingTestClientPath = Bundle.main.url(
+                    forResource: "MediaRemoteAdapterTestClient", withExtension: nil)?.path,
+                let frameworkPath = Bundle.main.privateFrameworksPath?.appending("/MediaRemoteAdapter.framework")
             else {
                 throw MediaCheckerError.missingResources
             }
@@ -31,6 +32,7 @@ final class MediaChecker: Sendable {
             do {
                 try process.run()
             } catch {
+                AppLogger.log("Failed to run mediaremote-adapter deprecation check: \(error)", category: .error)
                 throw MediaCheckerError.processExecutionFailed
             }
 
@@ -45,7 +47,7 @@ final class MediaChecker: Sendable {
                     if process.isRunning {
                         process.terminate()
                     }
-                    return false // Timed out
+                    return false  // Timed out
                 }
                 for try await exited in group {
                     if exited {
@@ -57,6 +59,7 @@ final class MediaChecker: Sendable {
             }
 
             if !didExit {
+                AppLogger.log("Timed out mediaremote-adapter deprecation check", category: .warning)
                 throw MediaCheckerError.timeout
             }
 

@@ -5,23 +5,24 @@
 //  Created by Alexander on 2025-09-13.
 //
 
-import Foundation
 import Defaults
+import Foundation
 
 public protocol ImageServiceProtocol {
     func fetchImageData(from url: URL) async throws -> Data
 }
 
 public final class ImageService: ImageServiceProtocol {
-    public static let shared = ImageService()
+    public nonisolated(unsafe) static let shared = ImageService()
 
     private let session: URLSession
 
     private init() {
         let config = URLSessionConfiguration.default
-        let cache = URLCache(memoryCapacity: 50 * 1024 * 1024, // 50MB
-                             diskCapacity: 100 * 1024 * 1024, // 100MB
-                             diskPath: "artwork_cache")
+        let cache = URLCache(
+            memoryCapacity: 50 * 1024 * 1024,  // 50MB
+            diskCapacity: 100 * 1024 * 1024,  // 100MB
+            diskPath: "artwork_cache")
         config.urlCache = cache
         config.timeoutIntervalForRequest = 15
         config.timeoutIntervalForResource = 30

@@ -5,15 +5,15 @@
 //  Created by Alexander on 2025-03-29.
 //
 
-import Foundation
 import AppKit
 import Combine
+import Foundation
 
-protocol MediaControllerProtocol: ObservableObject {
+protocol MediaControllerProtocol: ObservableObject, Sendable {
     var playbackStatePublisher: AnyPublisher<PlaybackState, Never> { get }
     var supportsVolumeControl: Bool { get }
     var supportsFavorite: Bool { get }
-    
+
     func setFavorite(_ favorite: Bool) async
     func play() async
     func pause() async

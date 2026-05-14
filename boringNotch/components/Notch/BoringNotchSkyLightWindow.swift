@@ -6,34 +6,19 @@
 //
 
 import Cocoa
-import SkyLightWindow
-import Defaults
 import Combine
+import Defaults
+import SkyLightWindow
 
 extension SkyLightOperator {
-    func undelegateWindow(_ window: NSWindow) {
-        typealias F_SLSRemoveWindowsFromSpaces = @convention(c) (Int32, CFArray, CFArray) -> Int32
-        
-        let handler = dlopen("/System/Library/PrivateFrameworks/SkyLight.framework/Versions/A/SkyLight", RTLD_NOW)
-        guard let SLSRemoveWindowsFromSpaces = unsafeBitCast(
-            dlsym(handler, "SLSRemoveWindowsFromSpaces"),
-            to: F_SLSRemoveWindowsFromSpaces?.self
-        ) else {
-            return
-        }
-        
-        // Remove the window from the SkyLight space
-        _ = SLSRemoveWindowsFromSpaces(
-            connection,
-            [window.windowNumber] as CFArray,
-            [space] as CFArray
-        )
+    @MainActor func undelegateWindow(_ window: NSWindow) {
+        SkyLightPrivateAPI.shared.remove(window: window, fromSpace: space, connection: connection)
     }
 }
 
 class BoringNotchSkyLightWindow: NSPanel {
     private var isSkyLightEnabled: Bool = false
-    
+
     override init(
         contentRect: NSRect,
         styleMask: NSWindow.StyleMask,
@@ -46,11 +31,11 @@ class BoringNotchSkyLightWindow: NSPanel {
             backing: backing,
             defer: flag
         )
-        
+
         configureWindow()
         setupObservers()
     }
-    
+
     private func configureWindow() {
         isFloatingPanel = true
         isOpaque = false
@@ -61,21 +46,21 @@ class BoringNotchSkyLightWindow: NSPanel {
         level = .mainMenu + 3
         hasShadow = false
         isReleasedWhenClosed = false
-        
+
         // Force dark appearance regardless of system setting
         appearance = NSAppearance(named: .darkAqua)
-        
+
         collectionBehavior = [
             .fullScreenAuxiliary,
             .stationary,
             .canJoinAllSpaces,
             .ignoresCycle,
         ]
-        
+
         // Apply initial sharing type setting
         updateSharingType()
     }
-    
+
     private func setupObservers() {
         // Listen for changes to the hideFromScreenRecording setting
         Defaults.publisher(.hideFromScreenRecording)
@@ -84,7 +69,7 @@ class BoringNotchSkyLightWindow: NSPanel {
             }
             .store(in: &observers)
     }
-    
+
     private func updateSharingType() {
         if Defaults[.hideFromScreenRecording] {
             sharingType = .none
@@ -92,23 +77,23 @@ class BoringNotchSkyLightWindow: NSPanel {
             sharingType = .readWrite
         }
     }
-    
+
     func enableSkyLight() {
         if !isSkyLightEnabled {
             SkyLightOperator.shared.delegateWindow(self)
             isSkyLightEnabled = true
         }
     }
-    
+
     func disableSkyLight() {
         if isSkyLightEnabled {
             SkyLightOperator.shared.undelegateWindow(self)
             isSkyLightEnabled = false
         }
     }
-    
+
     private var observers: Set<AnyCancellable> = []
-    
+
     override var canBecomeKey: Bool { false }
     override var canBecomeMain: Bool { false }
 }

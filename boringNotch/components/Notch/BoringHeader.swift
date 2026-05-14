@@ -29,7 +29,10 @@ struct BoringHeader: View {
 
             if vm.notchState == .open {
                 Rectangle()
-                    .fill(NSScreen.screen(withUUID: coordinator.selectedScreenUUID)?.safeAreaInsets.top ?? 0 > 0 ? .black : .clear)
+                    .fill(
+                        NSScreen.screen(withUUID: coordinator.selectedScreenUUID)?.safeAreaInsets.top ?? 0 > 0
+                            ? .black : .clear
+                    )
                     .frame(width: vm.closedNotchSize.width)
                     .mask {
                         NotchShape()
@@ -38,9 +41,14 @@ struct BoringHeader: View {
 
             HStack(spacing: 4) {
                 if vm.notchState == .open {
-                    if isHUDType(coordinator.sneakPeek.type) && coordinator.sneakPeek.show && Defaults[.showOpenNotchHUD] {
-                        OpenNotchHUD(type: $coordinator.sneakPeek.type, value: $coordinator.sneakPeek.value, icon: $coordinator.sneakPeek.icon)
-                            .transition(.scale(scale: 0.8).combined(with: .opacity))
+                    if isHUDType(coordinator.sneakPeek.type) && coordinator.sneakPeek.show
+                        && Defaults[.showOpenNotchHUD]
+                    {
+                        OpenNotchHUD(
+                            type: $coordinator.sneakPeek.type, value: $coordinator.sneakPeek.value,
+                            icon: $coordinator.sneakPeek.icon
+                        )
+                        .transition(.scale(scale: 0.8).combined(with: .opacity))
                     } else {
                         if Defaults[.showMirror] {
                             Button(action: {
@@ -63,7 +71,7 @@ struct BoringHeader: View {
                                 DispatchQueue.main.async {
                                     SettingsWindowController.shared.showWindow()
                                 }
-                                
+
                             }) {
                                 Capsule()
                                     .fill(.black)

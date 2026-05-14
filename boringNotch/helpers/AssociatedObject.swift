@@ -8,7 +8,6 @@
 import Foundation
 import ObjectiveC
 
-
 /// Lightweight helper for Objective-C associated objects.
 public struct AssociatedObject<Value: AnyObject> {
     private let key: UnsafeRawPointer
@@ -27,4 +26,4 @@ public struct AssociatedObject<Value: AnyObject> {
     }
 }
 
-extension AssociatedObject: @unchecked Sendable where Value: Sendable {}
+extension AssociatedObject: @unchecked Sendable {}

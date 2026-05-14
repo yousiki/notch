@@ -20,18 +20,20 @@ public final class CGSSpace {
             let remove = oldValue.subtracting(self.windows)
             let add = self.windows.subtracting(oldValue)
 
-            CGSRemoveWindowsFromSpaces(_CGSDefaultConnection(),
-                                       remove.map { $0.windowNumber } as NSArray,
-                                       [self.identifier])
-            CGSAddWindowsToSpaces(_CGSDefaultConnection(),
-                                  add.map { $0.windowNumber } as NSArray,
-                                  [self.identifier])
+            CGSRemoveWindowsFromSpaces(
+                _CGSDefaultConnection(),
+                remove.map { $0.windowNumber } as NSArray,
+                [self.identifier])
+            CGSAddWindowsToSpaces(
+                _CGSDefaultConnection(),
+                add.map { $0.windowNumber } as NSArray,
+                [self.identifier])
         }
     }
 
     /// Initialized `CGSSpace`s *MUST* be de-initialized upon app exit!
     public init(level: Int = 0) {
-        let flag = 0x1 // this value MUST be 1, otherwise, Finder decides to draw desktop icons
+        let flag = 0x1  // this value MUST be 1, otherwise, Finder decides to draw desktop icons
         self.identifier = CGSSpaceCreate(_CGSDefaultConnection(), flag, nil)
         CGSSpaceSetAbsoluteLevel(_CGSDefaultConnection(), self.identifier, level)
         CGSShowSpaces(_CGSDefaultConnection(), [self.identifier])

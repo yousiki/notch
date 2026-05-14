@@ -8,8 +8,6 @@
 
 
 <p align="center">
-  <a title="Crowdin" target="_blank" href="https://crowdin.com/project/boring-notch"><img src="https://badges.crowdin.net/boring-notch/localized.svg"></a>
-  <img src="https://github.com/TheBoredTeam/boring.notch/actions/workflows/cicd.yml/badge.svg" alt="TheBoringNotch Build & Test" style="margin-right: 10px;" />
   <a href="https://discord.gg/c8JXA7qrPm">
     <img src="https://dcbadge.limes.pink/api/server/https://discord.gg/c8JXA7qrPm?style=flat" alt="Discord Badge" />
   </a>
@@ -42,7 +40,7 @@ Say hello to **Boring Notch**, the coolest way to make your MacBook’s notch th
 ## Installation
 
 **System Requirements:**
-- macOS **14 Sonoma** or later
+- macOS **26.4 Tahoe** or later
 - Apple Silicon or Intel Mac
 
 ---
@@ -131,8 +129,8 @@ brew install --cask TheBoredTeam/boring-notch/boring-notch
 
 ### Prerequisites
 
-- **macOS 14 or later**: If you’re not on the latest macOS, we might need to send a search party.
-- **Xcode 16 or later**: This is where the magic happens, so make sure it’s up-to-date.
+- **macOS 26.4 Tahoe or later**: Boring Notch targets the current macOS baseline.
+- **Xcode 26.4.1 or later**: This is where the magic happens, so make sure it’s up-to-date.
 
 ### Installation
 
@@ -187,5 +185,3 @@ For a full list of licenses and attributions, please see the [Third-Party Licens
 
 - **SwiftUI**: For making us look like coding wizards.
 - **You**: For being awesome and checking out **boring.notch**!
-
-
