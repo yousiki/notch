@@ -21,7 +21,7 @@ You can contribute in many ways: writing code, improving documentation, reportin
 
 ## Localizations
 
-Please submit all translations to [Crowdin](https://crowdin.com/project/boring-notch). New strings added to the `dev` branch from code changes will sync automatically to Crowdin, and Crowdin will automatically open a new PR with translations to allow us to integrate them.
+Boring Notch currently maintains only English (`en`) and Simplified Chinese (`zh-Hans`) localizations. Update translations in `app/boringNotch/Localizable.xcstrings` using Xcode's string catalog localization workflow.
 
 ## Contributing Code
 
