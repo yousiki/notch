@@ -5,17 +5,20 @@
 //  Created by Richard Kunkli on 2024. 10. 17..
 //
 
-import SwiftUI
 import Defaults
+import Foundation
+import SwiftUI
 
-private let availableDirectories = FileManager
-    .default
-    .urls(for: .documentDirectory, in: .userDomainMask)
-let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-let bundleIdentifier = Bundle.main.bundleIdentifier!
-let appVersion = "\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "") (\(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? ""))"
+let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
+    ?? FileManager.default.homeDirectoryForCurrentUser
+let bundleIdentifier = Bundle.main.bundleIdentifier ?? "theboringteam.boringnotch"
 
-let temporaryDirectory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
+private let bundleShortVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
+private let bundleBuildVersion = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? ""
+let appVersion = "\(bundleShortVersion) (\(bundleBuildVersion))"
+
+let temporaryDirectory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first
+    ?? FileManager.default.temporaryDirectory
 let spacing: CGFloat = 16
 
 struct CustomVisualizer: Codable, Hashable, Equatable, Defaults.Serializable {

@@ -41,7 +41,7 @@ final class FullscreenMediaDetector: ObservableObject {
         for space in spaces {
             if let uuid = space.screenUUID {
                 let shouldDetect: Bool
-                if Defaults[.hideNotchOption] == .nowPlayingOnly, let musicSourceBundle = MusicManager.shared.bundleIdentifier  {
+                if Defaults[.hideNotchOption] == .nowPlayingOnly, let musicSourceBundle = MusicManager.shared.bundleIdentifier {
                     shouldDetect = space.runningApps.contains(musicSourceBundle)
                 } else {
                     shouldDetect = true
@@ -53,4 +53,3 @@ final class FullscreenMediaDetector: ObservableObject {
         self.fullscreenStatus = newStatus
     }
 }
-

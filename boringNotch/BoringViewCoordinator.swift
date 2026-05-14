@@ -20,7 +20,24 @@ enum SneakContentType {
     case download
 }
 
-struct sneakPeek {
+private extension SneakContentType {
+    init?(sharedValue: String) {
+        switch sharedValue {
+        case "brightness":
+            self = .brightness
+        case "volume":
+            self = .volume
+        case "backlight":
+            self = .backlight
+        case "mic":
+            self = .mic
+        default:
+            return nil
+        }
+    }
+}
+
+struct SneakPeek {
     var show: Bool = false
     var type: SneakContentType = .music
     var value: CGFloat = 0
@@ -47,13 +64,11 @@ struct ExpandedItem {
 }
 
 @MainActor
-class BoringViewCoordinator: ObservableObject {
+final class BoringViewCoordinator: ObservableObject {
     static let shared = BoringViewCoordinator()
 
     @Published var currentView: NotchViews = .home
     @Published var helloAnimationRunning: Bool = false
-    private var sneakPeekDispatch: DispatchWorkItem?
-    private var expandingViewDispatch: DispatchWorkItem?
     private var hudEnableTask: Task<Void, Never>?
 
     @AppStorage("firstLaunch") var firstLaunch: Bool = true
@@ -176,33 +191,28 @@ class BoringViewCoordinator: ObservableObject {
     }
     
     @objc func sneakPeekEvent(_ notification: Notification) {
-        let decoder = JSONDecoder()
-        if let decodedData = try? decoder.decode(
-            SharedSneakPeek.self, from: notification.userInfo?.first?.value as! Data)
-        {
-            let contentType =
-                decodedData.type == "brightness"
-                ? SneakContentType.brightness
-                : decodedData.type == "volume"
-                    ? SneakContentType.volume
-                    : decodedData.type == "backlight"
-                        ? SneakContentType.backlight
-                        : decodedData.type == "mic"
-                            ? SneakContentType.mic : SneakContentType.brightness
-
-            let formatter = NumberFormatter()
-            formatter.locale = Locale(identifier: "en_US_POSIX")
-            formatter.numberStyle = .decimal
-            let value = CGFloat((formatter.number(from: decodedData.value) ?? 0.0).floatValue)
-            let icon = decodedData.icon
-
-            print("Decoded: \(decodedData), Parsed value: \(value)")
-
-            toggleSneakPeek(status: decodedData.show, type: contentType, value: value, icon: icon)
-
-        } else {
+        guard let data = notification.userInfo?.first?.value as? Data else {
             print("Failed to decode JSON data")
+            return
         }
+
+        let decoder = JSONDecoder()
+        guard let decodedData = try? decoder.decode(SharedSneakPeek.self, from: data) else {
+            print("Failed to decode JSON data")
+            return
+        }
+
+        let contentType = SneakContentType(sharedValue: decodedData.type) ?? .brightness
+
+        let formatter = NumberFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.numberStyle = .decimal
+        let value = CGFloat((formatter.number(from: decodedData.value) ?? 0.0).floatValue)
+        let icon = decodedData.icon
+
+        print("Decoded: \(decodedData), Parsed value: \(value)")
+
+        toggleSneakPeek(status: decodedData.show, type: contentType, value: value, icon: icon)
     }
 
     func toggleSneakPeek(
@@ -249,7 +259,7 @@ class BoringViewCoordinator: ObservableObject {
         }
     }
 
-    @Published var sneakPeek: sneakPeek = .init() {
+    @Published var sneakPeek: SneakPeek = .init() {
         didSet {
             if sneakPeek.show {
                 scheduleSneakPeekHide(after: sneakPeekDuration)
