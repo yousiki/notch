@@ -11,7 +11,7 @@ updates:
       interval: "weekly"
 
   - package-ecosystem: "pip"
-    directory: "/Configuration/dmg"
+    directory: "/support/dmg"
     schedule:
       interval: "weekly"
 
