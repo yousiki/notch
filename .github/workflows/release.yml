@@ -12,7 +12,7 @@ env:
   BETA_CHANNEL_NAME: beta
   RELEASE_COMMAND: /release
   CODE_SIGN_IDENTITY: "Apple Development"
-  XCODE_VERSION: "16.4"
+  XCODE_VERSION: "26.4.1"
 
 permissions:
   contents: read
@@ -425,7 +425,7 @@ jobs:
               strategy :github_latest
             end
             auto_updates true
-            depends_on macos: ">= :sonoma"
+            depends_on macos: ">= :tahoe"
             app "boringNotch.app"
             
             postflight do

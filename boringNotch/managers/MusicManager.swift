@@ -14,7 +14,7 @@ let defaultImage: NSImage = .init(
     accessibilityDescription: "Album Art"
 )!
 
-class MusicManager: ObservableObject {
+class MusicManager: ObservableObject, @unchecked Sendable {
     // MARK: - Properties
     static let shared = MusicManager()
     private var cancellables = Set<AnyCancellable>()
@@ -46,7 +46,9 @@ class MusicManager: ObservableObject {
     @Published var repeatMode: RepeatMode = .off
     @Published var volume: Double = 0.5
     @Published var volumeControlSupported: Bool = true
-    @ObservedObject var coordinator = BoringViewCoordinator.shared
+    @MainActor private var coordinator: BoringViewCoordinator {
+        BoringViewCoordinator.shared
+    }
     @Published var usingAppIconForArtwork: Bool = false
     @Published var currentLyrics: String = ""
     @Published var isFetchingLyrics: Bool = false
@@ -86,7 +88,7 @@ class MusicManager: ObservableObject {
                 print("Failed to check deprecation status: \(error). Defaulting to false.")
                 self.isNowPlayingDeprecated = false
             }
-            
+
             // Initialize the active controller after deprecation check
             self.setActiveControllerBasedOnPreference()
         }
@@ -95,7 +97,7 @@ class MusicManager: ObservableObject {
     deinit {
         destroy()
     }
-    
+
     public func destroy() {
         debounceIdleTask?.cancel()
         cancellables.removeAll()
@@ -135,12 +137,17 @@ class MusicManager: ObservableObject {
 
         // Set up state observation for the new controller
         if let controller = newController {
+            let controllerID = ObjectIdentifier(controller as AnyObject)
             controller.playbackStatePublisher
                 .receive(on: DispatchQueue.main)
                 .sink { [weak self] state in
-                    guard let self = self,
-                          self.activeController === controller else { return }
-                    self.updateFromPlaybackState(state)
+                    Task { @MainActor [weak self] in
+                        guard let self = self,
+                            let activeController = self.activeController,
+                            ObjectIdentifier(activeController as AnyObject) == controllerID
+                        else { return }
+                        self.updateFromPlaybackState(state)
+                    }
                 }
                 .store(in: &controllerCancellables)
         }
@@ -153,7 +160,8 @@ class MusicManager: ObservableObject {
         print("Preferred Media Controller: \(preferredType)")
 
         // If NowPlaying is deprecated but that's the preference, use Apple Music instead
-        let controllerType = (self.isNowPlayingDeprecated && preferredType == .nowPlaying)
+        let controllerType =
+            (self.isNowPlayingDeprecated && preferredType == .nowPlaying)
             ? .appleMusic
             : preferredType
 
@@ -171,7 +179,7 @@ class MusicManager: ObservableObject {
 
         // Set new active controller
         activeController = controller
-        
+
         self.canFavoriteTrack = controller.supportsFavorite
 
         // Get current state from active controller
@@ -233,7 +241,8 @@ class MusicManager: ObservableObject {
             }
 
             // Fetch lyrics on content change
-            self.fetchLyricsIfAvailable(bundleIdentifier: state.bundleIdentifier, title: state.title, artist: state.artist)
+            self.fetchLyricsIfAvailable(
+                bundleIdentifier: state.bundleIdentifier, title: state.title, artist: state.artist)
         }
 
         let timeChanged = state.currentTime != self.elapsedTime
@@ -242,7 +251,7 @@ class MusicManager: ObservableObject {
         let shuffleChanged = state.isShuffled != self.isShuffled
         let repeatModeChanged = state.repeatMode != self.repeatMode
         let volumeChanged = state.volume != self.volume
-        
+
         if state.title != self.songTitle {
             self.songTitle = state.title
         }
@@ -266,7 +275,7 @@ class MusicManager: ObservableObject {
         if playbackRateChanged {
             self.playbackRate = state.playbackRate
         }
-        
+
         if shuffleChanged {
             self.isShuffled = state.isShuffled
         }
@@ -283,11 +292,11 @@ class MusicManager: ObservableObject {
         if state.isFavorite != self.isFavoriteTrack {
             self.isFavoriteTrack = state.isFavorite
         }
-        
+
         if volumeChanged {
             self.volume = state.volume
         }
-        
+
         self.timestampDate = state.lastUpdated
     }
 
@@ -303,19 +312,19 @@ class MusicManager: ObservableObject {
         guard !runningApps.isEmpty else { return }
 
         let script = """
-        tell application \"Music\"
-            if it is running then
-                try
-                    set loved of current track to (not loved of current track)
-                    return loved of current track
-                on error
+            tell application \"Music\"
+                if it is running then
+                    try
+                        set loved of current track to (not loved of current track)
+                        return loved of current track
+                    on error
+                        return false
+                    end try
+                else
                     return false
-                end try
-            else
-                return false
-            end if
-        end tell
-        """
+                end if
+            end tell
+            """
 
         if let result = try? await AppleScriptHelper.execute(script) {
             let loved = result.booleanValue
@@ -363,28 +372,30 @@ class MusicManager: ObservableObject {
                 self.currentLyrics = ""
                 do {
                     let script = """
-                    tell application \"Music\"
-                        if it is running then
-                            if player state is playing or player state is paused then
-                                try
-                                    set l to lyrics of current track
-                                    if l is missing value then
+                        tell application \"Music\"
+                            if it is running then
+                                if player state is playing or player state is paused then
+                                    try
+                                        set l to lyrics of current track
+                                        if l is missing value then
+                                            return \"\"
+                                        else
+                                            return l
+                                        end if
+                                    on error
                                         return \"\"
-                                    else
-                                        return l
-                                    end if
-                                on error
+                                    end try
+                                else
                                     return \"\"
-                                end try
+                                end if
                             else
                                 return \"\"
                             end if
-                        else
-                            return \"\"
-                        end if
-                    end tell
-                    """
-                    if let result = try await AppleScriptHelper.execute(script), let lyricsString = result.stringValue, !lyricsString.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                        end tell
+                        """
+                    if let result = try await AppleScriptHelper.execute(script), let lyricsString = result.stringValue,
+                        !lyricsString.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                    {
                         self.currentLyrics = lyricsString.trimmingCharacters(in: .whitespacesAndNewlines)
                         self.isFetchingLyrics = false
                         self.syncedLyrics = []
@@ -415,7 +426,8 @@ class MusicManager: ObservableObject {
         let cleanTitle = normalizedQuery(title)
         let cleanArtist = normalizedQuery(artist)
         guard let encodedTitle = cleanTitle.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
-              let encodedArtist = cleanArtist.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
+            let encodedArtist = cleanArtist.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+        else {
             self.currentLyrics = ""
             self.isFetchingLyrics = false
             return
@@ -436,7 +448,8 @@ class MusicManager: ObservableObject {
                 return
             }
             if let jsonArray = try JSONSerialization.jsonObject(with: data) as? [[String: Any]],
-               let first = jsonArray.first {
+                let first = jsonArray.first
+            {
                 // Prefer plain lyrics (syncedLyrics may also be present)
                 let plain = (first["plainLyrics"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
                 let synced = (first["syncedLyrics"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
@@ -523,15 +536,9 @@ class MusicManager: ObservableObject {
     }
 
     private func updateArtwork(_ artworkData: Data) {
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            guard let self = self else { return }
-
-            if let artworkImage = NSImage(data: artworkData) {
-                DispatchQueue.main.async { [weak self] in
-                    self?.usingAppIconForArtwork = false
-                    self?.updateAlbumArt(newAlbumArt: artworkImage)
-                }
-            }
+        if let artworkImage = NSImage(data: artworkData) {
+            usingAppIconForArtwork = false
+            updateAlbumArt(newAlbumArt: artworkImage)
         }
     }
 
@@ -582,7 +589,7 @@ class MusicManager: ObservableObject {
         }
     }
 
-    private func updateSneakPeek() {
+    @MainActor private func updateSneakPeek() {
         if isPlaying && Defaults[.enableSneakPeek] {
             if Defaults[.sneakPeekStyles] == .standard {
                 coordinator.toggleSneakPeek(status: true, type: .music)
@@ -622,7 +629,7 @@ class MusicManager: ObservableObject {
             await activeController?.toggleRepeat()
         }
     }
-    
+
     func togglePlay() {
         Task {
             await activeController?.togglePlay()
@@ -650,7 +657,7 @@ class MusicManager: ObservableObject {
         let newPos = min(max(0, elapsedTime + seconds), songDuration)
         seek(to: newPos)
     }
-    
+
     func setVolume(to level: Double) {
         if let controller = activeController {
             Task {
@@ -691,44 +698,45 @@ class MusicManager: ObservableObject {
             }
         }
     }
-    
-    
+
     func syncVolumeFromActiveApp() async {
         // Check if bundle identifier is valid and if the app is actually running
         guard let bundleID = bundleIdentifier, !bundleID.isEmpty,
-              NSWorkspace.shared.runningApplications.contains(where: { $0.bundleIdentifier == bundleID }) else { return }
-        
+            NSWorkspace.shared.runningApplications.contains(where: { $0.bundleIdentifier == bundleID })
+        else { return }
+
         var script: String?
         if bundleID == "com.apple.Music" {
             script = """
-            tell application "Music"
-                if it is running then
-                    get sound volume
-                else
-                    return 50
-                end if
-            end tell
-            """
+                tell application "Music"
+                    if it is running then
+                        get sound volume
+                    else
+                        return 50
+                    end if
+                end tell
+                """
         } else if bundleID == "com.spotify.client" {
             script = """
-            tell application "Spotify"
-                if it is running then
-                    get sound volume
-                else
-                    return 50
-                end if
-            end tell
-            """
+                tell application "Spotify"
+                    if it is running then
+                        get sound volume
+                    else
+                        return 50
+                    end if
+                end tell
+                """
         } else {
             // For unsupported apps, don't sync volume
             return
         }
-        
+
         if let volumeScript = script,
-           let result = try? await AppleScriptHelper.execute(volumeScript) {
+            let result = try? await AppleScriptHelper.execute(volumeScript)
+        {
             let volumeValue = result.int32Value
             let currentVolume = Double(volumeValue) / 100.0
-            
+
             await MainActor.run {
                 if abs(currentVolume - self.volume) > 0.01 {
                     self.volume = currentVolume

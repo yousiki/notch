@@ -5,13 +5,15 @@ import IOKit.ps
 import SwiftUI
 
 /// A view model that manages and monitors the battery status of the device
-class BatteryStatusViewModel: ObservableObject {
+class BatteryStatusViewModel: ObservableObject, @unchecked Sendable {
 
     private var wasCharging: Bool = false
     private var powerSourceChangedCallback: IOPowerSourceCallbackType?
     private var runLoopSource: Unmanaged<CFRunLoopSource>?
 
-    @ObservedObject var coordinator = BoringViewCoordinator.shared
+    @MainActor private var coordinator: BoringViewCoordinator {
+        BoringViewCoordinator.shared
+    }
 
     @Published private(set) var levelBattery: Float = 0.0
     @Published private(set) var maxCapacity: Float = 0.0
@@ -121,7 +123,7 @@ class BatteryStatusViewModel: ObservableObject {
     /// Notifies important changes in the battery status with an optional delay
     /// - Parameter delay: The delay before notifying the change, default is 0.0
     private func notifyImportanChangeStatus(delay: Double = 0.0) {
-        Task {
+        Task { @MainActor in
             try? await Task.sleep(for: .seconds(delay))
             self.coordinator.toggleExpandingView(status: true, type: .battery)
         }

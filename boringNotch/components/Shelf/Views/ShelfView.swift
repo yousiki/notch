@@ -5,8 +5,8 @@
 //  Created by Alexander on 2025-09-24.
 //
 
-import SwiftUI
 import AppKit
+import SwiftUI
 
 struct ShelfView: View {
     @EnvironmentObject var vm: BoringViewModel
@@ -21,9 +21,10 @@ struct ShelfView: View {
                 .aspectRatio(1, contentMode: .fit)
                 .environmentObject(vm)
             panel
-                .onDrop(of: [.fileURL, .url, .utf8PlainText, .plainText, .data], isTargeted: $vm.dragDetectorTargeting) { providers in
-                    handleDrop(providers: providers)
-                }
+                .onDrop(of: [.fileURL, .url, .utf8PlainText, .plainText, .data], isTargeted: $vm.dragDetectorTargeting)
+            { providers in
+                handleDrop(providers: providers)
+            }
         }
         // Bind Quick Look to shelf selection
         .onChange(of: selection.selectedIDs) {
@@ -31,17 +32,17 @@ struct ShelfView: View {
         }
         .quickLookPresenter(using: quickLookService)
     }
-    
+
     private func handleDrop(providers: [NSItemProvider]) -> Bool {
         guard !selection.isDragging else { return false }
         vm.dropEvent = true
         ShelfStateViewModel.shared.load(providers)
         return true
     }
-    
+
     private func updateQuickLookSelection() {
         guard quickLookService.isQuickLookOpen && !selection.selectedIDs.isEmpty else { return }
-        
+
         let selectedItems = selection.selectedItems(in: tvm.items)
         let urls: [URL] = selectedItems.compactMap { item in
             if let fileURL = item.fileURL {
@@ -52,7 +53,7 @@ struct ShelfView: View {
             }
             return nil
         }
-        
+
         if !urls.isEmpty {
             quickLookService.updateSelection(urls: urls)
         }
@@ -86,7 +87,7 @@ struct ShelfView: View {
                         .symbolRenderingMode(.hierarchical)
                         .foregroundStyle(.white, .gray)
                         .imageScale(.large)
-                    
+
                     Text("Drop files here")
                         .foregroundStyle(.gray)
                         .font(.system(.title3, design: .rounded))
@@ -103,7 +104,8 @@ struct ShelfView: View {
                 }
                 .padding(-spacing)
                 .scrollIndicators(.never)
-                .onDrop(of: [.fileURL, .url, .utf8PlainText, .plainText, .data], isTargeted: $vm.dragDetectorTargeting) { providers in
+                .onDrop(of: [.fileURL, .url, .utf8PlainText, .plainText, .data], isTargeted: $vm.dragDetectorTargeting)
+                { providers in
                     handleDrop(providers: providers)
                 }
             }

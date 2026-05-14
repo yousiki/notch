@@ -5,8 +5,8 @@
 //  Created by Harsh Vardhan  Goswami  on 04/08/24.
 //
 
-import Foundation
 import Defaults
+import Foundation
 
 public enum Style {
     case notch
@@ -24,7 +24,7 @@ public enum NotchState {
     case open
 }
 
-public enum NotchViews {
+public enum NotchViews: Sendable {
     case home
     case shelf
 }

@@ -36,12 +36,6 @@ class CalendarManager: ObservableObject {
         }
     }
 
-    deinit {
-        if let observer = eventStoreChangedObserver {
-            NotificationCenter.default.removeObserver(observer)
-        }
-    }
-
     private func setupEventStoreChangedObserver() {
         eventStoreChangedObserver = NotificationCenter.default.addObserver(
             forName: .EKEventStoreChanged,
@@ -59,7 +53,7 @@ class CalendarManager: ObservableObject {
         let all = await calendarService.calendars()
         self.eventCalendars = all.filter { !$0.isReminder }
         self.reminderLists = all.filter { $0.isReminder }
-        self.allCalendars = all // for legacy compatibility, can be removed if not needed
+        self.allCalendars = all  // for legacy compatibility, can be removed if not needed
         updateSelectedCalendars()
     }
 
@@ -99,7 +93,7 @@ class CalendarManager: ObservableObject {
             print("Unknown authorization status")
         }
     }
-    
+
     func checkReminderAuthorization() async {
         let status = EKEventStore.authorizationStatus(for: .reminder)
         DispatchQueue.main.async {
@@ -128,7 +122,6 @@ class CalendarManager: ObservableObject {
             print("Unknown authorization status")
         }
     }
-        
 
     func updateSelectedCalendars() {
         // Populate selectedCalendarIDs based on Defaults calendar selection state
@@ -165,8 +158,9 @@ class CalendarManager: ObservableObject {
             }
 
             selectionState =
-                identifiers.isEmpty
-                ? .all : identifiers.count == allCalendars.count ? .all : .selected(identifiers)  // if empty, select all
+                identifiers.isEmpty || identifiers.count == allCalendars.count
+                ? .all
+                : .selected(identifiers)
         }
 
         Defaults[.calendarSelectionState] = selectionState
@@ -192,7 +186,7 @@ class CalendarManager: ObservableObject {
         )
         self.events = eventsResult
     }
-    
+
     func setReminderCompleted(reminderID: String, completed: Bool) async {
         await calendarService.setReminderCompleted(reminderID: reminderID, completed: completed)
         // Refresh events after updating

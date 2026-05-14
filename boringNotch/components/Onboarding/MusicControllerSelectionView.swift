@@ -5,15 +5,14 @@
 //  Created by Alexander on 2025-06-23.
 //
 
-import SwiftUI
 import Defaults
-
+import SwiftUI
 
 struct MusicControllerSelectionView: View {
     let onContinue: () -> Void
 
     @Default(.mediaController) var mediaController
-    
+
     private var availableMediaControllers: [MediaControllerType] {
         if MusicManager.shared.isNowPlayingDeprecated {
             return MediaControllerType.allCases.filter { $0 != .nowPlaying }
@@ -21,9 +20,9 @@ struct MusicControllerSelectionView: View {
             return MediaControllerType.allCases
         }
     }
-    
+
     @State private var selectedMediaController: MediaControllerType = Defaults[.mediaController]
-    
+
     var body: some View {
         VStack(spacing: 20) {
             Text("Choose a Music Source")
@@ -54,19 +53,22 @@ struct MusicControllerSelectionView: View {
             //Disable scroll if there are 4 or fewer to avoid unnecessary scroll behavior
             .scrollDisabled(availableMediaControllers.count <= 4)
 
-//            Spacer()
+            //            Spacer()
 
-            Button("Continue", action: {
-                self.mediaController = self.selectedMediaController
-                NotificationCenter.default.post(
-                    name: Notification.Name.mediaControllerChanged,
-                    object: nil
-                )
-                onContinue()
-            })
-                .buttonStyle(.borderedProminent)
-                .controlSize(.large)
-                .padding(.bottom, 24)
+            Button(
+                "Continue",
+                action: {
+                    self.mediaController = self.selectedMediaController
+                    NotificationCenter.default.post(
+                        name: Notification.Name.mediaControllerChanged,
+                        object: nil
+                    )
+                    onContinue()
+                }
+            )
+            .buttonStyle(.borderedProminent)
+            .controlSize(.large)
+            .padding(.bottom, 24)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
@@ -95,14 +97,14 @@ struct ControllerOptionView: View {
                 Text(controller.description)
                     .font(.subheadline)
                     .foregroundColor(.secondary)
-                
+
                 if controller == .youtubeMusic, let url = URL(string: "https://github.com/pear-devs/pear-desktop") {
                     Link("View on GitHub: pear-devs/pear-desktop", destination: url)
                         .font(.subheadline)
                         .padding(.top, 2)
                 }
             }
-            
+
             Spacer()
         }
         .padding()
@@ -118,12 +120,12 @@ struct ControllerOptionView: View {
     }
 }
 
-
 extension MediaControllerType {
     var description: String {
         switch self {
         case .nowPlaying:
-            return "Works with most media apps, including browsers, to detect what's playing. Note: This may be removed in a future macOS version."
+            return
+                "Works with most media apps, including browsers, to detect what's playing. Note: This may be removed in a future macOS version."
         case .spotify:
             return "Connects directly to the Spotify app."
         case .appleMusic:

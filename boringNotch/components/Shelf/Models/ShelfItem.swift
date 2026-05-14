@@ -58,13 +58,13 @@ struct ShelfItem: Identifiable, Codable, Equatable, Sendable {
         self.kind = kind
         self.isTemporary = isTemporary
     }
-    
+
     var displayName: String {
         switch kind {
         case .file(let bookmarkData):
             let bookmark = Bookmark(data: bookmarkData)
             guard let resolvedURL = bookmark.resolveURL() else { return "" }
-            
+
             // Check for stored data files (text blocks, weblocs, etc.) to provide friendly names
             if resolvedURL.pathExtension.lowercased() == "json" && resolvedURL.path.contains("TextBlocks") {
                 do {
@@ -94,8 +94,10 @@ struct ShelfItem: Identifiable, Codable, Equatable, Sendable {
             } else if resolvedURL.pathExtension.lowercased() == "webloc" && resolvedURL.path.contains("WebLocs") {
                 do {
                     let data = try Data(contentsOf: resolvedURL)
-                    if let plist = try PropertyListSerialization.propertyList(from: data, format: nil) as? [String: Any],
-                       let urlString = plist["URL"] as? String {
+                    if let plist = try PropertyListSerialization.propertyList(from: data, format: nil)
+                        as? [String: Any],
+                        let urlString = plist["URL"] as? String
+                    {
                         let title = plist["Title"] as? String
                         return title ?? urlString
                     }
@@ -103,7 +105,8 @@ struct ShelfItem: Identifiable, Codable, Equatable, Sendable {
                     // Fall through to default naming
                 }
             }
-            return (try? resolvedURL.resourceValues(forKeys: [.localizedNameKey]).localizedName) ?? resolvedURL.lastPathComponent
+            return (try? resolvedURL.resourceValues(forKeys: [.localizedNameKey]).localizedName)
+                ?? resolvedURL.lastPathComponent
         case .text(let string):
             return string.trimmingCharacters(in: .whitespacesAndNewlines)
         case .link(let url):
@@ -117,18 +120,22 @@ struct ShelfItem: Identifiable, Codable, Equatable, Sendable {
             }
         }
     }
-    
+
     var fileURL: URL? {
         guard case .file = kind else { return nil }
         return ShelfStateViewModel.shared.resolveFileURL(for: self)
     }
-    
+
     var URL: URL? {
-        if case let .file(bookmark) = kind { return resolvedContext(for: bookmark)?.url }
-        else if case let .link(url) = kind { return url }
-        else { return nil }
+        if case .file(let bookmark) = kind {
+            return resolvedContext(for: bookmark)?.url
+        } else if case .link(let url) = kind {
+            return url
+        } else {
+            return nil
+        }
     }
-    
+
     var icon: NSImage {
         guard case .file = kind else {
             return Self.thumbnailSymbolImage(systemName: kind.iconSymbolName) ?? NSImage()
@@ -138,14 +145,14 @@ struct ShelfItem: Identifiable, Codable, Equatable, Sendable {
         }
         return NSImage()
     }
-    
 
     func cleanupStoredData() {
-        guard case let .file(bookmark) = kind,
-              let context = resolvedContext(for: bookmark) else { return }
-        
+        guard case .file(let bookmark) = kind,
+            let context = resolvedContext(for: bookmark)
+        else { return }
+
         let url = context.url
-        
+
         // Handle temporary files
         if isTemporary {
             TemporaryFileStorageService.shared.removeTemporaryFileIfNeeded(at: url)
@@ -154,13 +161,13 @@ struct ShelfItem: Identifiable, Codable, Equatable, Sendable {
     }
 }
 
-private extension ShelfItem {
-   static func thumbnailSymbolImage(
+extension ShelfItem {
+    fileprivate static func thumbnailSymbolImage(
         systemName: String,
-    size: CGSize = CGSize(width: 64, height: 80), 
-    symbolPointSize: CGFloat = 38,
-    backgroundColor: NSColor = NSColor.white,
-    symbolColor: NSColor = NSColor.labelColor
+        size: CGSize = CGSize(width: 64, height: 80),
+        symbolPointSize: CGFloat = 38,
+        backgroundColor: NSColor = NSColor.white,
+        symbolColor: NSColor = NSColor.labelColor
     ) -> NSImage? {
         let image = NSImage(size: size)
         image.lockFocus()
@@ -204,8 +211,8 @@ extension ShelfItem {
 }
 
 // MARK: - Private helpers
-private extension ShelfItemKind {
-    var iconSymbolName: String {
+extension ShelfItemKind {
+    fileprivate var iconSymbolName: String {
         switch self {
         case .file:
             return "questionmark.circle"
@@ -217,8 +224,8 @@ private extension ShelfItemKind {
     }
 }
 
-private extension ShelfItem {
-    func resolvedContext(for bookmarkData: Data) -> (url: URL, bookmark: Data)? {
+extension ShelfItem {
+    fileprivate func resolvedContext(for bookmarkData: Data) -> (url: URL, bookmark: Data)? {
         let bookmark = Bookmark(data: bookmarkData)
         if let url = bookmark.resolveURL() {
             return (url, bookmark.refreshedData ?? bookmarkData)

@@ -9,6 +9,7 @@ import Combine
 import Defaults
 import SwiftUI
 
+@MainActor
 class BoringViewModel: NSObject, ObservableObject {
     @ObservedObject var coordinator = BoringViewCoordinator.shared
     @ObservedObject var detector = FullscreenMediaDetector.shared
@@ -25,7 +26,7 @@ class BoringViewModel: NSObject, ObservableObject {
     @Published var dropEvent: Bool = false
     @Published var anyDropZoneTargeting: Bool = false
     var cancellables: Set<AnyCancellable> = []
-    
+
     @Published var hideOnClosed: Bool = true
 
     @Published var edgeAutoOpenActive: Bool = false
@@ -36,14 +37,10 @@ class BoringViewModel: NSObject, ObservableObject {
 
     @Published var notchSize: CGSize = getClosedNotchSize()
     @Published var closedNotchSize: CGSize = getClosedNotchSize()
-    
+
     let webcamManager = WebcamManager.shared
     @Published var isCameraExpanded: Bool = false
     @Published var isRequestingAuthorization: Bool = false
-    
-    deinit {
-        destroy()
-    }
 
     func destroy() {
         cancellables.forEach { $0.cancel() }
@@ -54,7 +51,7 @@ class BoringViewModel: NSObject, ObservableObject {
         animation = animationLibrary.animation
 
         super.init()
-        
+
         self.screenUUID = screenUUID
         notchSize = getClosedNotchSize(screenUUID: screenUUID)
         closedNotchSize = notchSize
@@ -65,20 +62,22 @@ class BoringViewModel: NSObject, ObservableObject {
             }
             .assign(to: \.anyDropZoneTargeting, on: self)
             .store(in: &cancellables)
-        
+
         setupDetectorObserver()
     }
-    
+
     private func setupDetectorObserver() {
         // Publisher for the user’s fullscreen detection setting
-        let enabledPublisher = Defaults
+        let enabledPublisher =
+            Defaults
             .publisher(.hideNotchOption)
             .map(\.newValue)
             .map { $0 != .never }
             .removeDuplicates()
 
         // Publisher for the current screen UUID (non-nil, distinct)
-        let screenPublisher = $screenUUID
+        let screenPublisher =
+            $screenUUID
             .compactMap { $0 }
             .removeDuplicates()
 
@@ -175,24 +174,24 @@ class BoringViewModel: NSObject, ObservableObject {
             break
         }
     }
-    
+
     func isMouseHovering(position: NSPoint = NSEvent.mouseLocation) -> Bool {
         let screenFrame = getScreenFrame(screenUUID)
         if let frame = screenFrame {
-            
+
             let baseY = frame.maxY - notchSize.height
             let baseX = frame.midX - notchSize.width / 2
-            
+
             return position.y >= baseY && position.x >= baseX && position.x <= baseX + notchSize.width
         }
-        
+
         return false
     }
 
     func open() {
         self.notchSize = openNotchSize
         self.notchState = .open
-        
+
         // Force music information update when notch is opened
         MusicManager.shared.forceUpdate()
     }

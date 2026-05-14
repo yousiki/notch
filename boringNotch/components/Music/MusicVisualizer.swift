@@ -13,13 +13,13 @@ class AudioSpectrum: NSView {
     private var barScales: [CGFloat] = []
     private var isPlaying: Bool = true
     private var animationTimer: Timer?
-    
+
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
         wantsLayer = true
         setupBars()
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         wantsLayer = true
@@ -34,7 +34,7 @@ class AudioSpectrum: NSView {
         let totalHeight: CGFloat = 14
         frame.size = CGSize(width: totalWidth, height: totalHeight)
 
-        for i in 0 ..< barCount {
+        for i in 0..<barCount {
             let xPosition = CGFloat(i) * (barWidth + spacing)
             let barLayer = CAShapeLayer()
             barLayer.frame = CGRect(x: xPosition, y: 0, width: barWidth, height: totalHeight)
@@ -44,33 +44,34 @@ class AudioSpectrum: NSView {
             barLayer.backgroundColor = NSColor.white.cgColor
             barLayer.allowsGroupOpacity = false
             barLayer.masksToBounds = true
-            let path = NSBezierPath(roundedRect: CGRect(x: 0, y: 0, width: barWidth, height: totalHeight),
-                                    xRadius: barWidth / 2,
-                                    yRadius: barWidth / 2)
+            let path = NSBezierPath(
+                roundedRect: CGRect(x: 0, y: 0, width: barWidth, height: totalHeight),
+                xRadius: barWidth / 2,
+                yRadius: barWidth / 2)
             barLayer.path = path.cgPath
             barLayers.append(barLayer)
             barScales.append(0.35)
             layer?.addSublayer(barLayer)
         }
     }
-    
+
     private func startAnimating() {
         guard animationTimer == nil else { return }
         animationTimer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: true) { [weak self] _ in
             self?.updateBars()
         }
     }
-    
+
     private func stopAnimating() {
         animationTimer?.invalidate()
         animationTimer = nil
         resetBars()
     }
-    
+
     private func updateBars() {
         for (i, barLayer) in barLayers.enumerated() {
             let currentScale = barScales[i]
-            let targetScale = CGFloat.random(in: 0.35 ... 1.0)
+            let targetScale = CGFloat.random(in: 0.35...1.0)
             barScales[i] = targetScale
             let animation = CABasicAnimation(keyPath: "transform.scale.y")
             animation.fromValue = currentScale
@@ -79,13 +80,11 @@ class AudioSpectrum: NSView {
             animation.autoreverses = true
             animation.fillMode = .forwards
             animation.isRemovedOnCompletion = false
-            if #available(macOS 13.0, *) {
-                animation.preferredFrameRateRange = CAFrameRateRange(minimum: 24, maximum: 24, preferred: 24)
-            }
+            animation.preferredFrameRateRange = CAFrameRateRange(minimum: 24, maximum: 24, preferred: 24)
             barLayer.add(animation, forKey: "scaleY")
         }
     }
-    
+
     private func resetBars() {
         for (i, barLayer) in barLayers.enumerated() {
             barLayer.removeAllAnimations()
@@ -93,7 +92,7 @@ class AudioSpectrum: NSView {
             barScales[i] = 0.35
         }
     }
-    
+
     func setPlaying(_ playing: Bool) {
         isPlaying = playing
         if isPlaying {
@@ -106,13 +105,13 @@ class AudioSpectrum: NSView {
 
 struct AudioSpectrumView: NSViewRepresentable {
     @Binding var isPlaying: Bool
-    
+
     func makeNSView(context: Context) -> AudioSpectrum {
         let spectrum = AudioSpectrum()
         spectrum.setPlaying(isPlaying)
         return spectrum
     }
-    
+
     func updateNSView(_ nsView: AudioSpectrum, context: Context) {
         nsView.setPlaying(isPlaying)
     }

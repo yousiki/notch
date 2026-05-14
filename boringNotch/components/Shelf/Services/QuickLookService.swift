@@ -5,11 +5,11 @@
 //  Created by Alexander on 2025-10-07.
 //
 
-import Foundation
-import UniformTypeIdentifiers
-import SwiftUI
-import QuickLookUI
 import AppKit
+import Foundation
+import QuickLookUI
+import SwiftUI
+import UniformTypeIdentifiers
 
 @MainActor
 final class QuickLookService: ObservableObject {
@@ -44,7 +44,8 @@ final class QuickLookService: ObservableObject {
             NotificationCenter.default.removeObserver(self, name: NSWindow.willCloseNotification, object: prev)
         }
         previewPanel = panel
-        NotificationCenter.default.addObserver(self, selector: #selector(previewPanelWillClose(_:)), name: NSWindow.willCloseNotification, object: panel)
+        NotificationCenter.default.addObserver(
+            self, selector: #selector(previewPanelWillClose(_:)), name: NSWindow.willCloseNotification, object: panel)
     }
 
     func hide() {
@@ -60,7 +61,7 @@ final class QuickLookService: ObservableObject {
             previewPanel = nil
         }
     }
-    
+
     private func stopAccessingCurrentURLs() {
         NSLog("Stopping access to \(accessingURLs.count) URLs")
         for url in accessingURLs where url.isFileURL {
@@ -73,14 +74,14 @@ final class QuickLookService: ObservableObject {
             previewPanel = nil
         }
     }
-    
+
     func showQuickLook(urls: [URL]) {
         show(urls: urls, selectFirst: true, slideshow: false)
     }
 
     func updateSelection(urls: [URL]) {
         guard isQuickLookOpen else { return }
-    show(urls: urls, selectFirst: true)
+        show(urls: urls, selectFirst: true)
     }
 }
 
@@ -114,7 +115,6 @@ extension View {
         self.modifier(QuickLookPresenter(service: service))
     }
 }
-
 
 final class QuickLookDataSource: NSObject, QLPreviewPanelDataSource, QLPreviewPanelDelegate {
     private let urls: [URL]

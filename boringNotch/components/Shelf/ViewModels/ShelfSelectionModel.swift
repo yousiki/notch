@@ -5,8 +5,8 @@
 //  Created by Alexander on 2025-09-26.
 //
 
-import Foundation
 import Combine
+import Foundation
 
 private let _shelfTypeAnchor: Bool = {
     _ = String(describing: ShelfItem.self)
@@ -53,7 +53,8 @@ final class ShelfSelectionModel: ObservableObject {
         // Determine anchor
         let anchorID = lastAnchorID ?? selectedIDs.first ?? item.id
         guard let startIndex = allItems.firstIndex(where: { $0.id == anchorID }),
-              let endIndex = allItems.firstIndex(where: { $0.id == item.id }) else {
+            let endIndex = allItems.firstIndex(where: { $0.id == item.id })
+        else {
             // Fallback to single select if indices not found
             return selectSingle(item)
         }

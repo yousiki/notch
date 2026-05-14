@@ -247,7 +247,7 @@ struct CalendarView: View {
 
 struct EmptyEventsView: View {
     let selectedDate: Date
-    
+
     var body: some View {
         VStack {
             Image(systemName: "calendar.badge.checkmark")
@@ -269,7 +269,6 @@ struct EventListView: View {
     let events: [EventModel]
     @Default(.autoScrollToNextEvent) private var autoScrollToNextEvent
     @Default(.showFullEventTitles) private var showFullEventTitles
-
 
     static func filteredEvents(events: [EventModel]) -> [EventModel] {
         events.filter { event in

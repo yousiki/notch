@@ -51,6 +51,9 @@ dist/
 *.xcscheme
 *.xcodeproj/xcuserdata
 *.xcodeproj/project.xcuserdata
+!*.xcodeproj/xcshareddata/
+!*.xcodeproj/xcshareddata/xcschemes/
+!*.xcodeproj/xcshareddata/xcschemes/*.xcscheme
 
 # Build artifacts
 *.ipa
