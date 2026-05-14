@@ -22,14 +22,18 @@ Carthage/Build/
 # Swift Package Manager
 .swiftpm/
 .build/
+.sourcepackages/
 
 # Derived data
 DerivedData/
+.derived-data/
 
 # Build output
 build/
+dist/
 *.app
 *.dSYM
+*.xcresult
 
 # Temporary files
 *.swp
@@ -52,4 +56,3 @@ build/
 *.ipa
 *.xcarchive
 *.dSYM
-
