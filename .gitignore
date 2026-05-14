@@ -22,11 +22,9 @@ Carthage/Build/
 # Swift Package Manager
 .swiftpm/
 .build/
-.sourcepackages/
 
 # Derived data
 DerivedData/
-.derived-data/
 
 # Build output
 build/

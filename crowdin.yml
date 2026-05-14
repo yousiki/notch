@@ -1,4 +1,4 @@
 files:
-  - source: /boringNotch/Localizable.xcstrings
-    translation: /boringNotch/Localizable.xcstrings
+  - source: /app/boringNotch/Localizable.xcstrings
+    translation: /app/boringNotch/Localizable.xcstrings
     multilingual: 1
